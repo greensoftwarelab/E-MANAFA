@@ -1,0 +1,81 @@
+Battery History (0% used, 64 used of 256KB, 2 strings using 70):
+                    0 (9) RESET:TIME: 2015-02-17-05-36-04
+                    0 (1) 042 status=charging health=good plug=usb temp=292 volt=3897 +running +plugged phone_signal_strength=great +charging
+                    0 (2) 042 top=1000:"com.android.settings"
+                    0 (2) 042 user=0:"0"
+                    0 (2) 042 userfg=0:"0"
+
+Daily stats:
+  Current start time: 2015-02-17-05-30-07
+  Next min deadline: 2015-02-18-01-00-00
+  Next max deadline: 2015-02-18-03-00-00
+  Daily from 2016-01-01-07-02-15 to 2015-05-24-12-42-49:
+    Package changes:
+      Update com.quicinc.trepn vers=7
+
+Statistics since last charge:
+  System starts: 0, currently on battery: false
+  Time on battery: 0ms (0.0%) realtime, 0ms (0.0%) uptime
+  Time on battery screen off: 0ms (0.0%) realtime, 0ms (0.0%) uptime
+  Total run time: 2s 732ms realtime, 2s 733ms uptime
+  Start clock time: 2015-02-17-05-36-04
+  Screen on: 0ms (--%) 0x, Interactive: 0ms (--%)
+  Screen brightnesses: (no activity)
+  Mobile total received: 0B, sent: 0B (packets received 0, sent 0)
+  Phone signal levels: (no activity)
+  Signal scanning time: 0ms
+  Radio types: (no activity)
+  Mobile radio active time: 0ms (--%) 0x
+  Wi-Fi total received: 0B, sent: 0B (packets received 0, sent 0)
+  Wifi on: 0ms (--%), Wifi running: 0ms (--%)
+  Wifi states: (no activity)
+  Wifi supplicant states: (no activity)
+  Wifi signal levels: (no activity)
+  WiFi Idle time: 0ms (--%)
+  WiFi Rx time:   0ms (--%)
+  WiFi Tx time:   0ms (--%)
+  WiFi Power drain: 0mAh
+  Bluetooth Idle time: 0ms (--%)
+  Bluetooth Rx time:   0ms (--%)
+  Bluetooth Tx time:   0ms (--%)
+  Bluetooth Power drain: 0mAh
+
+  Device battery use since last full charge
+    Amount discharged (lower bound): 0
+    Amount discharged (upper bound): 0
+    Amount discharged while screen on: 0
+    Amount discharged while screen off: 0
+
+  1000:
+    (nothing executed)
+  1001:
+    (nothing executed)
+  1027:
+    (nothing executed)
+  u0a1:
+    (nothing executed)
+  u0a2:
+    (nothing executed)
+  u0a3:
+    (nothing executed)
+  u0a5:
+    (nothing executed)
+  u0a6:
+    (nothing executed)
+  u0a9:
+    (nothing executed)
+  u0a11:
+    (nothing executed)
+  u0a13:
+    (nothing executed)
+  u0a19:
+    (nothing executed)
+  u0a21:
+    (nothing executed)
+  u0a26:
+    (nothing executed)
+  u0a52:
+    (nothing executed)
+  u0a83:
+    (nothing executed)
+
