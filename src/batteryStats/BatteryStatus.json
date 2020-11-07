@@ -1,0 +1,163 @@
+{
+	"nominal": {
+		"status":{
+			"unknown" :   1,
+			"charging":    2,
+			"discharging":   3,
+			"not-charging":   4,
+			"full":  5 
+		},
+		"health":{
+			"unknown":1,
+		    "good":2,
+		    "overheat":3, 
+		    "dead":4,
+		    "over-voltage":5,
+		    "failure":6,
+		    "cold":7
+		},
+		"plug":{
+			"none": 0 ,
+		    "ac": 1 ,
+		    "usb": 2 ,
+		    "wireless": 4 
+		},
+		"phone_signal_strength":{
+			"none":0,
+		    "poor":1,
+		    "moderate":2, 
+		    "good":3,
+		    "great":4
+		},
+		"phone_state":{
+			"in": "in",
+			"out": "out",
+			"emergency": "em",
+			"off": "off"
+		},
+		"gps_signal_quality":{
+			"poor": "poor",
+			"good": "good"
+		},
+		"brightness":{
+			"dark":0, 
+			"dim":1,
+			"medium":2,
+			"light":3,
+			"bright":4
+		},
+		"device_idle":{
+			"off": "off",
+			"light": "light",
+			"full": "full",
+			"???": "???"
+		},
+		"wifi_suppl":{
+			"invalid":"inv", 
+			"disconn":"dsc", 
+			"disabled":"dis", 
+			"inactive":"inact", 
+			"scanning":"scan", 
+	        "authenticating":"auth", 
+	        "associating":"ascing", 
+	        "associated":"asced", 
+	        "4-way-handshake":"4-way", 
+	        "group-handshake":"group", 
+	        "completed":"compl", 
+	        "dormant":"dorm", 
+	        "uninit":"uninit"
+		},
+		"data_conn":{
+			"oos":"oos",
+			"gprs":"gprs",
+			"edge":"edge",
+			"umts":"umts",
+			"cdma":"cdma",
+			"evdo_0":"evdo_0",
+			"evdo_A":"evdo_A",
+			"1xrtt":"1xrtt",
+			"hsdpa":"hsdpa",
+			"hsupa":"hsupa",
+			"hspa":"hspa",
+			"iden":"iden",
+			"evdo_b":"evdo_b",
+			"lte":"lte",
+			"ehrpd":"ehrpd",
+			"hspap":"hspap",
+			"gsm":"gsm",
+			"td_scdma":"td_scdma",
+			"iwlan":"iwlan",
+			"lte_ca":"lte_ca",
+			"nr":"nr",
+			"emngcy":"emngcy",
+			"other": "other",
+			"none": "none"
+		},
+		"wifi_signal_strength":{
+			"0" : 0,
+			"1" : 1,
+			"2" : 2,
+			"3" : 3,
+			"4" : 4
+		}
+
+	},
+
+	"numerical": [
+		"temp",
+		"volt",
+		"charge",
+		"modemRailChargemAh",
+		"wifiRailChargemAh"
+	],
+	"monoval":[
+		"running",
+		"wake_lock",
+		"wake_lock",
+		"sensor",
+		"gps",
+		"wifi_full_lock",
+		"wifi_scan",
+		"wifi_multicast",
+		"wifi_radio",
+		"mobile_radio",
+		"phone_scanning",
+		"audio",
+		"screen",
+		"plugged",
+		"screen_doze",
+		"power_save",
+		"video",
+		"wifi_running",
+		"wifi",
+		"video",
+		"flashlight",
+		"charging",
+		"usb_data",
+		"phone_in_call",
+		"bluetooth",
+		"camera",
+		"ble_scan",
+		"cellular_high_tx_power"
+	],
+	"trival":[
+		"fg", 
+        "top",
+        "wake_reason",
+        "stats",
+        "job",
+        "screenwake",
+        "sync",
+        "tmpwhitelist",
+        "pkgactive",
+        "pkginst",
+        "wakeupap",
+        "active",
+        "conn",
+        "longwake",
+        "user",
+        "userfg"
+
+	]
+
+}
