@@ -141,6 +141,7 @@
 		"cellular_high_tx_power"
 	],
 	"trival":[
+		"proc",
 		"fg", 
         "top",
         "wake_reason",
@@ -156,8 +157,9 @@
         "conn",
         "longwake",
         "user",
-        "userfg"
-
+        "userfg",
+        "wake_lock_in",
+        "alarm"
 	]
 
 }

@@ -1,57 +1,63 @@
 
 from os import sys,path
 import re,json
-sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+#sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+from PowerProfile import PowerProfile
 from dateUtils  import convertBatStatTimeToTimeStamp
-
+import copy
 default_json_path="src/batteryStats/BatteryStatus.json"
-
-def merge_two_dicts(x, y):
-    z = x.copy()   # start with x's keys and values
-    z.update(y)    # modifies z with y's keys and values & returns None
-    return z
 
 
 class BatteryEvent(object):
 	"""docstring for BatteryEvent"""
-	def __init__(self,time=0.0,val={}):
+	def __init__(self,time=0.0,vals={}):
 		self.time=time
-		self.updates = val 
+		self.updates = {}
+		self.concurrentUpdates={} 
+		self.concurrentUpdates["tmpwhitelist"]=[]
+		self.concurrentUpdates["job"]=[]
+		self.concurrentUpdates["sync"]=[]
+		self.concurrentUpdates["top"]=[]
+		self.concurrentUpdates["longwake"]=[]
+		self.concurrentUpdates["fg"]=[]
+		self.concurrentUpdates["proc"]=[]
+		self.concurrentUpdates["screenwake"]=[]
+		self.concurrentUpdates["pkgactive"]=[]
+		self.concurrentUpdates["user"]=[]
+		self.concurrentUpdates["userfg"]=[]
+		self.concurrentUpdates["wake_lock_in"]=[]
+		self.concurrentUpdates["alarm"]=[]
+
+	
+		self.addEvents(vals)
 
 	def __str__(self):
-		return "time:%f vals =  %s " % (self.time, str(self.updates))
+		return "time:%f vals =  %s , concs= %s  " % (self.time,str(self.updates),str(self.concurrentUpdates))
 
 	def __repr__(self):
 		return str(self)
 
-	def merge_events(self,event1):
-		for ev in event1.updates.keys():
-			if ev.startswith("-"):
-				self.updates.pop("+"+ev.replace("-","",1), None)
-			else:
-				self.updates[ev]=event1.updates[ev]
+	def isConcurrent(self,state):
+		#return re.match(r"(\+|\-)?(tmpwhitelist|job|sync|top|longwake|fg|proc)", state)
+		return state in self.concurrentUpdates
 
-class State(object):
-	"""docstring for State"""
-	def __init__(self):	
-		super(State, self).__init__()
-		self.time=0
-		self.oldState = 0
-		self.oldState2 = 0
-		self.oldLevel = -1
-		self.oldStatus = -1
-		self.oldHealth = -1
-		self.oldPlug = -1
-		self.oldTemp = -1
-		self.oldVolt = -1
-		self.oldChargeMAh = -1
-		self.oldModemRailChargeMah = -1
-		self.oldWifiRailChargeMah = -1
-		self.wakelockTag = None
-		self.wakeReasonTag = None
-		self.eventCode = None
-		self.eventTag = None
-		self.runningStuff={}
+	def addEvents(self,event1):
+		for ev in event1.keys():
+			#print("->"+ev + "--")
+			if ev.startswith("-"):
+				conc_update_state = ev.replace("-","",1)
+				if self.isConcurrent(conc_update_state):		
+					#print("vou tirar conc "+ev)
+					self.concurrentUpdates[conc_update_state] = [n for n in self.concurrentUpdates[conc_update_state] if (  n["val"] != event1[ev]["val"] and n["val2"] != event1[ev]["val2"] ) ]
+				else:
+					#print("vou tirar ev "+ev)
+					self.updates.pop(conc_update_state,None)
+			else:
+				ev_def = ev.replace("+","",1)
+				if self.isConcurrent(ev_def):
+					self.concurrentUpdates[ev_def].append(event1[ev])	
+				else:
+					self.updates[ev_def]=event1[ev]
 
 
 class BatteryStats(object):
@@ -59,7 +65,10 @@ class BatteryStats(object):
 	def __init__(self,def_file=default_json_path):
 		self.events = []
 		self.definitions = self.loadDefinitionFile(def_file)
-		#self.pidstats= []
+		self.powerProfile = None
+
+	def loadPowerProfile(self, xml_profile ):
+		self.powerProfile = PowerProfile(xml_profile)
 
 	def loadDefinitionFile(self,def_file):
 		with open(def_file,"r") as dff:
@@ -85,14 +94,14 @@ class BatteryStats(object):
 		accumulator = ""
 		latest_state=None
 		events={}
-		for state in states.split(" "):
+
+		for state in re.sub(r"^ ","",states).split(" "):
+			#print("->" +state)
 			if accum:
 				accumulator+=state
 				if state.count('\"')%2 != 0:
-					#print("acumulou")
 					accum = not accum
 					accumulator = ""
-					#print(accumulator)
 				continue		
 			if "=" in state:	
 				if state.count('\"')%2 != 0:
@@ -100,57 +109,82 @@ class BatteryStats(object):
 					accumulator+=state
 					continue
 				else:
-						#print(state)
 					key = state.split("=")[0]
 					val = state.split("=")[1]
 					state = self.getDefinitionVal(key,val)
 					if self.isTrival(key):
-						print("TODO: split in trival")
-						print("%s - %s -%s" %(key,val.split(":")[0],val.split(":")[1]))
+						#print("TODO: split in trival")
+						#print("%s - %s -%s" %(key,val.split(":")[0],val.split(":")[1]))
 						#return key,val.split(":")[0],val.split(":")[1]
 						events[key]= {"val": val.split(":")[0] , "val2": val.split(":")[1]}
 					else:
-						print("%s - %s" %(key,state))
+						#print("%s = %s" %(key,state))
 						events[key]=state
-			else:
-				#print(state)
+			elif state != "" and state != " ":
 				st = self.getDefinitionVal(state)
-				print("%s - %s" %(state,st))
-				
+				#print("%s - %s" %(state,st))
 				#print("val "+str(self.getDefinitionVal(state)))
-				events[re.sub(r"\+|\-","", state)]=st
+				events[state]=st
+			
 		return events
+	
 	def parseHistory(self,lines_list):
 		for i, line in enumerate(lines_list):
 			if re.match(r"^Per-PID Stats", line)or len(line)==0:
 				return
+			elif re.match(r"^\s*([^\s]+) (\(\d+\)) (\d+)(.*)?$", line):
+				x = re.match(r"^\s*([^\s]+) (\(\d+\)) (\d+)(.*)?$", line)
+				#print(x.groups())
+				#print("time:" +x.groups()[0])
+				time = convertBatStatTimeToTimeStamp(x.groups()[0])
+				events = self.parseStates(x.groups()[3])
+				
+				self.addUpdate(time, events)
 			else:
-				#self.parseState(lines_list[i:])
-				x = re.match(r"^\s*([^\s]+) (\(\d+\)) (\d+) (.*)$", line)
-				if x:
-					print(x.groups())
-					#print("time:" +x.groups()[0])
-					time = convertBatStatTimeToTimeStamp(x.groups()[0])
-					
-					events = self.parseStates(x.groups()[3])
-					b = BatteryEvent(time, events )
-					self.addUpdate(b)
-		
+				# TODO Handle DcpuStats and DpstStats
+				print("linha invalida" + line)
 
-	def addUpdate(self, bat_event):
+	def addUpdate(self, time,bat_events):
 		if len(self.events)==0:
-			self.events.append(bat_event)
+			self.events.append( BatteryEvent( time,bat_events ))
 		else:	
 			last_added = self.events[-1]
-			if last_added.time == bat_event.time:
-				self.events[-1] = BatteryEvent( last_added.time ,merge_two_dicts(self.events[-1].updates, bat_event.updates))
-	
+			if last_added.time == time:
+				self.events[-1].addEvents(bat_events)
+				
 			else:
-				print("todo calculate power of last event")
-				new_b= BatteryEvent( bat_event.time ,merge_two_dicts(self.events[-1].updates, bat_event.updates))
-				self.events.append(new_b)
-				print(self.events)
-				print("\nuiui\n")
+				# todo try to replace with shallow copy
+				bt = copy.deepcopy(self.events[-1])
+				bt.time = time
+				bt.addEvents(bat_events)
+				self.estimatePowerConsumption(bt)
+				self.events.append(bt)
+
+
+	def estimatePowerConsumption(self,bt_event):
+		print("----------")
+		power = 0.0
+		for p,v in self.powerProfile.components.items():
+			st = self.determinateComponentCurrent(bt_event,p,v)
+			print(st)
+			#print(str(p in self.updates)+ " + " +str(p) )	
+		return power
+
+
+	def determinateComponentCurrent(self,bt_event,comp_name, possible_states):
+		current = 0.0
+		if comp_name == "screen" and "screen" in bt_event.updates:
+				on_current = possible_states["on"]
+				brightness_level = bt_event.updates["brightness"]
+				relative_full_current = ( brightness_level * possible_states["full"] / ( len( self.definitions["nominal"]["brightness"] ) -1) ) 
+				current+= on_current + relative_full_current 
+
+		elif comp_name == "ambient" and "screen_doze" in bt_event.updates:
+				# power profile might have a defined value for ambient/doze screen consumpri
+				doze_current = possible_states["on"]
+				current+=doze_current
+
+		return current
 
 	def parseFile(self,filename):
 		print("parsing")
@@ -170,4 +204,9 @@ class BatteryStats(object):
 if __name__ == '__main__':
 	if len(sys.argv)>1:
 		x = BatteryStats()
+		#pp = "samples/profiles/power_profile.xml"
+		pp = "samples/profiles/power_profile_pixel3a_grapheneos.xml"
+		x.loadPowerProfile(pp)
 		x.parseFile(sys.argv[1])
+		
+
