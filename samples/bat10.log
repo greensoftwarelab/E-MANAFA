@@ -1,0 +1,20 @@
+Battery History (69% used, 2863KB used of 4096KB, 1100 strings using 116KB):
+                    0 (14) RESET:TIME: 2020-10-24-08-18-38
+                    0 (2) 100 status=discharging health=good plug=none temp=280 volt=4306 charge=3339 modemRailChargemAh=0 wifiRailChargemAh=0 +running +wake_lock +wifi_radio +screen phone_signal_strength=great brightness=dim +video +wifi_running +wifi wifi_signal_strength=2 wifi_suppl=completed +ble_scan gps_signal_quality=good fg=1000:"com.miui.securitycenter"
+                    0 (2) 100 fg=1000:"com.miui.notification"
+                    0 (2) 100 top=u0a69:"com.miui.home"
+                    0 (2) 100 job=u0a166:"com.facebook.katana/com.facebook.battery.monitor.ContinuousBatteryMonitorService"
+                    0 (2) 100 user=0:"0"
+                    0 (2) 100 userfg=0:"0"
+                +75ms (3) 100 volt=4223 -job=u0a166:"com.facebook.katana/com.facebook.battery.monitor.ContinuousBatteryMonitorService"
+               +115ms (2) 100 stats=0:"get-stats"
+               +205ms (2) 100 stats=0:"get-stats"
+               +575ms (2) 100 stats=0:"get-stats"
+             +2s058ms (2) 100 phone_signal_strength=good
+             +3s479ms (3) 100 volt=4276 +flashlight phone_signal_strength=great
+             +4s625ms (2) 100 +tmpwhitelist=u0a95:"pendingintent:1000:action.alarm_cancel"
+             +6s541ms (2) 100 phone_signal_strength=good
+            +10s159ms (2) 100 -top=u0a69:"com.miui.home"
+            +10s159ms (3) 100 phone_signal_strength=great +top=u0a166:"com.facebook.katana"
+            +11s512ms (1) 100 wifi_signal_strength=3
+            +14s793ms (2) 100 pkgactive=u0a23:"com.android.providers.media"

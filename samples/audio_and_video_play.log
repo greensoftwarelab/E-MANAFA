@@ -1,0 +1,67 @@
+Battery History (0% used, 1536 used of 4096KB, 15 strings using 606):
+                    0 (14) RESET:TIME: 2020-11-14-11-16-23
+                    0 (1) 056 status=charging health=good plug=ac temp=300 volt=4154 charge=1593 modemRailChargemAh=0 wifiRailChargemAh=0 +running +wake_lock +mobile_radio +screen +plugged data_conn=lte_ca phone_signal_strength=great +video +usb_data wifi_signal_strength=2 wifi_suppl=completed +ble_scan
+                    0 (2) 056 fg=1000:"com.miui.securitycenter"
+                    0 (2) 056 fg=1000:"com.miui.notification"
+                    0 (2) 056 top=u0a69:"com.miui.home"
+                    0 (2) 056 user=0:"0"
+                    0 (2) 056 userfg=0:"0"
+                +12ms (2) 056 stats=0:"wakelock-change"
+             +1s572ms (3) 056 data_conn=lte stats=0:"dump"
+             +3s162ms (2) 056 -mobile_radio stats=0:"modem-data"
+             +4s459ms (3) 057 charge=1597 stats=0:"get-stats"
+             +4s522ms (2) 057 stats=0:"wakelock-change"
+             +5s013ms (3) 057 brightness=medium stats=0:"get-stats"
+             +7s010ms (2) 057 charge=1598 -top=u0a69:"com.miui.home"
+             +7s650ms (2) 057 +top=1000:"com.android.settings"
+             +8s055ms (2) 057 stats=0:"get-stats"
+             +8s385ms (2) 057 -top=1000:"com.android.settings"
+             +8s385ms (3) 057 phone_signal_strength=good +top=u0a69:"com.miui.home"
+             +9s485ms (2) 057 volt=4176 charge=1600
+            +11s542ms (3) 057 phone_signal_strength=great -top=u0a69:"com.miui.home"
+            +11s634ms (2) 057 +top=u0a53:"com.miui.gallery"
+            +11s646ms (2) 057 pkgactive=u0a53:"com.miui.gallery"
+            +12s158ms (2) 057 +fg=u0a53:"com.miui.gallery"
+            +12s709ms (2) 057 +mobile_radio wakeupap=1051:""
+            +13s665ms (4) 057 volt=4136 charge=1602 data_conn=lte_ca -fg=u0a53:"com.miui.gallery"
+            +16s752ms (2) 057 pkgactive=u0a137:"com.miui.videoplayer"
+            +17s274ms (2) 057 -top=u0a53:"com.miui.gallery"
+            +17s274ms (2) 057 +top=u0a137:"com.miui.videoplayer"
+            +18s479ms (2) 057 +audio
+            +24s187ms (2) 057 phone_signal_strength=good
+            +25s884ms (2) 057 -top=u0a137:"com.miui.videoplayer"
+            +25s884ms (3) 057 -audio +top=u0a53:"com.miui.gallery"
+            +26s323ms (2) 057 -top=u0a53:"com.miui.gallery"
+            +26s323ms (3) 057 phone_signal_strength=great +top=u0a69:"com.miui.home"
+            +27s496ms (3) 057 charge=1608 -screen brightness=dark stats=0:"screen-state"
+            +28s882ms (3) 057 +screen_doze stats=0:"screen-state"
+            +28s917ms (2) 057 stats=0:"screen-state"
+            +28s951ms (2) 057 stats=0:"screen-state"
+            +29s963ms (2) 057 stats=0:"dump"
+            +30s281ms (2) 057 stats=0:"screen-state"
+            +35s404ms (2) 057 stats=0:"dump"
+            +36s547ms (2) 057 stats=0:"screen-state"
+            +36s760ms (2) 057 stats=0:"screen-state"
+            +37s938ms (3) 057 -screen_doze stats=0:"screen-state"
+            +38s035ms (2) 057 -wake_lock stats=0:"screen-state"
+            +43s311ms (2) 057 temp=310 volt=4186 charge=1617
+            +45s421ms (3) 058 charge=1618 +wake_lock=1001:"*telephony-radio*"
+            +45s447ms (1) 058 -wake_lock
+            +45s447ms (3) 058 +wake_lock=1000:"*telephony-radio*" stats=0:"get-stats"
+            +45s494ms (1) 058 -wake_lock
+            +45s495ms (2) 058 +wake_lock=1001:"*telephony-radio*"
+            +45s496ms (2) 058 -wake_lock stats=0:"wakelock-change"
+            +47s977ms (1) 058 charge=1620
+            +50s449ms (1) 058 charge=1621
+            +54s800ms (2) 058 +wake_lock=1001:"*telephony-radio*"
+            +54s802ms (1) 058 -wake_lock
+            +54s803ms (2) 058 +wake_lock=1000:"*telephony-radio*"
+            +54s817ms (1) 058 -wake_lock
+            +54s818ms (3) 058 +wake_lock=1001:"*telephony-radio*" stats=0:"dump"
+            +54s870ms (1) 058 -wake_lock
+
+Total cpu time reads: 0
+Batched cpu time reads: 0
+Batching Duration (min): 944
+All UID cpu time reads since the later of device start or stats reset: 80
+UIDs removed since the later of device start or stats reset: 0

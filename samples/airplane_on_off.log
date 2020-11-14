@@ -1,0 +1,119 @@
+Battery History (0% used, 2784 used of 4096KB, 22 strings using 1902):
+                    0 (14) RESET:TIME: 2020-11-13-09-54-20
+                    0 (1) 096 status=charging health=good plug=ac temp=260 volt=4354 charge=3269 modemRailChargemAh=0 wifiRailChargemAh=0 +running +wake_lock +screen +plugged phone_state=off phone_signal_strength=moderate brightness=medium +charging +usb_data wifi_signal_strength=2 wifi_suppl=completed
+                    0 (2) 096 fg=1000:"com.miui.securitycenter"
+                    0 (2) 096 fg=1000:"com.miui.notification"
+                    0 (2) 096 top=1000:"com.android.settings"
+                    0 (2) 096 user=0:"0"
+                    0 (2) 096 userfg=0:"0"
+                    0 (2) 096 stats=0:"wakelock-change"
+                +36ms (2) 096 stats=0:"dump"
+             +5s261ms (3) 097 charge=3270 stats=0:"get-stats"
+             +5s344ms (2) 097 stats=0:"wakelock-change"
+             +9s549ms (2) 097 stats=0:"dump"
+            +15s626ms (2) 097 stats=0:"dump"
+            +19s684ms (2) 097 stats=0:"dump"
+            +23s630ms (3) 097 +phone_scanning phone_state=out phone_signal_strength=none stats=0:"dump"
+            +24s636ms (1) 097 charge=3272
+            +25s682ms (2) 097 -phone_scanning phone_state=in phone_signal_strength=great
+            +27s956ms (2) 097 phone_signal_strength=good
+            +30s553ms (1) 097
+            +33s431ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+            +33s448ms (2) 097 +job=u0a56:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+            +33s479ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+            +33s524ms (2) 097 -job=u0a56:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+            +35s782ms (2) 097 phone_signal_strength=great
+            +40s057ms (1) 097 charge=3273
+            +41s550ms (2) 097 phone_signal_strength=good
+            +43s795ms (2) 097 phone_signal_strength=great brightness=dark
+            +49s547ms (2) 097 phone_signal_strength=good
+            +53s306ms (2) 097 brightness=medium
+            +54s650ms (2) 097 -top=1000:"com.android.settings"
+            +54s650ms (3) 097 phone_signal_strength=moderate +top=u0a166:"com.facebook.katana"
+            +55s583ms (2) 097 -top=u0a166:"com.facebook.katana"
+            +55s583ms (2) 097 +top=u0a69:"com.miui.home"
+            +56s285ms (2) 097 -top=u0a69:"com.miui.home"
+            +56s285ms (2) 097 +top=u0a110:"com.google.android.apps.messaging"
+            +56s963ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+            +57s445ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+            +57s525ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+            +57s624ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+            +58s718ms (3) 097 phone_signal_strength=great pkgactive=u0a136:"com.google.android.apps.tachyon"
+          +1m00s199ms (2) 097 +job=u0a183:"com.touchtype.swiftkey/com.touchtype.telemetry.TelemetryJobIntentService"
+          +1m00s715ms (3) 097 phone_signal_strength=moderate -job=u0a183:"com.touchtype.swiftkey/com.touchtype.telemetry.TelemetryJobIntentService"
+          +1m07s679ms (2) 097 pkgactive=u0a121:"com.google.android.tts"
+          +1m07s854ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m07s928ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m12s903ms (2) 097 phone_signal_strength=great
+          +1m15s695ms (2) 097 stats=0:"dump"
+          +1m17s174ms (3) 097 +audio +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m17s369ms (3) 097 phone_signal_strength=good -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m17s393ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+          +1m17s433ms (3) 097 -audio -job=u0a110:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+          +1m19s403ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+          +1m19s433ms (2) 097 charge=3277 -job=u0a110:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+          +1m21s878ms (2) 097 phone_signal_strength=great
+          +1m29s719ms (1) 097
+          +1m30s837ms (2) 097 phone_signal_strength=good
+          +1m35s291ms (2) 097 phone_signal_strength=great
+          +1m37s332ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m37s411ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m39s769ms (2) 097 charge=3278 phone_signal_strength=moderate
+          +1m44s353ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m44s437ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m46s519ms (2) 097 phone_signal_strength=great
+          +1m48s760ms (2) 097 phone_signal_strength=good
+          +1m50s727ms (3) 097 +mobile_radio data_conn=lte conn=0:"CONNECTED"
+          +1m51s167ms (2) 097 +job=u0a171:"com.facebook.orca/com.facebook.analytics2.logger.LollipopUploadService"
+          +1m51s182ms (2) 097 +job=u0a166:"com.facebook.katana/com.facebook.analytics2.logger.LollipopUploadService"
+          +1m51s484ms (2) 097 -job=u0a166:"com.facebook.katana/com.facebook.analytics2.logger.LollipopUploadService"
+          +1m51s597ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m51s646ms (2) 097 +job=u0a166:"com.facebook.katana/com.facebook.analytics2.logger.LollipopUploadService"
+          +1m51s669ms (2) 097 +tmpwhitelist=u0a46:"broadcast:u0a46:com.google.android.intent.action.GCM_RECONNECT"
+          +1m51s691ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m51s721ms (2) 097 -job=u0a171:"com.facebook.orca/com.facebook.analytics2.logger.LollipopUploadService"
+          +1m51s800ms (3) 097 data_conn=lte_ca -job=u0a166:"com.facebook.katana/com.facebook.analytics2.logger.LollipopUploadService"
+          +1m57s705ms (2) 097 phone_signal_strength=great
+          +2m01s678ms (2) 097 -tmpwhitelist=u0a46:"broadcast:u0a46:com.google.android.intent.action.GCM_RECONNECT"
+          +2m01s971ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m01s984ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m04s410ms (2) 097 phone_signal_strength=good
+          +2m05s675ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m05s761ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m08s224ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m08s392ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m08s818ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m08s889ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m09s021ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m09s094ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m09s320ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m09s330ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m10s695ms (3) 097 phone_signal_strength=great +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m11s328ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m12s725ms (2) 097 -top=u0a110:"com.google.android.apps.messaging"
+          +2m12s725ms (2) 097 +top=u0a69:"com.miui.home"
+          +2m12s856ms (3) 097 phone_signal_strength=good +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m13s811ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m14s508ms (2) 097 stats=0:"dump"
+          +2m19s682ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m20s657ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m25s183ms (2) 097 -mobile_radio stats=0:"dump"
+          +2m25s869ms (2) 097 conn=0:"DISCONNECTED"
+          +2m25s893ms (3) 097 data_conn=none phone_state=off stats=0:"modem-data"
+          +2m34s810ms (2) 097 temp=270 charge=3283
+          +2m35s818ms (2) 097 +job=u0a56:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+          +2m35s828ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+          +2m35s877ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+          +2m35s940ms (2) 097 -job=u0a56:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+          +2m40s054ms (1) 097
+          +2m41s419ms (1) 097
+          +2m46s771ms (2) 097 brightness=dark
+          +3m13s414ms (2) 097 +job=u0a110:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+          +3m13s467ms (2) 097 -job=u0a110:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+          +3m25s647ms (2) 097 stats=0:"dump"
+
+Total cpu time reads: 0
+Batched cpu time reads: 0
+Batching Duration (min): 381
+All UID cpu time reads since the later of device start or stats reset: 48
+UIDs removed since the later of device start or stats reset: 1

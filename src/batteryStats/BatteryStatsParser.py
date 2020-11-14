@@ -8,11 +8,33 @@ import copy
 default_json_path="src/batteryStats/BatteryStatus.json"
 
 
+KNOWN_VALUES=set(
+	"screen.on"
+	#TODO put here all values in https://source.android.com/devices/tech/power/values
+)
+
+
+def areInMinCPUFreq( cpu_freq , possible_cpu_states  ):
+	print("rolando")
+	possible_freqs = possible_cpu_states["speeds"] if "speeds" in possible_cpu_states else []
+	if len(possible_freqs)==0:
+		possible_freqs = possible_cpu_states["core_speeds"] if "core_speeds" in possible_cpu_states else []
+		if len(possible_freqs)>0:
+			possible_freqs = sum(possible_freqs.values(),[]) 
+	print("--")
+	print(possible_freqs)
+	return False
+
+def safe_division(a,b):
+	z = 1 if b==0 else b
+	return a / z
+
 class BatteryEvent(object):
 	"""docstring for BatteryEvent"""
 	def __init__(self,time=0.0,vals={}):
 		self.time=time
 		self.updates = {}
+		self.currents = {}
 		self.concurrentUpdates={} 
 		self.concurrentUpdates["tmpwhitelist"]=[]
 		self.concurrentUpdates["job"]=[]
@@ -62,10 +84,11 @@ class BatteryEvent(object):
 
 class BatteryStats(object):
 	"""docstring for BatteryStats"""
-	def __init__(self,def_file=default_json_path):
+	def __init__(self,def_file=default_json_path, android_version=10):
 		self.events = []
 		self.definitions = self.loadDefinitionFile(def_file)
 		self.powerProfile = None
+		self.android_version = android_version
 
 	def loadPowerProfile(self, xml_profile ):
 		self.powerProfile = PowerProfile(xml_profile)
@@ -157,25 +180,35 @@ class BatteryStats(object):
 				bt = copy.deepcopy(self.events[-1])
 				bt.time = time
 				bt.addEvents(bat_events)
-				self.estimatePowerConsumption(bt)
+				self.estimateCurrentConsumption(bt)
 				self.events.append(bt)
 
 
-	def estimatePowerConsumption(self,bt_event):
-		print("----------")
-		power = 0.0
+	def estimateCurrentConsumption(self,bt_event):
+		power={}
 		for p,v in self.powerProfile.components.items():
+			
+			#print(p)
+
 			st = self.determinateComponentCurrent(bt_event,p,v)
-			print(st)
+			power[p]=st
+			print("%s %s" %(p , str(st)))
 			#print(str(p in self.updates)+ " + " +str(p) )	
-		return power
+		
+		#power = total_current * float(bt_event.updates["volt"])
+		#print(bt_event.updates["volt"])
+		#print(power)
+		print(power)
+		bt_event.currents=power
+		
 
 
 	def determinateComponentCurrent(self,bt_event,comp_name, possible_states):
 		current = 0.0
+		# screen 
 		if comp_name == "screen" and "screen" in bt_event.updates:
 				on_current = possible_states["on"]
-				brightness_level = bt_event.updates["brightness"]
+				brightness_level = bt_event.updates["brightness"] if "brightness" in bt_event.updates else 1
 				relative_full_current = ( brightness_level * possible_states["full"] / ( len( self.definitions["nominal"]["brightness"] ) -1) ) 
 				current+= on_current + relative_full_current 
 
@@ -183,6 +216,175 @@ class BatteryStats(object):
 				# power profile might have a defined value for ambient/doze screen consumpri
 				doze_current = possible_states["on"]
 				current+=doze_current
+
+		# camera/flashlight 
+		elif comp_name == "camera":
+			if "camera" in bt_event.updates:
+				#usually available as avg consumption (Intended as a rough estimate for an application running a preview and capturing approximately 10 full-resolution pictures per minute.)
+				cam_current = possible_states["avg"]
+				current+=cam_current
+		
+			if "flashlight" in bt_event.updates:
+				flash_curr = possible_states["flashlight"]
+				current+=flash_curr
+		# dsp
+		elif comp_name == "dsp":
+			
+			if "video" in bt_event.updates:
+				video_curr = possible_states["video"] if comp_name == "dsp" else possible_states
+				current+=video_curr
+
+			if "audio" in bt_event.updates:
+				print("audio")
+				audio_curr = possible_states["audio"] if comp_name == "dsp" else possible_states
+				current+=audio_curr
+		
+		# audio
+		elif  comp_name == "video" and "video" in bt_event.updates:
+			video_curr = possible_states
+			current+=video_curr
+		# video
+		elif  comp_name == "audio" and "audio" in bt_event.updates:
+			audio_curr = possible_states
+			current+=audio_curr
+
+		# wifi 
+		elif comp_name == "wifi" and "wifi_running" in bt_event.updates:
+			on_current = possible_states["on"] if "on" in possible_states else 0
+			on_current += possible_states["controller"]["idle"] if ( "controller" in possible_states and "idle" in possible_states["controller"] ) else 0
+			current+= on_current
+			if "wifi_scan" in bt_event.updates:
+				if "scan" in possible_states:
+					current+= possible_states["scan"]
+				if "controller" in possible_states:
+					curravg=0
+					avg_ct =0
+					if "tx" in possible_states["controller"]:
+						curravg+=possible_states["controller"]["tx"]
+						avg_ct+=1
+					if "rx" in possible_states["controller"]:
+						curravg+=possible_states["controller"]["rx"]
+						avg_ct+=1
+					current += safe_division(curravg, avg_ct)
+
+			elif "wifi_radio" in bt_event.updates:
+				current+= possible_states["active"] if "active" in possible_states else 0
+				if "controller" in possible_states:
+					curravg=0
+					avg_ct =0
+					if "tx" in possible_states["controller"]:
+						curravg+=possible_states["controller"]["tx"]
+						avg_ct+=1
+					if "rx" in possible_states["controller"]:
+						curravg+=possible_states["controller"]["rx"]
+						avg_ct+=1
+					current += safe_division(curravg, avg_ct)
+
+		# gps 
+		elif comp_name == "gps":
+			if "signalqualitybased" in possible_states: # and "gps_signal_quality" in bt_event.updates:
+				# considerate gps signal quality
+				if "gps_signal_quality" in bt_event.updates:
+					val = 1 if bt_event.updates["gps_signal_quality"] == "good" else 0
+					current+= possible_states["signalqualitybased"][val]
+			if "on" in 	possible_states and "gps" in bt_event.updates:
+				current+= possible_states["on"]
+		
+		#bluetooth
+		elif comp_name == "bluetooth":
+			if self.android_version<7 or "controller" not in possible_states:
+				#account blue on and active vals
+				if "ble_scan" in  bt_event.updates:
+					current+=  possible_states["active"] if "active" in possible_states else 0
+					current+=  possible_states["on"] if "on" in possible_states else 0
+				elif "bluetooth" in  bt_event.updates:
+					current+=  possible_states["on"] if "on" in possible_states else 0
+			elif "controller" in possible_states:
+				current += possible_states["controller"]["idle"] if ( "idle" in possible_states["controller"] ) else 0
+				if "ble_scan" in  bt_event.updates:
+					if "tx" in possible_states["controller"]:
+						curravg+=possible_states["controller"]["tx"]
+						avg_ct+=1
+					if "rx" in possible_states["controller"]:
+						curravg+=possible_states["controller"]["rx"]
+						avg_ct+=1
+					current += safe_division(curravg, avg_ct)
+
+		# radio =  modem
+		elif comp_name == "radio":
+			#radio.on
+			if "phone_scanning" in  bt_event.updates:
+				# radio.scanning
+				current += possible_states["scanning"] if "scanning" in possible_states else 0
+
+			elif "mobile_radio" in  bt_event.updates:
+				on_vals =  possible_states["on"] if "on" in possible_states else [] 
+				signal_stren = bt_event.updates["phone_signal_strength"] if "phone_signal_strength" in bt_event.updates else 0
+				if signal_stren > len(on_vals) and len(on_vals)>0:
+					current+= on_vals[-1]
+				elif  len(on_vals)>0:
+					current+= on_vals[signal_stren]
+				# radio.active == mobile_radio - transmiting
+				
+		elif comp_name == "modem":
+			#same as radio
+			if "phone_scanning" in  bt_event.updates:
+				curravg=0
+				avg_ct=0
+				if "tx" in possible_states["controller"]:
+					on_vals =  possible_states["controller"]["tx"] if "tx" in possible_states["controller"] else [] 
+					signal_stren = bt_event.updates["phone_signal_strength"] if "phone_signal_strength" in bt_event.updates else 0
+					if signal_stren > len(on_vals) and len(on_vals)>0:
+						curravg+= on_vals[-1]
+					elif  len(on_vals)>0:
+						curravg+= on_vals[signal_stren]
+					print(signal_stren)
+					avg_ct+=1
+				if "rx" in possible_states["controller"]:
+					curravg+=possible_states["controller"]["rx"]
+					avg_ct+=1
+				current += safe_division(curravg, avg_ct)
+			elif "mobile_radio" in  bt_event.updates:
+				current+=  possible_states["idle"] if "idle" in possible_states else 0	
+		# cpu
+		elif comp_name == "cpu":
+			# retrieve just the component state
+			#if phone has multiple cpu_clusters and that info is present in power profile file
+			# only for devices with heterogeneous CPU architectures.
+			#print(possible_states)
+			#has_multiple_cpu_clusters= "clusters" in possible_states and "cores" in possible_states["clusters"] and  len(possible_states["clusters"]["cores"])>1
+			#if has_multiple_cpu_clusters:
+				#cores_per_cluster = possible_states["clusters"]["cores"]
+				# calculate energy per cluster
+				#if areInMinCPUFreq(bt_event.updates["cpufreq"] , possible_states):
+						# assume is just awake
+
+			#		current += possible_states["awake"]
+		#		else:
+
+					# calculate active state
+		#			current += 0 # possible_states["awake"] if "awake" in possible_states else 0
+		#			print("TODO Calculate power according to freq")
+				
+
+
+		#	else:
+				if "running" in bt_event.updates:
+					# is active or just awake	
+					#if "awake" in possible_states and areInMinCPUFreq(bt_event.updates["cpufreq"] , possible_states):
+					#if areInMinCPUFreq(bt_event.updates["cpufreq"] , possible_states):
+						# assume is just awake
+
+					#	current += possible_states["awake"]
+					#else:
+						# calculate active state
+					#	current += 0 # possible_states["awake"] if "awake" in possible_states else 0
+					#	print("TODO Calculate power according to freq")
+					current = "active"
+				else:
+					#cpu in idle state
+					#current+= possible_states["idle"] if "idle" in possible_states else 0
+					current = "idle"
 
 		return current
 

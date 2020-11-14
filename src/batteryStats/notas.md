@@ -22,4 +22,11 @@
 - screen - 
 
 -screen_doze - display state: The display is dozing in a low power state; it is still on but is optimized for showing system-provided content while the device is non-interactive. https://developer.android.com/reference/android/view/Display.html#STATE_DOZE
-		- equivalent to ambient.on
+		- equivalent to ambient.on no power profile
+		- https://www.protechtraining.com/blog/post/diving-into-android-m-doze-875
+
+- whitelist -  whitelisted from Doze – these apps are not restricted in their alarms, etc.
+
+
+- bluetooth - even if bluetooth turned off in ui settings, the device keeps scanning if blt is being used for location purposes
+- https://github.com/AltBeacon/android-beacon-library/issues/754

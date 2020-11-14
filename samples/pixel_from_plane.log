@@ -1,0 +1,165 @@
+Battery History (0% used, 3908 used of 4096KB, 56 strings using 7448):
+                    0 (14) RESET:TIME: 2020-11-11-11-08-51
+                    0 (1) 100 status=charging health=good plug=ac temp=290 volt=4397 charge=3211 modemRailChargemAh=0 wifiRailChargemAh=0 +running +wake_lock +screen +plugged phone_state=off phone_signal_strength=poor brightness=bright +charging +usb_data +ble_scan
+                    0 (2) 100 top=u0a152:"com.google.android.apps.nexuslauncher"
+                    0 (2) 100 job=1000:"android/com.android.server.pm.BackgroundDexOptService"
+                    0 (2) 100 user=0:"0"
+                    0 (2) 100 userfg=0:"0"
+                 +2ms (2) 100 stats=0:"wakelock-change"
+                +34ms (2) 100 stats=0:"dump"
+               +232ms (2) 100 +tmpwhitelist=u0a143:"broadcast:u0a143:com.google.android.intent.action.GCM_RECONNECT"
+             +2s227ms (2) 100 stats=0:"dump"
+             +6s129ms (2) 100 +longwake=u0a143:"wake:com.google.android.gms/.chimera.GmsIntentOperationService"
+             +6s149ms (2) 100 -longwake=u0a143:"wake:com.google.android.gms/.chimera.GmsIntentOperationService"
+             +6s667ms (2) 100 -job=1000:"android/com.android.server.pm.BackgroundDexOptService"
+             +6s721ms (2) 100 +job=u0a122:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+             +6s832ms (2) 100 -job=u0a122:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+             +7s177ms (2) 100 +job=u0a130:"com.google.android.apps.scone/.awareness.OosObserver"
+             +7s201ms (2) 100 -job=u0a130:"com.google.android.apps.scone/.awareness.OosObserver"
+            +10s257ms (2) 100 -tmpwhitelist=u0a143:"broadcast:u0a143:com.google.android.intent.action.GCM_RECONNECT"
+            +20s640ms (3) 100 brightness=dark stats=0:"dump"
+            +29s221ms (2) 100 +longwake=u0a143:"wake:com.google.android.gms/.auth.account.be.accountstate.LoginAccountsChangedIntentService"
+            +29s263ms (2) 100 -longwake=u0a143:"wake:com.google.android.gms/.auth.account.be.accountstate.LoginAccountsChangedIntentService"
+            +30s052ms (2) 100 +longwake=u0a143:"wake:com.google.android.gms/.chimera.GmsIntentOperationService"
+            +30s097ms (2) 100 -longwake=u0a143:"wake:com.google.android.gms/.chimera.GmsIntentOperationService"
+            +34s832ms (3) 100 +phone_scanning +audio phone_state=out phone_signal_strength=none brightness=bright +wifi +job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.RefreshActivationStateJobService"
+            +35s080ms (2) 100 -job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.RefreshActivationStateJobService"
+            +35s095ms (2) 100 +job=u0a124:"com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService"
+            +35s103ms (2) 100 +job=u0a133:"com.google.android.settings.intelligence/.modules.sliceindexing.impl.SliceIndexUpdateJobService"
+            +35s109ms (2) 100 +job=u0a179:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+            +35s128ms (3) 100 -audio -job=u0a124:"com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService"
+            +35s159ms (2) 100 stats=0:"wifi-off"
+            +35s224ms (2) 100 -job=u0a133:"com.google.android.settings.intelligence/.modules.sliceindexing.impl.SliceIndexUpdateJobService"
+            +35s233ms (2) 100 -job=u0a179:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+            +35s918ms (2) 100 +job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.RefreshActivationStateJobService"
+            +35s943ms (2) 100 -job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.RefreshActivationStateJobService"
+            +35s958ms (2) 100 +job=u0a179:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+            +36s053ms (2) 100 -job=u0a179:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+            +44s920ms (2) 100 +job=u0a122:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+            +44s962ms (2) 100 -job=u0a122:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+            +45s026ms (2) 100 +job=u0a130:"com.google.android.apps.scone/.awareness.OosObserver"
+            +45s037ms (2) 100 -job=u0a130:"com.google.android.apps.scone/.awareness.OosObserver"
+            +47s272ms (2) 100 temp=305 charge=3216
+            +50s027ms (3) 100 +audio -top=u0a152:"com.google.android.apps.nexuslauncher"
+            +50s358ms (2) 100 +top=1000:"com.android.settings"
+            +50s542ms (2) 100 pkgactive=u0a133:"com.google.android.settings.intelligence"
+            +50s544ms (3) 100 -audio stats=0:"get-stats"
+            +50s811ms (2) 100 stats=0:"get-stats"
+            +50s847ms (2) 100 pkgactive=u0a146:"com.google.android.apps.tips"
+            +50s872ms (2) 100 stats=0:"get-stats"
+            +50s901ms (2) 100 stats=0:"get-stats"
+            +50s950ms (2) 100 pkgactive=u0a82:"com.google.android.permissioncontroller"
+            +52s196ms (2) 100 +audio
+            +52s333ms (2) 100 -audio
+          +1m08s352ms (2) 100 stats=0:"dump"
+          +1m10s009ms (1) 100 charge=3217
+          +1m16s127ms (2) 100 brightness=dark
+          +1m18s319ms (2) 100 stats=0:"dump"
+          +1m26s249ms (2) 100 brightness=bright
+          +1m27s548ms (2) 100 +audio -wifi
+          +1m27s551ms (3) 100 +wifi_scan -audio +wifi_running +wifi stats=0:"wifi-on"
+          +1m27s971ms (2) 100 stats=0:"wifi-off"
+          +1m27s983ms (2) 100 stats=0:"wifi-running"
+          +1m29s885ms (2) 100 stats=0:"dump"
+          +1m31s391ms (1) 100 -wifi_scan
+          +1m37s968ms (1) 100 +wifi_scan
+          +1m39s338ms (2) 100 +job=u0a156:"com.google.android.apps.turbo/com.google.android.libraries.smartbattery.appusage.library.InferAppBucketsJob"
+          +1m39s501ms (2) 100 -job=u0a156:"com.google.android.apps.turbo/com.google.android.libraries.smartbattery.appusage.library.InferAppBucketsJob"
+          +1m41s431ms (1) 100 -wifi_scan wifi_suppl=disabled
+          +1m41s540ms (1) 100 wifi_suppl=disconn
+          +1m41s541ms (1) 100 wifi_suppl=associating
+          +1m41s664ms (1) 100 wifi_suppl=associated
+          +1m41s665ms (1) 100 wifi_suppl=4-way-handshake
+          +1m41s672ms (1) 100 wifi_signal_strength=2 wifi_suppl=group-handshake
+          +1m41s715ms (1) 100 wifi_suppl=completed
+          +1m44s022ms (2) 100 +wifi_radio stats=0:"wifi-state"
+          +1m44s102ms (2) 100 conn=1:"CONNECTED"
+          +1m44s111ms (2) 100 +job=u0a130:"com.google.android.apps.scone/.log.LogJobIntentService"
+          +1m44s189ms (2) 100 +job=u0a133:"com.google.android.settings.intelligence/.modules.routines.impl.RoutinesJobIntentService"
+          +1m44s210ms (2) 100 -job=u0a130:"com.google.android.apps.scone/.log.LogJobIntentService"
+          +1m44s256ms (2) 100 -job=u0a133:"com.google.android.settings.intelligence/.modules.routines.impl.RoutinesJobIntentService"
+          +1m44s430ms (14) TIME: 2020-11-11-11-10-22
+          +1m44s468ms (2) 100 stats=0:"dump"
+          +1m44s645ms (2) 100 +job=u0a115:"com.google.android.as/com.google.android.apps.miphone.aiai.common.superpacks.impl.AiAiPersistentDownloadJobService"
+          +1m44s661ms (2) 100 +job=u0a149:"com.google.android.ims/.metrics.PeriodicMetricsJobService"
+          +1m44s668ms (2) 100 +job=u0a124:"com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService"
+          +1m44s670ms (2) 100 +job=u0a129:"com.google.android.hardwareinfo/.HardwareInfoService"
+          +1m44s676ms (2) 100 +job=u0a144:"com.google.android.wfcactivation/.gcm.GcmRegistrationService"
+          +1m44s685ms (2) 100 +job=u0a123:"com.android.vending/com.google.android.finsky.scheduler.process.mainimpl.PhoneskyJobServiceMain"
+          +1m44s707ms (2) 100 -job=u0a149:"com.google.android.ims/.metrics.PeriodicMetricsJobService"
+          +1m44s717ms (2) 100 +job=u0a194:"com.google.android.apps.docs/com.google.android.libraries.internal.growth.growthkit.internal.jobs.impl.GrowthKitJobService"
+          +1m44s843ms (2) 100 -job=u0a129:"com.google.android.hardwareinfo/.HardwareInfoService"
+          +1m44s861ms (2) 100 +job=u0a179:"com.google.android.apps.messaging/com.google.android.libraries.internal.growth.growthkit.internal.jobs.impl.GrowthKitJobService"
+          +1m44s893ms (2) 100 -job=u0a144:"com.google.android.wfcactivation/.gcm.GcmRegistrationService"
+          +1m44s904ms (3) 100 +wifi_scan +wifi_multicast +job=u0a172:"com.google.android.apps.photos/.actionqueue.impl.OnlineActionJobsService"
+          +1m45s775ms (2) 100 -job=u0a123:"com.android.vending/com.google.android.finsky.scheduler.process.mainimpl.PhoneskyJobServiceMain"
+          +1m45s787ms (2) 100 +job=u0a172:"com.google.android.apps.photos/com.google.android.libraries.notifications.entrypoints.scheduled.ScheduledTaskService"
+          +1m45s824ms (2) 100 -job=u0a172:"com.google.android.apps.photos/.actionqueue.impl.OnlineActionJobsService"
+          +1m45s831ms (2) 100 +job=u0a172:"com.google.android.apps.photos/.jobqueue.PhotosJobQueueJobsService"
+          +1m45s834ms (2) 100 -job=u0a172:"com.google.android.apps.photos/com.google.android.libraries.notifications.entrypoints.scheduled.ScheduledTaskService"
+          +1m45s840ms (2) 100 +job=u0a176:"com.google.android.contacts/com.google.android.libraries.internal.growth.growthkit.internal.jobs.impl.GrowthKitJobService"
+          +1m45s865ms (2) 100 -job=u0a172:"com.google.android.apps.photos/.jobqueue.PhotosJobQueueJobsService"
+          +1m45s875ms (2) 100 +job=u0a137:"com.google.android.dialer/com.google.android.libraries.internal.growth.growthkit.internal.jobs.impl.GrowthKitJobService"
+          +1m45s998ms (2) 100 +fg=u0a122:"com.google.android.apps.wellbeing"
+          +1m46s286ms (2) 100 -fg=u0a122:"com.google.android.apps.wellbeing"
+          +1m46s578ms (2) 100 -job=u0a124:"com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService"
+          +1m46s583ms (2) 100 +job=u0a137:"com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m47s241ms (2) 100 charge=3220 -job=u0a194:"com.google.android.apps.docs/com.google.android.libraries.internal.growth.growthkit.internal.jobs.impl.GrowthKitJobService"
+          +1m47s447ms (2) 100 -job=u0a176:"com.google.android.contacts/com.google.android.libraries.internal.growth.growthkit.internal.jobs.impl.GrowthKitJobService"
+          +1m47s460ms (2) 100 +job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.StatusCheckJobService"
+          +1m47s483ms (2) 100 -job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.StatusCheckJobService"
+          +1m47s491ms (2) 100 +job=u0a162:"com.google.android.webview/org.chromium.android_webview.services.AwVariationsSeedFetcher"
+          +1m47s642ms (2) 100 -job=u0a179:"com.google.android.apps.messaging/com.google.android.libraries.internal.growth.growthkit.internal.jobs.impl.GrowthKitJobService"
+          +1m47s654ms (2) 100 +job=u0a172:"com.google.android.apps.photos/.dbprocessor.impl.DatabaseProcessorJobService"
+          +1m47s683ms (2) 100 -job=u0a172:"com.google.android.apps.photos/.dbprocessor.impl.DatabaseProcessorJobService"
+          +1m47s689ms (2) 100 wifi_signal_strength=3 +job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.scheduling.TaskSchedulerJobService"
+          +1m48s585ms (2) 100 -job=u0a137:"com.google.android.dialer/com.google.android.libraries.internal.growth.growthkit.internal.jobs.impl.GrowthKitJobService"
+          +1m49s160ms (2) 100 -job=u0a162:"com.google.android.webview/org.chromium.android_webview.services.AwVariationsSeedFetcher"
+          +1m49s445ms (2) 100 +tmpwhitelist=u0a72:"broadcast:u0a72:com.android.providers.calendar.intent.CalendarProvider2"
+          +1m50s072ms (2) 100 -job=u0a137:"com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService"
+          +1m51s518ms (2) 100 brightness=dark
+          +1m52s788ms (3) 100 -wifi_scan -wifi_multicast -job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.scheduling.TaskSchedulerJobService"
+          +1m53s352ms (2) 100 +wifi_scan brightness=bright
+          +1m54s645ms (2) 100 -job=u0a115:"com.google.android.as/com.google.android.apps.miphone.aiai.common.superpacks.impl.AiAiPersistentDownloadJobService"
+          +1m56s782ms (1) 100 wifi_signal_strength=2
+          +1m58s983ms (2) 100 stats=0:"dump"
+          +1m59s466ms (2) 100 -wifi_scan wifi_signal_strength=3 -tmpwhitelist=u0a72:"broadcast:u0a72:com.android.providers.calendar.intent.CalendarProvider2"
+          +2m02s223ms (2) 100 +job=u0a124:"com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService"
+          +2m02s526ms (2) 100 -job=u0a124:"com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService"
+          +2m06s803ms (1) 100 wifi_suppl=group-handshake
+          +2m06s803ms (1) 100 wifi_suppl=completed
+          +2m07s971ms (1) 100 +wifi_scan
+          +2m13s374ms (2) 100 +audio
+          +2m13s647ms (3) 100 -wifi_scan -audio -screen brightness=dark wifi_signal_strength=2 stats=0:"screen-state"
+          +2m14s159ms (3) 100 +sensor +wifi_scan +job=u0a130:"com.google.android.apps.scone/.awareness.AwarenessJobIntentService"
+          +2m14s446ms (2) 100 +job=u0a130:"com.google.android.apps.scone/.awareness.RelayerJobIntentService"
+          +2m14s448ms (2) 100 -job=u0a130:"com.google.android.apps.scone/.awareness.AwarenessJobIntentService"
+          +2m14s467ms (2) 100 +job=u0a130:"com.google.android.apps.scone/.log.LogJobIntentService"
+          +2m14s471ms (2) 100 -job=u0a130:"com.google.android.apps.scone/.awareness.RelayerJobIntentService"
+          +2m14s484ms (2) 100 -ble_scan -job=u0a130:"com.google.android.apps.scone/.log.LogJobIntentService"
+          +2m16s703ms (1) 100 -wake_lock
+          +2m19s992ms (2) 100 +wake_lock=u0a143:"CMWakeLock" -wifi_scan
+          +2m20s025ms (1) 100 -wake_lock
+          +2m22s762ms (1) 100 wifi_suppl=group-handshake
+          +2m22s763ms (2) 100 +wake_lock=1073:"IpReachabilityMonitor.wlan0" wifi_suppl=completed
+          +2m26s281ms (1) 100 -wake_lock
+          +2m32s527ms (2) 100 +wake_lock=1000:"*alarm*:TIME_TICK"
+          +2m32s552ms (2) 100 -wake_lock +job=u0a124:"com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService"
+          +2m32s571ms (3) 100 +wake_lock=u0a124:"*job*/com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService" -job=u0a124:"com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService"
+          +2m33s038ms (2) 100 -wake_lock +job=u0a137:"com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m33s068ms (2) 100 +wake_lock=u0a137:"*job*/com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m34s395ms (2) 100 -wake_lock -job=u0a137:"com.google.android.dialer/androidx.work.impl.background.systemjob.SystemJobService"
+          +2m47s280ms (2) 100 temp=318 charge=3224
+          +2m51s648ms (1) 100 -wifi_radio
+          +2m56s448ms (2) 100 +wake_lock=1001:"*telephony-radio*"
+          +2m56s450ms (1) 100 -wake_lock
+          +2m56s450ms (2) 100 +wake_lock=1000:"*telephony-radio*"
+          +2m56s465ms (1) 100 -wake_lock
+          +2m56s466ms (3) 100 +wake_lock=1001:"*telephony-radio*" stats=0:"dump"
+          +2m56s513ms (1) 100 -wake_lock
+
+Total cpu time reads: 0
+Batched cpu time reads: 0
+Batching Duration (min): 4
+All UID cpu time reads since the later of device start or stats reset: 60
+UIDs removed since the later of device start or stats reset: 0

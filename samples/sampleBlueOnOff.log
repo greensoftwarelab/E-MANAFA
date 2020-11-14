@@ -1,0 +1,59 @@
+Battery History (0% used, 1332 used of 4096KB, 13 strings using 1236):
+                    0 (14) RESET:TIME: 2020-11-12-14-24-33
+                    0 (1) 093 status=charging health=good plug=ac temp=265 volt=4395 charge=2852 modemRailChargemAh=0 wifiRailChargemAh=0 +running +wake_lock +screen +plugged phone_signal_strength=great +wifi +charging +usb_data wifi_signal_strength=2 wifi_suppl=completed +ble_scan
+                    0 (2) 093 top=u0a152:"com.google.android.apps.nexuslauncher"
+                    0 (2) 093 user=0:"0"
+                    0 (2) 093 userfg=0:"0"
+                +27ms (2) 093 stats=0:"dump"
+             +2s486ms (2) 093 stats=0:"dump"
+             +4s978ms (3) 093 +audio phone_state=off brightness=bright -wifi stats=0:"wifi-on"
+             +5s294ms (3) 093 -audio +job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.RefreshActivationStateJobService"
+             +5s445ms (2) 093 -job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.RefreshActivationStateJobService"
+             +5s452ms (2) 093 +job=u0a179:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+             +5s572ms (2) 093 -job=u0a179:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+             +5s667ms (3) 094 charge=2860 +job=u0a156:"com.google.android.apps.turbo/.nudges.broadcasts.BatteryHistoryLoggerJobService"
+             +5s680ms (2) 094 stats=0:"wakelock-change"
+             +5s733ms (2) 094 -job=u0a156:"com.google.android.apps.turbo/.nudges.broadcasts.BatteryHistoryLoggerJobService"
+             +8s309ms (2) 094 stats=0:"dump"
+            +15s082ms (2) 094 +job=u0a122:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+            +15s207ms (2) 094 -job=u0a122:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+            +15s285ms (2) 094 +job=u0a130:"com.google.android.apps.scone/.awareness.OosObserver"
+            +15s306ms (2) 094 -job=u0a130:"com.google.android.apps.scone/.awareness.OosObserver"
+            +28s949ms (3) 094 brightness=dark stats=0:"dump"
+            +30s490ms (2) 094 stats=0:"dump"
+            +33s765ms (3) 094 +phone_scanning +audio phone_state=out phone_signal_strength=none brightness=bright +wifi -ble_scan stats=0:"dump"
+            +34s174ms (2) 094 +job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.RefreshActivationStateJobService"
+            +34s196ms (2) 094 -job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.RefreshActivationStateJobService"
+            +34s216ms (3) 094 -audio +job=u0a179:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+            +34s318ms (2) 094 -job=u0a179:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+            +34s318ms (2) 094 stats=0:"wifi-off"
+            +35s137ms (2) 094 +job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.RefreshActivationStateJobService"
+            +35s163ms (2) 094 -job=u0a137:"com.google.android.dialer/com.android.voicemail.impl.RefreshActivationStateJobService"
+            +35s174ms (2) 094 +job=u0a179:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+            +35s268ms (2) 094 -job=u0a179:"com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService"
+            +35s776ms (2) 094 +ble_scan pkgactive=u0a169:"com.google.android.music"
+            +35s840ms (2) 094 pkgactive=u0a190:"com.google.android.youtube"
+            +41s128ms (2) 094 stats=0:"dump"
+            +43s996ms (2) 094 +job=u0a122:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+            +44s088ms (2) 094 -job=u0a122:"com.google.android.apps.wellbeing/.focusmode.growth.SettingsStateChangeService$AirplaneModeChangeService"
+            +44s146ms (2) 094 +job=u0a130:"com.google.android.apps.scone/.awareness.OosObserver"
+            +44s165ms (2) 094 -job=u0a130:"com.google.android.apps.scone/.awareness.OosObserver"
+            +57s905ms (2) 094 brightness=dark
+          +1m05s672ms (1) 094 charge=2871
+          +1m12s729ms (1) 094 charge=2873
+          +2m05s675ms (2) 094 temp=275 charge=2882
+          +2m37s289ms (3) 094 +audio brightness=bright stats=0:"dump"
+          +2m38s123ms (2) 094 -audio
+          +2m45s484ms (2) 094 stats=0:"dump"
+          +2m50s987ms (2) 094 stats=0:"dump"
+          +3m01s796ms (2) 094 brightness=dark
+          +3m05s671ms (3) 095 charge=2892 +job=u0a156:"com.google.android.apps.turbo/.nudges.broadcasts.BatteryHistoryLoggerJobService"
+          +3m05s697ms (2) 095 stats=0:"wakelock-change"
+          +3m05s804ms (2) 095 -job=u0a156:"com.google.android.apps.turbo/.nudges.broadcasts.BatteryHistoryLoggerJobService"
+          +3m08s249ms (2) 095 stats=0:"dump"
+
+Total cpu time reads: 0
+Batched cpu time reads: 0
+Batching Duration (min): 102
+All UID cpu time reads since the later of device start or stats reset: 52
+UIDs removed since the later of device start or stats reset: 0
