@@ -1,0 +1,7 @@
+Battery History (0% used, 0 used of 4096KB, 0 strings using 0):
+
+Total cpu time reads: 0
+Batched cpu time reads: 0
+Batching Duration (min): 1000
+All UID cpu time reads since the later of device start or stats reset: 8
+UIDs removed since the later of device start or stats reset: 0

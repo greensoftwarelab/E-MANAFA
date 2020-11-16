@@ -2,10 +2,10 @@
 from os import sys,path
 import re,json
 #sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-from PowerProfile import PowerProfile
-from dateUtils  import convertBatStatTimeToTimeStamp
+from .PowerProfile import PowerProfile
+from .dateUtils  import convertBatStatTimeToTimeStamp,batStatResetTimeToTimeStamp
 import copy
-default_json_path="src/batteryStats/BatteryStatus.json"
+default_json_path="src/greenstats/batteryStats/BatteryStatus.json"
 
 
 KNOWN_VALUES=set(
@@ -15,13 +15,13 @@ KNOWN_VALUES=set(
 
 
 def areInMinCPUFreq( cpu_freq , possible_cpu_states  ):
-	print("rolando")
 	possible_freqs = possible_cpu_states["speeds"] if "speeds" in possible_cpu_states else []
 	if len(possible_freqs)==0:
 		possible_freqs = possible_cpu_states["core_speeds"] if "core_speeds" in possible_cpu_states else []
 		if len(possible_freqs)>0:
 			possible_freqs = sum(possible_freqs.values(),[]) 
 	print("--")
+	#tem que ser os 2 tempos absolutos
 	print(possible_freqs)
 	return False
 
@@ -49,8 +49,6 @@ class BatteryEvent(object):
 		self.concurrentUpdates["userfg"]=[]
 		self.concurrentUpdates["wake_lock_in"]=[]
 		self.concurrentUpdates["alarm"]=[]
-
-	
 		self.addEvents(vals)
 
 	def __str__(self):
@@ -82,21 +80,22 @@ class BatteryEvent(object):
 					self.updates[ev_def]=event1[ev]
 
 
-class BatteryStats(object):
-	"""docstring for BatteryStats"""
-	def __init__(self,def_file=default_json_path, android_version=10):
+class BatteryStatsParser(object):
+	"""docstring for BatteryStatsParser"""
+	def __init__(self, powerProfile=None , timezone="EST", def_file=default_json_path, android_version=10):
 		self.events = []
 		self.definitions = self.loadDefinitionFile(def_file)
-		self.powerProfile = None
+		self.powerProfile = self.loadPowerProfile(powerProfile) if powerProfile is not None else {}
 		self.android_version = android_version
+		self.start_time = 0
+		self.timezone = timezone # adb shell  date +"%Z %z"
 
 	def loadPowerProfile(self, xml_profile ):
-		self.powerProfile = PowerProfile(xml_profile)
+		return PowerProfile(xml_profile)
 
 	def loadDefinitionFile(self,def_file):
 		with open(def_file,"r") as dff:
 			return json.load(dff)
-
 
 	def getDefinitionVal(self,key,val=""):
 		if re.sub(r"\+|\-", "", key) in self.definitions["monoval"]:
@@ -117,7 +116,6 @@ class BatteryStats(object):
 		accumulator = ""
 		latest_state=None
 		events={}
-
 		for state in re.sub(r"^ ","",states).split(" "):
 			#print("->" +state)
 			if accum:
@@ -147,22 +145,26 @@ class BatteryStats(object):
 				st = self.getDefinitionVal(state)
 				#print("%s - %s" %(state,st))
 				#print("val "+str(self.getDefinitionVal(state)))
-				events[state]=st
-			
+				events[state]=st		
 		return events
 	
 	def parseHistory(self,lines_list):
 		for i, line in enumerate(lines_list):
+			if re.match(r"^Battery History \([0-9]", line):
+				#header, ignore
+				continue
 			if re.match(r"^Per-PID Stats", line)or len(line)==0:
 				return
 			elif re.match(r"^\s*([^\s]+) (\(\d+\)) (\d+)(.*)?$", line):
 				x = re.match(r"^\s*([^\s]+) (\(\d+\)) (\d+)(.*)?$", line)
-				#print(x.groups())
-				#print("time:" +x.groups()[0])
-				time = convertBatStatTimeToTimeStamp(x.groups()[0])
+				time   = convertBatStatTimeToTimeStamp(x.groups()[0])
+				time  += self.start_time
 				events = self.parseStates(x.groups()[3])
-				
 				self.addUpdate(time, events)
+			elif re.match(r"^\s*0 (\(\d+\)) (.*)?$", line):
+				x = re.match(r"^\s*0 (\(\d+\)) (.*)?$", line)
+				if "RESET:TIME" in x.groups()[1]:
+					self.start_time= batStatResetTimeToTimeStamp((x.groups()[1]).replace("RESET:TIME: ",""), self.timezone )		
 			else:
 				# TODO Handle DcpuStats and DpstStats
 				print("linha invalida" + line)
@@ -187,21 +189,11 @@ class BatteryStats(object):
 	def estimateCurrentConsumption(self,bt_event):
 		power={}
 		for p,v in self.powerProfile.components.items():
-			
-			#print(p)
-
 			st = self.determinateComponentCurrent(bt_event,p,v)
 			power[p]=st
-			print("%s %s" %(p , str(st)))
-			#print(str(p in self.updates)+ " + " +str(p) )	
-		
-		#power = total_current * float(bt_event.updates["volt"])
-		#print(bt_event.updates["volt"])
-		#print(power)
-		print(power)
+			#print("%s %s" %(p , str(st)))
 		bt_event.currents=power
 		
-
 
 	def determinateComponentCurrent(self,bt_event,comp_name, possible_states):
 		current = 0.0
@@ -389,26 +381,15 @@ class BatteryStats(object):
 		return current
 
 	def parseFile(self,filename):
-		print("parsing")
 		with open(filename, 'r') as filehandle:
 			lines=filehandle.read().splitlines()
-		for i, line in enumerate(lines):
-			#print(line)
-			if re.match(r"^Battery History",line):
-				self.parseHistory(lines[i:])
-			if re.match(r"^Per-PID Stats:",line):
-				print("olha o pid stats")
-				return
-			else:
-				return
-
+			self.parseHistory(lines)
 
 if __name__ == '__main__':
 	if len(sys.argv)>1:
-		x = BatteryStats()
-		#pp = "samples/profiles/power_profile.xml"
-		pp = "samples/profiles/power_profile_pixel3a_grapheneos.xml"
-		x.loadPowerProfile(pp)
+		pp = "samples/profiles/power_profile.xml"
+		#pp = "samples/profiles/power_profile_pixel3a_grapheneos.xml"
+		x = BatteryStatsParser(powerProfile=pp,timezone="WET")
 		x.parseFile(sys.argv[1])
 		
 
