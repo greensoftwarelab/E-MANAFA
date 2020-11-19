@@ -3,7 +3,7 @@ from os import sys,path
 import re,json
 #sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 from .PowerProfile import PowerProfile
-from .dateUtils  import convertBatStatTimeToTimeStamp,batStatResetTimeToTimeStamp
+from .dateUtils  import convertBatStatTimeToTimeStamp,batStatResetTimeToTimeStamp,epochToDate
 import copy
 default_json_path="src/greenstats/batteryStats/BatteryStatus.json"
 
@@ -60,6 +60,19 @@ class BatteryEvent(object):
 	def isConcurrent(self,state):
 		#return re.match(r"(\+|\-)?(tmpwhitelist|job|sync|top|longwake|fg|proc)", state)
 		return state in self.concurrentUpdates
+
+	def getCurrentOfBatStatEvent(self):
+		total=0
+		for x in self.currents.values():
+			try:
+				z = float(x)
+				total+=z
+			except ValueError:
+				continue		
+		return total / 1000
+
+	def getVoltageValue(self):
+		return float(self.updates["volt"]) / 1000 if "volt" in self.updates else 0
 
 	def addEvents(self,event1):
 		for ev in event1.keys():
@@ -157,21 +170,25 @@ class BatteryStatsParser(object):
 				return
 			elif re.match(r"^\s*([^\s]+) (\(\d+\)) (\d+)(.*)?$", line):
 				x = re.match(r"^\s*([^\s]+) (\(\d+\)) (\d+)(.*)?$", line)
-				time   = convertBatStatTimeToTimeStamp(x.groups()[0])
+				time   = convertBatStatTimeToTimeStamp(x.groups()[0], timezone=self.timezone)
 				time  += self.start_time
+				#print(time)
 				events = self.parseStates(x.groups()[3])
 				self.addUpdate(time, events)
 			elif re.match(r"^\s*0 (\(\d+\)) (.*)?$", line):
 				x = re.match(r"^\s*0 (\(\d+\)) (.*)?$", line)
 				if "RESET:TIME" in x.groups()[1]:
 					self.start_time= batStatResetTimeToTimeStamp((x.groups()[1]).replace("RESET:TIME: ",""), self.timezone )		
+					#print(epochToDate(self.start_time))
 			else:
 				# TODO Handle DcpuStats and DpstStats
 				print("linha invalida" + line)
 
 	def addUpdate(self, time,bat_events):
 		if len(self.events)==0:
-			self.events.append( BatteryEvent( time,bat_events ))
+			bt = BatteryEvent( time,bat_events )
+			self.estimateCurrentConsumption(bt)
+			self.events.append(bt )
 		else:	
 			last_added = self.events[-1]
 			if last_added.time == time:
@@ -194,6 +211,27 @@ class BatteryStatsParser(object):
 			#print("%s %s" %(p , str(st)))
 		bt_event.currents=power
 		
+
+	def getCPUSamplesInBetween(self,start_time, end_time ):
+		l =[]
+		last_ev = self.events[0] if len(self.events)>0 else None
+		last_time = start_time
+		for x in self.events:
+			if x.time > start_time and x.time < end_time:
+				delta = x.time - last_time
+				state = last_ev.currents["cpu"]
+				voltage = last_ev.getVoltageValue() #float(last_ev.updates["volt"])
+				pair = (delta, state,voltage)
+				l.append(pair)
+				last_time= x.time
+			last_ev = x
+		# 
+		last_delta = end_time - last_time
+		last_state = last_ev.currents["cpu"]
+		last_voltage = last_ev.getVoltageValue() #float(last_ev.updates["volt"])
+		last_pair = ( last_delta, last_state,last_voltage)
+		l.append(last_pair)
+		return l
 
 	def determinateComponentCurrent(self,bt_event,comp_name, possible_states):
 		current = 0.0
@@ -227,7 +265,7 @@ class BatteryStatsParser(object):
 				current+=video_curr
 
 			if "audio" in bt_event.updates:
-				print("audio")
+				
 				audio_curr = possible_states["audio"] if comp_name == "dsp" else possible_states
 				current+=audio_curr
 		
@@ -310,11 +348,11 @@ class BatteryStatsParser(object):
 				current += possible_states["scanning"] if "scanning" in possible_states else 0
 
 			elif "mobile_radio" in  bt_event.updates:
-				on_vals =  possible_states["on"] if "on" in possible_states else [] 
+				on_vals =  list(possible_states["on"]) if "on" in possible_states else []
 				signal_stren = bt_event.updates["phone_signal_strength"] if "phone_signal_strength" in bt_event.updates else 0
 				if signal_stren > len(on_vals) and len(on_vals)>0:
-					current+= on_vals[-1]
-				elif  len(on_vals)>0:
+					 current+= on_vals[-1]
+				elif len(on_vals)>0:
 					current+= on_vals[signal_stren]
 				# radio.active == mobile_radio - transmiting
 				
@@ -385,11 +423,11 @@ class BatteryStatsParser(object):
 			lines=filehandle.read().splitlines()
 			self.parseHistory(lines)
 
-if __name__ == '__main__':
-	if len(sys.argv)>1:
-		pp = "samples/profiles/power_profile.xml"
+#if __name__ == '__main__':
+	#if len(sys.argv)>1:
+		#pp = "samples/profiles/power_profile.xml"
 		#pp = "samples/profiles/power_profile_pixel3a_grapheneos.xml"
-		x = BatteryStatsParser(powerProfile=pp,timezone="WET")
-		x.parseFile(sys.argv[1])
+		#x = BatteryStatsParser(powerProfile=pp,timezone="WET")
+		#x.parseFile(sys.argv[1])
 		
 

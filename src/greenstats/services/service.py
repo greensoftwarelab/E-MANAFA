@@ -1,6 +1,7 @@
 
 RESULTS_DIR="results/"
 from .utils import executeShCommand
+
 class Service(object):
 	"""docstring for Service"""
 	def __init__(self,results_dir=""):

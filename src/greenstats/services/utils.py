@@ -17,5 +17,5 @@ def executeShCommand(command):
         print("error executing command %s" % command)
         print(err_msg)
         return -1    
-    elif len(std_err):
+    elif len(std_err)==0:
         return output
