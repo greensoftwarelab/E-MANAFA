@@ -8,8 +8,8 @@ from batteryStats.BatteryStatsParser import BatteryStatsParser
 
 import time
 
-DEFAULT_PROFILE="samples/profiles/power_profile.xml"
-#DEFAULT_PROFILE="samples/profiles/power_profile_pixel3a_grapheneos.xml"
+#DEFAULT_PROFILE="samples/profiles/power_profile.xml"
+DEFAULT_PROFILE="samples/profiles/power_profile_pixel3a_grapheneos.xml"
 
 
 def getLastBootTime():
@@ -49,10 +49,10 @@ class GreenStats(Service):
 		self.perfetto.clean()
 
 	def parseResults(self,pp_file=DEFAULT_PROFILE, bts_file="",pf_file=""):
-		self.bat_events =  BatteryStatsParser(powerProfile=pp_file,timezone=self.timezone)
+		self.bat_events = BatteryStatsParser(powerProfile=pp_file,timezone=self.timezone)
 		self.bat_events.parseFile(bts_file)
 		b_time = getLastBootTime()
-		self.perf_events =  PerfettoCPUfreqParser(pp_file,b_time,timezone=self.timezone)
+		self.perf_events = PerfettoCPUfreqParser(pp_file,b_time,timezone=self.timezone)
 		self.perf_events.parseFile(pf_file)
 	
 
@@ -76,8 +76,7 @@ class GreenStats(Service):
 			last_event = x
 			last_time = x.time
 		
-		# after calcs
-		# TODO merge with cycle
+
 		delta_time = end_time - last_time 
 		if delta_time < 0.0:
 			print("fatal error")
@@ -104,13 +103,12 @@ class GreenStats(Service):
 			for sample in l:
 				delta,state,voltage = sample[0],sample[1],sample[2]
 				cpus_current= last_event.calculateCPUsCurrent(state,self.perf_events.power_profile) 
-				print("cpucu- "+str(cpus_current))
-				print("delta- "+str(delta))
-				print("volta- "+str(voltage))
+				#print("cpucu- "+str(cpus_current))
+				#print("delta- "+str(delta))
+				#print("volta- "+str(voltage))
 				tot_time +=delta
 				total += ( cpus_current) *  delta * voltage 
-				print("total- " + str(total))
-				print()
+				#print("total- " + str(total))
 			last_event = x 
 			last_time = x.time
 		
@@ -120,18 +118,16 @@ class GreenStats(Service):
 		for sample in l:
 			delta,state,voltage = sample[0],sample[1],sample[2]
 			cpus_current= last_event.calculateCPUsCurrent(state,self.perf_events.power_profile) 
-			print("cpucu- "+str(cpus_current))
-			print("delta- "+str(delta))
-			print("volta- "+str(voltage))
+			#print("cpucu- "+str(cpus_current))
+			#print("delta- "+str(delta))
+			#print("volta- "+str(voltage))
 			tot_time +=delta
 			total += ( cpus_current) *  delta * voltage 
-			print("total- " + str(total))
-			print()
+			#print("total- " + str(total))
+			#print()
 			
 		# TODO just like non cpu
-
-		print("tolas")
-		print(tot_time)
+		#print(tot_time)
 		return total
 		
 
@@ -145,19 +141,15 @@ def getClosestPair(events, time ):
 
 if __name__ == '__main__':
 	g = GreenStats(power_profile=DEFAULT_PROFILE,timezone="EST")
-	#g.init()
-	#g.start()
-	#time.sleep(10)
-	#bts_file, pf_file =  g.stop()
-	bts_file = "results/batterystats//bstats-1605639386.log"
-	pf_file = "results/perfetto//trace-1605639386.systrace"
-	#print(bts_file)
-	#print(pf_file)
-
+	g.init()
+	g.start()
+	time.sleep(10) # do work 
+	bts_file, pf_file =  g.stop()
 	g.parseResults( DEFAULT_PROFILE, bts_file , pf_file )
-	cons = g.getConsumptionInBetween(1605639376, 1605639379)
-	print(cons)
-
+	begin = g.bat_events.events[0].time
+	end = g.bat_events.events[-1].time
+	consumption = g.getConsumptionInBetween(begin, end)
+	print("Energy consumed: %f Joules" % consumption)
 
 
 
