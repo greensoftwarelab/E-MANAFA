@@ -5,7 +5,7 @@ This tool is a software model-based tool, for performing fine-grained estimates 
 # SETUP
 
 In order to run this tool, the following components are required:
-- An Android rooted device;
+- An Android rooted device (running Android 9 or above);
 - A * nix-based environment;
 - Android Sdk tools (https://developer.android.com/studio/releases/platform-tools)-
 
@@ -44,9 +44,19 @@ $ source env/bin/activate
 $ pip install -r requirements.txt
 ```
 
-# Usage
+# Example
 ```
-(in progress)
+# getting the energy consumed in a profiling session (between first and last measurement)
+g = GreenStats(power_profile=DEFAULT_PROFILE, timezone="EST")
+g.init()
+g.start()
+do_some_work()
+batstats_out_file, perfetto_out_file = g.stop()
+g.parseResults( DEFAULT_PROFILE, batstats_out_file , perfetto_out_file )
+begin = g.bat_events.events[0].time
+end = g.bat_events.events[-1].time
+consumption = g.getConsumptionInBetween(begin, end)
+print("Energy consumed: %f Joules" % consumption)
 ```
 
 # TODO
