@@ -24,13 +24,13 @@ def getColor(sev):
     }.get(sev, 'white')
 
 
-def log(time, message, log_sev=LogSeverity.INFO):
+def log(message, log_sev=LogSeverity.INFO, time=time.time()):
     color = getColor(log_sev.value)
     adapted_time = datetime.datetime.fromtimestamp(time)
     str_to_print = colored("[%s] %s: %s" % (log_sev.value, adapted_time, message), color)
     print(str_to_print)
     if DUMP_TO_FILE:
         filename = "%d-%d-%d.log" % (adapted_time.year,adapted_time.month,adapted_time.day)
-        f = open( filename, "a+")
+        f = open(filename, "a+")
         f.write(str_to_print+"\n")
         f.close()

@@ -5,14 +5,17 @@ from .service import Service
 import time
 import os
 
-from ..utils.Utils import execute_shell_command
+from manafa.utils.Utils import execute_shell_command
 
 
 class PerfettoService(Service):
 	"""docstring for BatteryStatsService"""
 	def __init__(self,output_res_folder="perfetto"):
 		Service.__init__(self,output_res_folder)
-		
+
+	def config(self,**kwargs):
+		pass
+
 	def init(self,**kwargs):
 		self.clean()
 
@@ -21,7 +24,7 @@ class PerfettoService(Service):
 	
 	def stop(self,file_id=None):
 		if file_id is None:
-			file_id = execute_shell_command("date +%s").strip()
+			file_id = execute_shell_command("date +%s")[1].strip()
 		#executeShCommand("adb shell su -c \"killall perfetto\"")
 		execute_shell_command("adb shell killall perfetto")
 		time.sleep(1)

@@ -1,11 +1,10 @@
-
-from os import sys,path
 import re,json
 #sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-from .PowerProfile import PowerProfile
-from .dateUtils  import convertBatStatTimeToTimeStamp,batStatResetTimeToTimeStamp,epochToDate
+from manafa.powerProfile.PowerProfile import PowerProfile
+from manafa.utils.dateUtils import convertBatStatTimeToTimeStamp,batStatResetTimeToTimeStamp
 import copy
-default_json_path="src/greenstats/batteryStats/BatteryStatus.json"
+
+DEFAULT_JSON_PATH = "manafa/batteryStats/BatteryStatus.json"
 
 
 KNOWN_VALUES=set(
@@ -95,7 +94,7 @@ class BatteryEvent(object):
 
 class BatteryStatsParser(object):
 	"""docstring for BatteryStatsParser"""
-	def __init__(self, powerProfile=None , timezone="EST", def_file=default_json_path, android_version=10):
+	def __init__(self, powerProfile=None , timezone="EST", def_file=DEFAULT_JSON_PATH, android_version=10):
 		self.events = []
 		self.definitions = self.loadDefinitionFile(def_file)
 		self.powerProfile = self.loadPowerProfile(powerProfile) if powerProfile is not None else {}

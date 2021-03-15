@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.greenstats.utils.Utils import execute_shell_command
+from manafa.utils.Utils import execute_shell_command
 
 RESULTS_DIR="results/"
 

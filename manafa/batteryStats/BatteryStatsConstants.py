@@ -101,5 +101,3 @@ EVENT_NAMES= {
             "longwake", 
             "est_capacity"
 }
-
-                      

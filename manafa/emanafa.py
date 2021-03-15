@@ -1,31 +1,31 @@
 import time
 
-from services.service import *
-from services.perfettoService import PerfettoService
-from services.batteryStatsService import BatteryStatsService
-from batteryStats.perfettoParser import PerfettoCPUfreqParser
-from batteryStats.BatteryStatsParser import BatteryStatsParser
+from manafa.services.batteryStatsService import BatteryStatsService
+from manafa.services.service import *
+from manafa.services.perfettoService import PerfettoService
+from manafa.perfetto.perfettoParser import PerfettoCPUfreqParser
+from manafa.batteryStats.BatteryStatsParser import BatteryStatsParser
 import argparse
-from src.greenstats.utils.Logger import log, LogSeverity
+from manafa.utils.Logger import log, LogSeverity
 
 #DEFAULT_PROFILE="samples/profiles/power_profile.xml"
 #DEFAULT_PROFILE="samples/profiles/power_profile_pixel3a_grapheneos.xml"
-from src.greenstats.utils.Utils import execute_shell_command
+from manafa.utils.Utils import execute_shell_command
 
-DEFAULT_PROFILE="samples/profiles/power_profile_pixel4a_grapheneos.xml"
-
+DEFAULT_PROFILE="resources/profiles/power_profile_pixel4a_grapheneos.xml"
+DEFAULT_TIMEZONE="GMT"
 
 def getLastBootTime():
 	res,out,err = execute_shell_command("adb shell cat /proc/stat | grep btime | awk '{print $2}'") #executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
-	if res !=0:
+	if res !=0 or len(out) == 0:
 		boot_time = 1605110840
-		log(time.time(),  "no device connected. Assuming Boot time %d" % boot_time, LogSeverity.ERROR )
+		log( "no device connected. Assuming Boot time %d" % boot_time, LogSeverity.ERROR )
 		#print("[Warning]: no device connected. Assuming Boot time %d" % boot_time)
 		return boot_time
 	return float(out.strip())
 
 
-class GreenStats(Service):
+class EManafa(Service):
 	"""docstring for GreenStats"""
 	def __init__(self,power_profile,timezone="EST"):
 		Service.__init__(self)
@@ -34,6 +34,9 @@ class GreenStats(Service):
 		self.perf_events = None
 		self.perfetto = PerfettoService()
 		self.timezone = timezone
+
+	def config(self,**kwargs):
+		pass
 
 	def init(self):
 		self.batterystats.init()
@@ -53,6 +56,9 @@ class GreenStats(Service):
 		self.perfetto.clean()
 
 	def parseResults(self,pp_file=DEFAULT_PROFILE, bts_file="",pf_file=""):
+		if bts_file== "" or pf_file == "":
+			log("Empty result files", LogSeverity.FATAL)
+			raise Exception()
 		self.bat_events = BatteryStatsParser(powerProfile=pp_file,timezone=self.timezone)
 		self.bat_events.parseFile(bts_file)
 		b_time = getLastBootTime()
@@ -143,31 +149,28 @@ def inferPowerProfile():
 
 def inferTimezone():
 	res,out,err = execute_shell_command("adb shell date")
-	if res != 0:
-		return "GMT"
-	else:
-		print(out)
-		return "GMT"
-
+	default_tz = DEFAULT_TIMEZONE
+	if res ==0 and len(out)>0:
+		default_tz = out.split(" ")[-2]
+	log("Using timezone: %s" % default_tz)
+	return default_tz
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-p", "--profile", default=inferPowerProfile(), type=str)
 	parser.add_argument("-t", "--timezone", default=inferTimezone(), type=str)
 	args = parser.parse_args()
-	g = GreenStats(power_profile=args.profile, timezone=args.timezone)
-	# g.init()
-	# g.start()
-	# time.sleep(20) # do work
-	# bts_file, pf_file = g.stop()
-	bts_file = "results/batterystats/bstats-1615568898.log"
-	pf_file = "results/perfetto/trace-1615568898.systrace"
+	g = EManafa(power_profile=args.profile, timezone=args.timezone)
+	g.init()
+	g.start()
+	time.sleep(7) # do work
+	bts_file, pf_file = g.stop()
+	#bts_file = "results/batterystats/bstats-1615831762.log"
+	#pf_file = "results/perfetto/trace-1615831762.systrace"
 	g.parseResults(DEFAULT_PROFILE, bts_file , pf_file )
 	begin = g.bat_events.events[0].time
 	end = g.bat_events.events[-1].time
 	consumption = g.getConsumptionInBetween(begin, end)
-	log(time.time(), "Energy consumed: %f Joules" % consumption, log_sev=LogSeverity.SUCCESS)
-
-
+	log("Energy consumed: %f Joules" % consumption, log_sev=LogSeverity.SUCCESS)
 
 
