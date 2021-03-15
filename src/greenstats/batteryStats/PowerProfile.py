@@ -44,10 +44,10 @@ class PowerProfile(object):
 				ll = child.attrib['name'].split(".")
 				begin_d = self.components
 				for at in ll:
-					begin_d[at]={} if not at in begin_d else begin_d[at]
+					begin_d[at]={} if at not in begin_d else begin_d[at]
 					last_b = begin_d
 					begin_d = begin_d[at]
-				last_b[at]=  list( map( lambda xxz : float(xxz.text), child.getchildren() ) )
+				last_b[at]= list( map( lambda xxz : float(xxz.text), child.getchildren() ) )
 
 	
 	def getCPUStateCurrent(self,state):
@@ -78,10 +78,9 @@ class PowerProfile(object):
 				freq = i
 				break
 			mini_fr = i
-		#print("%f- %f" % (mini_fr,freq))
-		fst_pair = (profile_speeds[mini_fr],profile_currents[mini_fr])
-		snd_pair = (profile_speeds[freq]   ,profile_currents[freq])
-		return fst_pair,snd_pair
+		fst_pair = (profile_speeds[mini_fr], profile_currents[mini_fr])
+		snd_pair = (profile_speeds[freq], profile_currents[freq])
+		return fst_pair, snd_pair
 
 
 if __name__ == '__main__':

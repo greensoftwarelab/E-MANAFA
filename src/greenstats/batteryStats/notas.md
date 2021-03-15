@@ -1,4 +1,4 @@
- TmpWhiteList contains apps that are given temporary network access after receiving a high priority GCM message.
+TmpWhiteList contains apps that are given temporary network access after receiving a high priority GCM message.
 
  
  # events:

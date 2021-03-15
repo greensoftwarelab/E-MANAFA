@@ -235,6 +235,8 @@ class BatteryStatsParser(object):
 
 	def determinateComponentCurrent(self,bt_event,comp_name, possible_states):
 		current = 0.0
+		curravg=0
+		avg_ct=0
 		# screen 
 		if comp_name == "screen" and "screen" in bt_event.updates:
 				on_current = possible_states["on"]
@@ -259,7 +261,6 @@ class BatteryStatsParser(object):
 				current+=flash_curr
 		# dsp
 		elif comp_name == "dsp":
-			
 			if "video" in bt_event.updates:
 				video_curr = possible_states["video"] if comp_name == "dsp" else possible_states
 				current+=video_curr

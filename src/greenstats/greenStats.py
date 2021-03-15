@@ -1,24 +1,28 @@
-
-from services.service import * 
-from services.perfettoService import PerfettoService
-from services.batteryStatsService import BatteryStatsService
-from services.utils import executeShCommand
-from batteryStats.perfettoParser import PerfettoCPUfreqParser
-from batteryStats.BatteryStatsParser import BatteryStatsParser
-
 import time
 
+from services.service import *
+from services.perfettoService import PerfettoService
+from services.batteryStatsService import BatteryStatsService
+from batteryStats.perfettoParser import PerfettoCPUfreqParser
+from batteryStats.BatteryStatsParser import BatteryStatsParser
+import argparse
+from src.greenstats.utils.Logger import log, LogSeverity
+
 #DEFAULT_PROFILE="samples/profiles/power_profile.xml"
-DEFAULT_PROFILE="samples/profiles/power_profile_pixel3a_grapheneos.xml"
+#DEFAULT_PROFILE="samples/profiles/power_profile_pixel3a_grapheneos.xml"
+from src.greenstats.utils.Utils import execute_shell_command
+
+DEFAULT_PROFILE="samples/profiles/power_profile_pixel4a_grapheneos.xml"
 
 
 def getLastBootTime():
-	x = executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
-	if x is None:
+	res,out,err = execute_shell_command("adb shell cat /proc/stat | grep btime | awk '{print $2}'") #executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
+	if res !=0:
 		boot_time = 1605110840
+		log(time.time(),  "no device connected. Assuming Boot time %d" % boot_time, LogSeverity.ERROR )
+		#print("[Warning]: no device connected. Assuming Boot time %d" % boot_time)
 		return boot_time
-		print("erro.dispositivo nao conectado")
-	return float(x.strip())
+	return float(out.strip())
 
 
 class GreenStats(Service):
@@ -58,27 +62,26 @@ class GreenStats(Service):
 
 	# energy calc related stuff
 	def getConsumptionInBetween(self,start_time=0, end_time=9905715380):
-		return self.calculateNonCpuEnergy(start_time,end_time)  \
-			+  self.calculateCPUEnergy(start_time,end_time)		
+		return self.calculateNonCpuEnergy(start_time, end_time)  \
+			+ self.calculateCPUEnergy(start_time, end_time)
 
 	def calculateNonCpuEnergy(self, start_time, end_time):
-		c_beg_bef,c_beg_aft =  getClosestPair(self.bat_events.events, start_time)
-		c_end_bef,c_end_aft =  getClosestPair(self.bat_events.events, end_time)
+		c_beg_bef, c_beg_aft = getClosestPair(self.bat_events.events, start_time)
 		total = 0
 		last_event = self.bat_events.events[c_beg_bef]
 		last_time = start_time
 		for i, x in enumerate(self.bat_events.events[c_beg_aft:]):
 			if x.time > end_time:
 				break
-			delta_time = abs (x.time - last_time)
+			delta_time = abs(x.time - last_time)
 			total += last_event.getCurrentOfBatStatEvent() * (last_event.getVoltageValue()) * (delta_time)
-			#print(total)
+
 			last_event = x
 			last_time = x.time
-		
 
 		delta_time = end_time - last_time 
 		if delta_time < 0.0:
+			log(time.time(), "Error calculating delta (<0) ", LogSeverity.FATAL )
 			print("fatal error")
 		total += last_event.getCurrentOfBatStatEvent() * (last_event.getVoltageValue()) * (delta_time)
 		
@@ -87,7 +90,7 @@ class GreenStats(Service):
 
 	def calculateCPUEnergy(self,start_time,end_time):
 		c_beg_bef,c_beg_aft =  getClosestPair(self.perf_events.events, start_time)
-		c_end_bef,c_end_aft =  getClosestPair(self.perf_events.events, end_time)
+		#c_end_bef,c_end_aft =  getClosestPair(self.perf_events.events, end_time)
 		total = 0
 		last_event = self.perf_events.events[c_beg_bef]
 		last_time = start_time
@@ -102,18 +105,14 @@ class GreenStats(Service):
 			# TODO : test to assert if x.time - last_time  = sum( deltas_of_L )
 			for sample in l:
 				delta,state,voltage = sample[0],sample[1],sample[2]
-				cpus_current= last_event.calculateCPUsCurrent(state,self.perf_events.power_profile) 
-				#print("cpucu- "+str(cpus_current))
-				#print("delta- "+str(delta))
-				#print("volta- "+str(voltage))
+				cpus_current= last_event.calculateCPUsCurrent(state,self.perf_events.power_profile)
 				tot_time +=delta
-				total += ( cpus_current) *  delta * voltage 
-				#print("total- " + str(total))
+				total += ( cpus_current) * delta * voltage
 			last_event = x 
 			last_time = x.time
 		
 		# after calcs'''
-		# TODO merge with cycle
+		# TODO merge with cycle just like with non cpu
 		l = self.bat_events.getCPUSamplesInBetween(last_time,end_time)
 		for sample in l:
 			delta,state,voltage = sample[0],sample[1],sample[2]
@@ -139,19 +138,35 @@ def getClosestPair(events, time ):
 		lasti = i
 	return lasti,lasti
 
+def inferPowerProfile():
+	return DEFAULT_PROFILE#TODO
+
+def inferTimezone():
+	res,out,err = execute_shell_command("adb shell date")
+	if res != 0:
+		return "GMT"
+	else:
+		print(out)
+		return "GMT"
+
+
 if __name__ == '__main__':
-	g = GreenStats(power_profile=DEFAULT_PROFILE,timezone="EST")
-	g.init()
-	g.start()
-	time.sleep(10) # do work 
-	bts_file, pf_file =  g.stop()
-	g.parseResults( DEFAULT_PROFILE, bts_file , pf_file )
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-p", "--profile", default=inferPowerProfile(), type=str)
+	parser.add_argument("-t", "--timezone", default=inferTimezone(), type=str)
+	args = parser.parse_args()
+	g = GreenStats(power_profile=args.profile, timezone=args.timezone)
+	# g.init()
+	# g.start()
+	# time.sleep(20) # do work
+	# bts_file, pf_file = g.stop()
+	bts_file = "results/batterystats/bstats-1615568898.log"
+	pf_file = "results/perfetto/trace-1615568898.systrace"
+	g.parseResults(DEFAULT_PROFILE, bts_file , pf_file )
 	begin = g.bat_events.events[0].time
 	end = g.bat_events.events[-1].time
 	consumption = g.getConsumptionInBetween(begin, end)
-	print("Energy consumed: %f Joules" % consumption)
-
-
+	log(time.time(), "Energy consumed: %f Joules" % consumption, log_sev=LogSeverity.SUCCESS)
 
 
 

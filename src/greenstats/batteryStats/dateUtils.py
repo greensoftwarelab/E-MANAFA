@@ -32,8 +32,9 @@ def batStatResetTimeToTimeStamp(matime,timezone="EST"):
 
 def convertDateToTimeStamp(date,timezone="EST"):
 	local = pytz.timezone(timezone)
-	time = time.mktime(datetime.datetime.strptime(s, "%d/%m/%Y").timetuple())
+	#time = time.mktime(datetime.datetime.strptime(s, "%d/%m/%Y").timetuple())
 	return time
+	#return None
 
 def epochToDate(ts):
 	return time.ctime(ts)

@@ -7,7 +7,7 @@ BATTERY_STATUS= {
  "unknown" :   1, # "BATTERY_STATUS_UNKNOWN",
  "charging":    2, #  "BATTERY_STATUS_CHARGING",
  "discharging":   3, #; "BATTERY_STATUS_DISCHARGING",
- "not-charging"   4, # "BATTERY_STATUS_NOT_CHARGING",
+ "not-charging":  4, # "BATTERY_STATUS_NOT_CHARGING",
  "full":  5 # "BATTERY_STATUS_FULL",
 }
 BATTERY_HEALTH= {

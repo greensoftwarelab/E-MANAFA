@@ -1,20 +1,25 @@
+from abc import ABC, abstractmethod
+
+from src.greenstats.utils.Utils import execute_shell_command
 
 RESULTS_DIR="results/"
-from .utils import executeShCommand
 
-class Service(object):
+class Service(ABC):
 	"""docstring for Service"""
 	def __init__(self,results_dir=""):
 		self.results_dir = RESULTS_DIR + results_dir+"/"
-	
+
+	@abstractmethod
 	def config(self,**kwargs):
 		print(kwargs)
 
+	@abstractmethod
 	def start(self):
 		pass
 
+	@abstractmethod
 	def stop(self):
 		pass
 
 	def clean(self):
-		executeShCommand("find %s -type f | xargs rm " % self.results_dir)
+		execute_shell_command("find %s -type f | xargs rm " % self.results_dir)

@@ -2,8 +2,11 @@
 from __future__ import absolute_import
 
 from .service import Service
-from .utils import executeShCommand 
-import time,os
+import time
+import os
+
+from ..utils.Utils import execute_shell_command
+
 
 class PerfettoService(Service):
 	"""docstring for BatteryStatsService"""
@@ -14,22 +17,25 @@ class PerfettoService(Service):
 		self.clean()
 
 	def start(self):
-		executeShCommand("adb shell perfetto -o /data/misc/perfetto-traces/trace freq -t 1h --background ")
+		execute_shell_command("adb shell perfetto -o /data/misc/perfetto-traces/trace freq  -t 1h --background ")
 	
 	def stop(self,file_id=None):
 		if file_id is None:
-			file_id = executeShCommand("date +%s").strip() 
-		executeShCommand("adb shell su -c \"killall perfetto\"")
-		executeShCommand("adb pull /data/misc/perfetto-traces/trace " + ("%strace" % self.results_dir )   +"-$(date +%s)")
+			file_id = execute_shell_command("date +%s").strip()
+		#executeShCommand("adb shell su -c \"killall perfetto\"")
+		execute_shell_command("adb shell killall perfetto")
+		time.sleep(1)
+		execute_shell_command("adb pull /data/misc/perfetto-traces/trace " + ("%strace" % self.results_dir )   +"-"+file_id)
 		return self.export()
+	
 	
 	def export(self):
 		last_exported = ""
 		for f in os.listdir(self.results_dir):
-			executeShCommand("./resources/traceconv systrace %s/%s %s/%s.systrace" %(self.results_dir,f,self.results_dir,f) )
-			last_exported=  "%s/%s.systrace" %(self.results_dir,f)
+			execute_shell_command("./resources/traceconv systrace %s/%s %s/%s.systrace" %(self.results_dir,f,self.results_dir,f) )
+			last_exported = "%s/%s.systrace" %(self.results_dir,f)
 		return last_exported
 	def clean(self):
-		executeShCommand("find %s -type f  | xargs rm " % self.results_dir)
+		execute_shell_command("find %s -type f  | xargs rm " % self.results_dir)
 
 

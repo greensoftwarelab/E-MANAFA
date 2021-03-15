@@ -72,10 +72,10 @@ class PerfettoEvent(object):
 
 
 class PerfettoCPUfreqParser(object):
-	def __init__(self,powerProfile=None,start_time=0.0,timezone="EST"):
+	def __init__(self, power_profile=None, start_time=0.0, timezone="EST"):
 		self.events = []
 		self.start_time = start_time
-		self.power_profile = self.loadPowerProfile(powerProfile) if powerProfile is not None else {}
+		self.power_profile = self.loadPowerProfile(power_profile) if power_profile is not None else {}
 		
 
 	def loadPowerProfile(self, xml_profile ):
@@ -86,17 +86,19 @@ class PerfettoCPUfreqParser(object):
 			lines=filehandle.read().splitlines()
 			self.parseHistory(lines)
 
-	def parseHistory(self,lines):
+	def parseHistory(self, lines):
 		for line in lines:
 			if line.startswith("#"):
 				continue
 			z =  re.match(r"^\s*([^\s]+)\-(\d+)\s*\(\s*(\d+|\-+)\) \[(\d+)\] (\d+|\.+) ([0-9]*\.[0-9]+|[0-9]+)\: (.*)?$",line)
-			if z: 
-				time = float (z.groups()[5])
+			if z is not None:
+				time = float(z.groups()[5])
 				time += self.start_time
-				#print(time)
-				cpu_id,cpu_freq = self.parseEvent(z.groups()[6])
-				self.addEvent(time,cpu_id,cpu_freq)
+				ev_pair = self.parseEvent(z.groups()[6])
+				if ev_pair is not None:
+					cpu_id = ev_pair[0]
+					cpu_freq = ev_pair[1]
+					self.addEvent(time,cpu_id,cpu_freq)
 			else:
 				raise Exception ("Error parsing file")
 		
@@ -117,7 +119,6 @@ class PerfettoCPUfreqParser(object):
 			cpu_id=int(mat.groups()[1])
 			cpu_freq=int(mat.groups()[0])
 			return cpu_id,cpu_freq
-	
 	
 
 
