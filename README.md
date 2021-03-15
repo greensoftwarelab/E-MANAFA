@@ -1,4 +1,4 @@
-# petra-like
+# E-MANAFA: Energy Monitoring and ANAlyzing For Android
 
 This tool is a software model-based tool, for performing fine-grained estimates of energy consumption on Android devices. For this purpose, it uses the values contained in the power_profile.xml file for each device and the BatteryStats and Perfetto services to estimate the energy consumption of each resource / component of the device.
 
