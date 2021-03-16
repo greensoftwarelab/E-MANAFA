@@ -37,18 +37,18 @@ $ virtualenv env/
 $ source env/bin/activate
 ```
 
-## Extract power_profile.xml file from device
-Note: 
+## Extract power_profile.xml file from device (https://source.android.com/devices/tech/power/values)
+Note: This file present in every device since Android 5 should contain values that were estimated by device manufacturers using external apparatus. However, most 
+devices don't provide a fine-grained power profile. Google provides a set of instructions in order to complete this file with more accurate values(https://source.android.com/devices/tech/power/component)
+
 ```
+TODO
 
-
-
+```
 # Install required packages
 ```
 $ pip install -r requirements.txt
-```
 
-# Example
 ```
 # getting the energy consumed in a profiling session (between first and last measurement)
 g = GreenStats(power_profile=DEFAULT_PROFILE, timezone="EST")
