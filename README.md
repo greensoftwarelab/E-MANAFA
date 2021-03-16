@@ -50,6 +50,7 @@ TODO
 $ pip install -r requirements.txt
 
 ```
+```
 # getting the energy consumed in a profiling session (between first and last measurement)
 g = GreenStats(power_profile=DEFAULT_PROFILE, timezone="EST")
 g.init()
