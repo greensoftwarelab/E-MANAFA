@@ -4,11 +4,10 @@ python:
   - "3.8"
 install:
   - pip install -r requirements.txt
-  -
 # command to run tests
 script:
   ppytest manafa/tests
 
 notifications:
   email:
-    - rui.a.rua@inesctec.pt
+    - rui.rrua@gmail.com
