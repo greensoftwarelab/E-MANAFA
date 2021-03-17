@@ -12,6 +12,10 @@ In order to run this tool, the following resources are required:
 - Android Sdk tools (https://developer.android.com/studio/releases/platform-tools)
 
 # Installation
+Using pip:
+```
+pip install manafa
+```
 
 ## define environment variables
 
