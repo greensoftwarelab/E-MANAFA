@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/RRua/e-manafa.svg?branch=main](https://travis-ci.com/RRua/e-manafa)
+[![Build Status](https://travis-ci.com/RRua/e-manafa.svg?branch=master)](https://travis-ci.com/RRua/e-amanfa)
 # E-MANAFA: Energy Monitor and ANAlyzer For Android
 
 E-MANAFA is a software model-based tool for performing fine-grained estimates of energy consumption on Android devices. For this purpose, it uses values from power_profile.xml and from the BatteryStats and Perfetto services to estimate the energy consumption of each resource / component of the device. 
