@@ -6,7 +6,7 @@ install:
   - pip install -r requirements.txt
 # command to run tests
 script:
-  ppytest manafa/tests
+  pytest manafa/tests
 
 notifications:
   email:
