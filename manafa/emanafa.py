@@ -169,6 +169,7 @@ if __name__ == '__main__':
 	g.parseResults(DEFAULT_PROFILE, bts_file , pf_file )
 	begin = g.bat_events.events[0].time
 	end = g.bat_events.events[-1].time
+	print("nada")
 	consumption = g.getConsumptionInBetween(begin, end)
 	log("Energy consumed: %f Joules" % consumption, log_sev=LogSeverity.SUCCESS)
 
