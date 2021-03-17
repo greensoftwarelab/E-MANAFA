@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.com/RRua/e-manafa.svg?branch=main)](https://travis-ci.com/RRua/e-manafa)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![PyPI version](https://badge.fury.io/py/manafa.svg)](https://badge.fury.io/py/manafa)
+[![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/manafa)
+[![PyPI status](https://img.shields.io/pypi/status/ansicolortags.svg)](https://pypi.python.org/pypi/manafa)
 # E-MANAFA: Energy Monitor and ANAlyzer For Android
 
 E-MANAFA is a software model-based tool for performing fine-grained estimates of energy consumption on Android devices. For this purpose, it uses values from power_profile.xml and from the BatteryStats and Perfetto services to estimate the energy consumption of each resource / component of the device. 
