@@ -1,13 +1,15 @@
-# petra-like
+# E-MANAFA: Energy Monitor and ANAlyzer For Android
 
-This tool is a software model-based tool, for performing fine-grained estimates of energy consumption on Android devices. For this purpose, it uses the values contained in the power_profile.xml file for each device and the BatteryStats and Perfetto services to estimate the energy consumption of each resource / component of the device.
+E-MANAFA is a software model-based tool for performing fine-grained estimates of energy consumption on Android devices. For this purpose, it uses values from power_profile.xml and from the BatteryStats and Perfetto services to estimate the energy consumption of each resource / component of the device. 
+
 
 # SETUP
 
-In order to run this tool, the following components are required:
-- An Android rooted device (running Android 9 or above);
-- A * nix-based environment;
-- Android Sdk tools (https://developer.android.com/studio/releases/platform-tools)-
+In order to run this tool, the following resources are required:
+- A rooted Android device (running Android 9 or above);
+- A *nix-based environment (MAC OS , Linux);
+- Python 3.6 or above;
+- Android Sdk tools (https://developer.android.com/studio/releases/platform-tools)
 
 # Installation
 
@@ -35,16 +37,19 @@ $ virtualenv env/
 $ source env/bin/activate
 ```
 
-## Extract power_profile file from device
+## Extract power_profile.xml file from device (https://source.android.com/devices/tech/power/values)
+Note: This file present in every device since Android 5 should contain values that were estimated by device manufacturers using external apparatus. However, most 
+devices don't provide a fine-grained power profile. Google provides a set of instructions in order to complete this file with more accurate values(https://source.android.com/devices/tech/power/component)
 
-(In progress)
+```
+TODO
 
-## Install required packages
+```
+# Install required packages
 ```
 $ pip install -r requirements.txt
-```
 
-# Example
+```
 ```
 # getting the energy consumed in a profiling session (between first and last measurement)
 g = GreenStats(power_profile=DEFAULT_PROFILE, timezone="EST")
@@ -59,6 +64,13 @@ consumption = g.getConsumptionInBetween(begin, end)
 print("Energy consumed: %f Joules" % consumption)
 ```
 
+# Supported devices:
+This tool can be used with any Android device able to run the Perfetto, that is available since Android 9 (P). The tool so far was successfuly executed on the following devices:
+- Pixel 3a
+- Pixel 4a 5G
+- Xiaomi Mi 9 Lite
+
 # TODO
 - calibrate the model
 - test using flashlight
+- Retrieve consumption per component 
