@@ -55,14 +55,14 @@ class EManafa(Service):
 		self.batterystats.clean()
 		self.perfetto.clean()
 
-	def parseResults(self,pp_file=DEFAULT_PROFILE, bts_file="",pf_file=""):
+	def parseResults(self, pp_file=DEFAULT_PROFILE, bts_file="", pf_file=""):
 		if bts_file== "" or pf_file == "":
 			log("Empty result files", LogSeverity.FATAL)
 			raise Exception()
-		self.bat_events = BatteryStatsParser(powerProfile=pp_file,timezone=self.timezone)
+		self.bat_events = BatteryStatsParser(powerProfile=pp_file, timezone=self.timezone)
 		self.bat_events.parseFile(bts_file)
 		b_time = getLastBootTime()
-		self.perf_events = PerfettoCPUfreqParser(pp_file,b_time,timezone=self.timezone)
+		self.perf_events = PerfettoCPUfreqParser(pp_file, b_time, timezone=self.timezone)
 		self.perf_events.parseFile(pf_file)
 	
 
@@ -81,7 +81,6 @@ class EManafa(Service):
 				break
 			delta_time = abs(x.time - last_time)
 			total += last_event.getCurrentOfBatStatEvent() * (last_event.getVoltageValue()) * (delta_time)
-
 			last_event = x
 			last_time = x.time
 
@@ -163,7 +162,7 @@ if __name__ == '__main__':
 	g = EManafa(power_profile=args.profile, timezone=args.timezone)
 	g.init()
 	g.start()
-	time.sleep(7) # do work
+	time.sleep(7)# do work
 	bts_file, pf_file = g.stop()
 	#bts_file = "results/batterystats/bstats-1615831762.log"
 	#pf_file = "results/perfetto/trace-1615831762.systrace"

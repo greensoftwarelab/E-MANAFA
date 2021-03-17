@@ -26,13 +26,13 @@ def epochToDate(ts):
 def interpolate(x1: float, x2: float, y1: float, y2: float, x: float):
 	"""Perform linear interpolation for x between (x1,y1) and (x2,y2) """
 	return ((y2 - y1) * x + x2 * y1 - x1 * y2) / (x2 - x1)  if (x2-x1)>0 else y1
-	print(val)
-	print("---")
-	return val
+	#print(val)
+	#print("---")
+	#return val
 
 class PerfettoEvent(object):
 	"""docstring for BatteryEvent"""
-	def __init__(self,time=0.0,values=[]):
+	def __init__(self, time=0.0, values=[]):
 		self.time=time
 		self.vals=[]
 		for x in values:
@@ -64,7 +64,7 @@ class PerfettoEvent(object):
 		if state not in ["idle","suspend"]:
 			for core_id, freq in enumerate(self.vals):
 				bf,aft = profile.getCPUCoreSpeedPair(core_id,freq)
-				lin_inter_val = interpolate(  bf[0], aft[0], bf[1], aft[1], freq )
+				lin_inter_val = interpolate( bf[0], aft[0], bf[1], aft[1], freq )
 				total += lin_inter_val
 			total = total / len(self.vals)
 		else:
@@ -122,7 +122,6 @@ class PerfettoCPUfreqParser(object):
 			cpu_freq=int(mat.groups()[0])
 			return cpu_id,cpu_freq
 	
-
 
 #bootTime = float ( executeShCommand ("adb shell cat /proc/stat | grep btime | awk '{print $2}'").strip() )
 #print(bootTime)
