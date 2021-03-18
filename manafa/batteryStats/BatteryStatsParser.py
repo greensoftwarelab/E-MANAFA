@@ -19,9 +19,9 @@ def areInMinCPUFreq( cpu_freq , possible_cpu_states  ):
 		possible_freqs = possible_cpu_states["core_speeds"] if "core_speeds" in possible_cpu_states else []
 		if len(possible_freqs)>0:
 			possible_freqs = sum(possible_freqs.values(),[]) 
-	print("--")
+
 	#tem que ser os 2 tempos absolutos
-	print(possible_freqs)
+	#print(possible_freqs)
 	return False
 
 def safe_division(a,b):
@@ -61,14 +61,14 @@ class BatteryEvent(object):
 		return state in self.concurrentUpdates
 
 	def getCurrentOfBatStatEvent(self):
-		total=0
-		for x in self.currents.values():
+		total = 0
+		for v, x in self.currents.items():
 			try:
 				z = float(x)
-				total+=z
+				total += z
 			except ValueError:
 				continue		
-		return total / 1000
+		return total/1000, self.currents
 
 	def getVoltageValue(self):
 		return float(self.updates["volt"]) / 1000 if "volt" in self.updates else 0
@@ -368,7 +368,7 @@ class BatteryStatsParser(object):
 						curravg+= on_vals[-1]
 					elif  len(on_vals)>0:
 						curravg+= on_vals[signal_stren]
-					print(signal_stren)
+
 					avg_ct+=1
 				if "rx" in possible_states["controller"]:
 					curravg+=possible_states["controller"]["rx"]

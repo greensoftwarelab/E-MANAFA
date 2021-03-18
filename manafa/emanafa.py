@@ -19,15 +19,21 @@ def getLastBootTime():
 	res,out,err = execute_shell_command("adb shell cat /proc/stat | grep btime | awk '{print $2}'") #executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
 	if res !=0 or len(out) == 0:
 		boot_time = 1605110840
-		log( "no device connected. Assuming Boot time %d" % boot_time, LogSeverity.ERROR )
+		log("no device connected. Assuming Boot time %d" % boot_time, LogSeverity.ERROR )
 		#print("[Warning]: no device connected. Assuming Boot time %d" % boot_time)
 		return boot_time
 	return float(out.strip())
 
+def is_float(string):
+	try:
+		float(string)
+	except ValueError:
+		return False
+	return True
 
 class EManafa(Service):
 	"""docstring for GreenStats"""
-	def __init__(self,power_profile,timezone="EST"):
+	def __init__(self,power_profile, timezone="EST"):
 		Service.__init__(self)
 		self.batterystats = BatteryStatsService()
 		self.bat_events = None
@@ -35,7 +41,7 @@ class EManafa(Service):
 		self.perfetto = PerfettoService()
 		self.timezone = timezone
 
-	def config(self,**kwargs):
+	def config(self, **kwargs):
 		pass
 
 	def init(self):
@@ -64,23 +70,31 @@ class EManafa(Service):
 		b_time = getLastBootTime()
 		self.perf_events = PerfettoCPUfreqParser(pp_file, b_time, timezone=self.timezone)
 		self.perf_events.parseFile(pf_file)
-	
 
 	# energy calc related stuff
-	def getConsumptionInBetween(self,start_time=0, end_time=9905715380):
-		return self.calculateNonCpuEnergy(start_time, end_time)  \
-			+ self.calculateCPUEnergy(start_time, end_time)
+	def getConsumptionInBetween(self, start_time=0, end_time=9905715380):
+		total, per_component = self.calculateNonCpuEnergy(start_time, end_time)
+		total_cpu = self.calculateCPUEnergy(start_time,end_time)
+		per_component['cpu'] += total_cpu
+		return total + total_cpu, per_component
 
 	def calculateNonCpuEnergy(self, start_time, end_time):
 		c_beg_bef, c_beg_aft = getClosestPair(self.bat_events.events, start_time)
 		total = 0
+		per_component_consumption = {}
 		last_event = self.bat_events.events[c_beg_bef]
 		last_time = start_time
 		for i, x in enumerate(self.bat_events.events[c_beg_aft:]):
 			if x.time > end_time:
 				break
 			delta_time = abs(x.time - last_time)
-			total += last_event.getCurrentOfBatStatEvent() * (last_event.getVoltageValue()) * (delta_time)
+			tot_curr, comps_curr = last_event.getCurrentOfBatStatEvent()
+			total += tot_curr * (last_event.getVoltageValue()) * delta_time
+			for comp, comp_curr in comps_curr.items():
+				if comp not in per_component_consumption:
+					per_component_consumption[comp] = 0
+				if is_float(comp_curr):
+					per_component_consumption[comp] += (comp_curr * last_event.getVoltageValue() * delta_time)
 			last_event = x
 			last_time = x.time
 
@@ -88,9 +102,14 @@ class EManafa(Service):
 		if delta_time < 0.0:
 			log(time.time(), "Error calculating delta (<0) ", LogSeverity.FATAL )
 			print("fatal error")
-		total += last_event.getCurrentOfBatStatEvent() * (last_event.getVoltageValue()) * (delta_time)
-		
-		return total
+		tot_curr, comps_curr = last_event.getCurrentOfBatStatEvent()
+		total += tot_curr * (last_event.getVoltageValue()) * (delta_time)
+		for comp, comp_curr in comps_curr.items():
+			if comp not in per_component_consumption:
+				per_component_consumption[comp] = 0
+			if is_float(comp_curr):
+				per_component_consumption[comp] += (comp_curr * last_event.getVoltageValue() * delta_time)
+		return total, per_component_consumption
 
 
 	def calculateCPUEnergy(self,start_time,end_time):
@@ -118,24 +137,18 @@ class EManafa(Service):
 		
 		# after calcs'''
 		# TODO merge with cycle just like with non cpu
-		l = self.bat_events.getCPUSamplesInBetween(last_time,end_time)
+		l = self.bat_events.getCPUSamplesInBetween(last_time, end_time)
 		for sample in l:
-			delta,state,voltage = sample[0],sample[1],sample[2]
-			cpus_current= last_event.calculateCPUsCurrent(state,self.perf_events.power_profile) 
-			#print("cpucu- "+str(cpus_current))
-			#print("delta- "+str(delta))
-			#print("volta- "+str(voltage))
-			tot_time +=delta
-			total += ( cpus_current) *  delta * voltage 
-			#print("total- " + str(total))
-			#print()
-			
+			delta, state, voltage = sample[0], sample[1], sample[2]
+			cpus_current = last_event.calculateCPUsCurrent(state, self.perf_events.power_profile)
+			tot_time += delta
+			total += (cpus_current) * delta * voltage
 		# TODO just like non cpu
 		#print(tot_time)
 		return total
 		
 
-def getClosestPair(events, time ):
+def getClosestPair(events, time):
 	lasti = 0
 	for i, x in enumerate(events):
 		if x.time>time:
@@ -162,14 +175,15 @@ if __name__ == '__main__':
 	g = EManafa(power_profile=args.profile, timezone=args.timezone)
 	g.init()
 	g.start()
-	time.sleep(7)# do work
+	time.sleep(7) # do work
 	bts_file, pf_file = g.stop()
 	#bts_file = "results/batterystats/bstats-1615831762.log"
 	#pf_file = "results/perfetto/trace-1615831762.systrace"
 	g.parseResults(DEFAULT_PROFILE, bts_file , pf_file )
 	begin = g.bat_events.events[0].time
 	end = g.bat_events.events[-1].time
-	consumption = g.getConsumptionInBetween(begin, end)
+	consumption, z = g.getConsumptionInBetween(begin, end)
+	print(z)
 	log("Energy consumed: %f Joules" % consumption, log_sev=LogSeverity.SUCCESS)
 
 
