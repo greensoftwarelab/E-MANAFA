@@ -7,21 +7,24 @@ from manafa.perfetto.perfettoParser import PerfettoCPUfreqParser
 from manafa.batteryStats.BatteryStatsParser import BatteryStatsParser
 import argparse
 from manafa.utils.Logger import log, LogSeverity
+from manafa.utils.Utils import execute_shell_command, mega_find
 
-#DEFAULT_PROFILE="samples/profiles/power_profile.xml"
-#DEFAULT_PROFILE="samples/profiles/power_profile_pixel3a_grapheneos.xml"
-from manafa.utils.Utils import execute_shell_command
-
-DEFAULT_PROFILE="resources/profiles/power_profile_pixel4a_grapheneos.xml"
+DEFAULT_PROFILE="resources/profiles/power_profile.xml"
 DEFAULT_TIMEZONE="GMT"
 
-def getLastBootTime():
-	res,out,err = execute_shell_command("adb shell cat /proc/stat | grep btime | awk '{print $2}'") #executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
-	if res !=0 or len(out) == 0:
-		boot_time = 1605110840
-		log("no device connected. Assuming Boot time %d" % boot_time, LogSeverity.ERROR )
+def getLastBootTime(bts_file=None):
+	res, out, err = execute_shell_command("adb shell cat /proc/stat | grep btime | awk '{print $2}'") #executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
+	if res != 0 or len(out) == 0:
+		log("no device connected. Assuming Boot time of battery stats file", LogSeverity.ERROR)
+		flds = bts_file.split("-") if bts_file is not None else []
+		if len(flds)>1:
+			log("Boot time: " + flds[2], LogSeverity.WARNING )
+			return int(flds[2])
+		else:
+			log("no device connected. Assuming Boot time 0", LogSeverity.WARNING)
+			return 0
+			#raise Exception("Invalid boot time ")
 		#print("[Warning]: no device connected. Assuming Boot time %d" % boot_time)
-		return boot_time
 	return float(out.strip())
 
 def is_float(string):
@@ -33,10 +36,13 @@ def is_float(string):
 
 class EManafa(Service):
 	"""docstring for GreenStats"""
-	def __init__(self,power_profile, timezone="EST"):
+	def __init__(self, power_profile, timezone="EST", resources_dir="resources"):
 		Service.__init__(self)
+		self.power_profile = power_profile
+		self.boot_time = 0
+		log("Power profile file: " + power_profile , LogSeverity.INFO )
+		self.resources_dir = resources_dir
 		self.batterystats = BatteryStatsService()
-		self.bat_events = None
 		self.perf_events = None
 		self.perfetto = PerfettoService()
 		self.timezone = timezone
@@ -45,8 +51,9 @@ class EManafa(Service):
 		pass
 
 	def init(self):
-		self.batterystats.init()
-		self.perfetto.init()
+		self.boot_time = getLastBootTime()
+		self.batterystats.init(boot_time = self.boot_time)
+		self.perfetto.init(boot_time = self.boot_time)
 		
 	def start(self):
 		self.batterystats.start()
@@ -61,14 +68,14 @@ class EManafa(Service):
 		self.batterystats.clean()
 		self.perfetto.clean()
 
-	def parseResults(self, pp_file=DEFAULT_PROFILE, bts_file="", pf_file=""):
+	def parseResults(self, bts_file="", pf_file=""):
 		if bts_file== "" or pf_file == "":
 			log("Empty result files", LogSeverity.FATAL)
 			raise Exception()
-		self.bat_events = BatteryStatsParser(powerProfile=pp_file, timezone=self.timezone)
+		self.b_time = getLastBootTime(bts_file)
+		self.bat_events = BatteryStatsParser(self.power_profile, timezone=self.timezone)
 		self.bat_events.parseFile(bts_file)
-		b_time = getLastBootTime()
-		self.perf_events = PerfettoCPUfreqParser(pp_file, b_time, timezone=self.timezone)
+		self.perf_events = PerfettoCPUfreqParser(self.power_profile, self.b_time, timezone=self.timezone)
 		self.perf_events.parseFile(pf_file)
 
 	# energy calc related stuff
@@ -100,8 +107,7 @@ class EManafa(Service):
 
 		delta_time = end_time - last_time 
 		if delta_time < 0.0:
-			log(time.time(), "Error calculating delta (<0) ", LogSeverity.FATAL )
-			print("fatal error")
+			log(time.time(), "Error calculating delta (<0) ", LogSeverity.FATAL)
 		tot_curr, comps_curr = last_event.getCurrentOfBatStatEvent()
 		total += tot_curr * (last_event.getVoltageValue()) * (delta_time)
 		for comp, comp_curr in comps_curr.items():
@@ -128,9 +134,9 @@ class EManafa(Service):
 			l = self.bat_events.getCPUSamplesInBetween(last_time,x.time)
 			# TODO : test to assert if x.time - last_time  = sum( deltas_of_L )
 			for sample in l:
-				delta,state,voltage = sample[0],sample[1],sample[2]
-				cpus_current= last_event.calculateCPUsCurrent(state,self.perf_events.power_profile)
-				tot_time +=delta
+				delta, state, voltage = sample[0],sample[1],sample[2]
+				cpus_current = last_event.calculateCPUsCurrent(state, self.perf_events.power_profile)
+				tot_time += delta
 				total += ( cpus_current) * delta * voltage
 			last_event = x 
 			last_time = x.time
@@ -156,34 +162,62 @@ def getClosestPair(events, time):
 		lasti = i
 	return lasti,lasti
 
-def inferPowerProfile():
-	return DEFAULT_PROFILE#TODO
+
+def extractPowerProfile(resources_dir, filename):
+	# extracting power_profile.xml from device
+	res, suc, _ = execute_shell_command("adb pull /system/framework/framework-res.apk %s" % resources_dir)
+	if res==0:
+		cmd = """java -jar {res_dir}/apktool_2.4.0.jar d -s {res_dir}/framework-res.apk -o {res_dir}/out_jar_dir/""".format(res_dir=resources_dir)
+		res, suc, _ = execute_shell_command(cmd)
+		pp_file = resources_dir + "/out_jar_dir/res/xml/power_profile.xml"
+		if res==0:
+			# cp to profiles, remove out_jar_dir and framework-res.apk
+			res,_,_=  execute_shell_command("cp {extracted_file} \"{res_dir}/profiles/{new_file}\" ; rm -rf {res_dir}/out_jar_dir {res_dir}/framework-res.apk".format(extracted_file=pp_file, new_file=filename, res_dir=resources_dir ))
+			if res ==0:
+				return filename
+
+	return DEFAULT_PROFILE
+
+def inferPowerProfile(resources_dir):
+	res, device_model, _ = execute_shell_command("adb shell getprop ro.product.model")
+	if res == 0 and device_model != "":
+		model_profile_file = """power_profile_{device_model}.xml""".format(device_model=device_model.replace(" ", "").strip().lower())
+		matching_profiles = mega_find(resources_dir, pattern=model_profile_file, maxdepth=2)
+		if len(matching_profiles) > 0:
+			return matching_profiles[0]
+		else:
+			# if power profile not present in profiles directory, extract from device
+			power_profile = extractPowerProfile(resources_dir,model_profile_file)
+			return power_profile
+	else:
+		return DEFAULT_PROFILE
 
 def inferTimezone():
 	res,out,err = execute_shell_command("adb shell date")
 	default_tz = DEFAULT_TIMEZONE
-	if res ==0 and len(out)>0:
+	if res == 0 and len(out) > 0:
 		default_tz = out.split(" ")[-2]
 	log("Using timezone: %s" % default_tz)
 	return default_tz
 
+
 if __name__ == '__main__':
+	default_resources_dir = "resources"
 	parser = argparse.ArgumentParser()
-	parser.add_argument("-p", "--profile", default=inferPowerProfile(), type=str)
+	parser.add_argument("-p", "--profile", default=inferPowerProfile(default_resources_dir), type=str)
 	parser.add_argument("-t", "--timezone", default=inferTimezone(), type=str)
 	args = parser.parse_args()
-	g = EManafa(power_profile=args.profile, timezone=args.timezone)
+	g = EManafa(power_profile=args.profile, timezone=args.timezone,resources_dir=default_resources_dir)
 	g.init()
 	g.start()
 	time.sleep(7) # do work
 	bts_file, pf_file = g.stop()
 	#bts_file = "results/batterystats/bstats-1615831762.log"
 	#pf_file = "results/perfetto/trace-1615831762.systrace"
-	g.parseResults(DEFAULT_PROFILE, bts_file , pf_file )
+	g.parseResults(bts_file, pf_file )
 	begin = g.bat_events.events[0].time
 	end = g.bat_events.events[-1].time
-	consumption, z = g.getConsumptionInBetween(begin, end)
-	print(z)
+	consumption, per_component_consumption = g.getConsumptionInBetween(begin, end)
+	print(per_component_consumption)
 	log("Energy consumed: %f Joules" % consumption, log_sev=LogSeverity.SUCCESS)
-
 

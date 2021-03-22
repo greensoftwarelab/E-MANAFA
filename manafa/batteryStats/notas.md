@@ -10,7 +10,7 @@ TmpWhiteList contains apps that are given temporary network access after receivi
 - screenwake: screen wake reason
 
 - screen: Screen on/off
-
+__
 - brigthness: value in [ "dark", "dim", "medium", "light", "bright"]
 
 - wifi - on: wifi_running

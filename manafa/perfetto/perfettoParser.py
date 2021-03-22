@@ -83,7 +83,7 @@ class PerfettoCPUfreqParser(object):
 	def loadPowerProfile(self, xml_profile ):
 		return PowerProfile(xml_profile)
 	
-	def parseFile(self,filename):
+	def parseFile(self, filename):
 		with open(filename, 'r') as filehandle:
 			lines=filehandle.read().splitlines()
 			self.parseHistory(lines)
@@ -92,7 +92,7 @@ class PerfettoCPUfreqParser(object):
 		for line in lines:
 			if line.startswith("#"):
 				continue
-			z =  re.match(r"^\s*([^\s]+)\-(\d+)\s*\(\s*(\d+|\-+)\) \[(\d+)\] (\d+|\.+) ([0-9]*\.[0-9]+|[0-9]+)\: (.*)?$",line)
+			z = re.match(r"^\s*([^\s]+)\-(\d+)\s*\(\s*(\d+|\-+)\) \[(\d+)\] (\d+|\.+) ([0-9]*\.[0-9]+|[0-9]+)\: (.*)?$",line)
 			if z is not None:
 				time = float(z.groups()[5])
 				time += self.start_time

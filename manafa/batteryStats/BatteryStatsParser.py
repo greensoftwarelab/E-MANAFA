@@ -1,5 +1,7 @@
 import re,json
 #sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+from collections import Iterable
+
 from manafa.powerProfile.PowerProfile import PowerProfile
 from manafa.utils.dateUtils import convertBatStatTimeToTimeStamp,batStatResetTimeToTimeStamp
 import copy
@@ -61,14 +63,17 @@ class BatteryEvent(object):
 		return state in self.concurrentUpdates
 
 	def getCurrentOfBatStatEvent(self):
+		currs = {}
 		total = 0
 		for v, x in self.currents.items():
 			try:
 				z = float(x)
+				currs[v] = z / 1000
 				total += z
 			except ValueError:
+				currs[v]=0
 				continue		
-		return total/1000, self.currents
+		return total/1000, currs
 
 	def getVoltageValue(self):
 		return float(self.updates["volt"]) / 1000 if "volt" in self.updates else 0
@@ -236,7 +241,7 @@ class BatteryStatsParser(object):
 		current = 0.0
 		curravg=0
 		avg_ct=0
-		# screen 
+		# screen
 		if comp_name == "screen" and "screen" in bt_event.updates:
 				on_current = possible_states["on"]
 				brightness_level = bt_event.updates["brightness"] if "brightness" in bt_event.updates else 1
@@ -270,13 +275,13 @@ class BatteryStatsParser(object):
 				current+=audio_curr
 		
 		# audio
-		elif  comp_name == "video" and "video" in bt_event.updates:
+		elif comp_name == "video" and "video" in bt_event.updates:
 			video_curr = possible_states
-			current+=video_curr
+			current += video_curr
 		# video
-		elif  comp_name == "audio" and "audio" in bt_event.updates:
+		elif comp_name == "audio" and "audio" in bt_event.updates:
 			audio_curr = possible_states
-			current+=audio_curr
+			current += audio_curr
 
 		# wifi 
 		elif comp_name == "wifi" and "wifi_running" in bt_event.updates:
@@ -296,7 +301,6 @@ class BatteryStatsParser(object):
 						curravg+=possible_states["controller"]["rx"]
 						avg_ct+=1
 					current += safe_division(curravg, avg_ct)
-
 			elif "wifi_radio" in bt_event.updates:
 				current+= possible_states["active"] if "active" in possible_states else 0
 				if "controller" in possible_states:
