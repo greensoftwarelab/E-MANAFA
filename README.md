@@ -70,7 +70,7 @@ batstats_out_file, perfetto_out_file = g.stop()
 g.parseResults( DEFAULT_PROFILE, batstats_out_file , perfetto_out_file )
 begin = g.bat_events.events[0].time
 end = g.bat_events.events[-1].time
-consumption = g.getConsumptionInBetween(begin, end)
+consumption,per_component_consumption = g.getConsumptionInBetween(begin, end)
 print("Energy consumed: %f Joules" % consumption)
 ```
 
@@ -83,4 +83,4 @@ This tool can be used with any Android device able to run Perfetto, that is avai
 # TODO
 - calibrate the model
 - test using flashlight
-- Retrieve consumption per component 
+- wifi pixel4a
