@@ -23,7 +23,7 @@ def convertBatStatTimeToTimeStamp(batstattime,timezone="EST"):
 	#d= pst.localize(d1)
 	#return time.mktime(d.timetuple())
 
-def batStatResetTimeToTimeStamp(matime,timezone="EST"):
+def batStatResetTimeToTimeStamp(matime, timezone="UTC"):
 	d1 =datetime.datetime.strptime(matime, '%Y-%m-%d-%H-%M-%S')
 	pst = pytz.timezone(timezone)
 	d= pst.localize(d1)

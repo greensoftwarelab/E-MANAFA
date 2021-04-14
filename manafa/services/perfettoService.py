@@ -10,11 +10,11 @@ from manafa.utils.Utils import execute_shell_command
 
 class PerfettoService(Service):
 	"""docstring for BatteryStatsService"""
-	def __init__(self,boot_time=0,output_res_folder="perfetto"):
-		Service.__init__(self,output_res_folder)
+	def __init__(self,boot_time=0, output_res_folder="perfetto"):
+		Service.__init__(self, output_res_folder)
 		self.boot_time = boot_time
 
-	def config(self,**kwargs):
+	def config(self, **kwargs):
 		pass
 
 	def init(self,boot_time=0,**kwargs):
@@ -24,7 +24,7 @@ class PerfettoService(Service):
 	def start(self):
 		execute_shell_command("adb shell perfetto -o /data/misc/perfetto-traces/trace freq  -t 1h --background ")
 	
-	def stop(self,file_id=None):
+	def stop(self, file_id=None):
 		if file_id is None:
 			file_id = execute_shell_command("date +%s")[1].strip()
 		#executeShCommand("adb shell su -c \"killall perfetto\"")

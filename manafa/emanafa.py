@@ -36,24 +36,24 @@ def is_float(string):
 
 class EManafa(Service):
 	"""docstring for GreenStats"""
-	def __init__(self, power_profile, timezone="EST", resources_dir="resources"):
+	def __init__(self, power_profile=None, timezone=None, resources_dir="resources"):
 		Service.__init__(self)
-		self.power_profile = power_profile
-		self.boot_time = 0
-		log("Power profile file: " + power_profile , LogSeverity.INFO )
 		self.resources_dir = resources_dir
+		self.power_profile = power_profile if power_profile is not None else self.inferPowerProfile()
+		self.boot_time = 0
+		log("Power profile file: " + self.power_profile , LogSeverity.INFO )
 		self.batterystats = BatteryStatsService()
 		self.perf_events = None
 		self.perfetto = PerfettoService()
-		self.timezone = timezone
+		self.timezone = timezone if timezone is not None else self.__inferTimezone()
 
 	def config(self, **kwargs):
 		pass
 
 	def init(self):
 		self.boot_time = getLastBootTime()
-		self.batterystats.init(boot_time = self.boot_time)
-		self.perfetto.init(boot_time = self.boot_time)
+		self.batterystats.init(boot_time=self.boot_time)
+		self.perfetto.init(boot_time=self.boot_time)
 		
 	def start(self):
 		self.batterystats.start()
@@ -69,7 +69,7 @@ class EManafa(Service):
 		self.perfetto.clean()
 
 	def parseResults(self, bts_file="", pf_file=""):
-		if bts_file== "" or pf_file == "":
+		if bts_file == "" or pf_file == "":
 			log("Empty result files", LogSeverity.FATAL)
 			raise Exception()
 		self.b_time = getLastBootTime(bts_file)
@@ -86,7 +86,7 @@ class EManafa(Service):
 		return total + total_cpu, per_component
 
 	def calculateNonCpuEnergy(self, start_time, end_time):
-		c_beg_bef, c_beg_aft = getClosestPair(self.bat_events.events, start_time)
+		c_beg_bef, c_beg_aft = self.__getClosestPair(self.bat_events.events, start_time)
 		total = 0
 		per_component_consumption = {}
 		last_event = self.bat_events.events[c_beg_bef]
@@ -119,7 +119,7 @@ class EManafa(Service):
 
 
 	def calculateCPUEnergy(self,start_time,end_time):
-		c_beg_bef,c_beg_aft =  getClosestPair(self.perf_events.events, start_time)
+		c_beg_bef,c_beg_aft =  self.__getClosestPair(self.perf_events.events, start_time)
 		#c_end_bef,c_end_aft =  getClosestPair(self.perf_events.events, end_time)
 		total = 0
 		last_event = self.perf_events.events[c_beg_bef]
@@ -154,67 +154,67 @@ class EManafa(Service):
 		return total
 		
 
-def getClosestPair(events, time):
-	lasti = 0
-	for i, x in enumerate(events):
-		if x.time>time:
-			return lasti, i	
-		lasti = i
-	return lasti,lasti
+	def __getClosestPair(self,events, time):
+		lasti = 0
+		for i, x in enumerate(events):
+			if x.time>time:
+				return lasti, i
+			lasti = i
+		return lasti,lasti
 
 
-def extractPowerProfile(resources_dir, filename):
-	# extracting power_profile.xml from device
-	res, suc, _ = execute_shell_command("adb pull /system/framework/framework-res.apk %s" % resources_dir)
-	if res==0:
-		cmd = """java -jar {res_dir}/apktool_2.4.0.jar d -s {res_dir}/framework-res.apk -o {res_dir}/out_jar_dir/""".format(res_dir=resources_dir)
-		res, suc, _ = execute_shell_command(cmd)
-		pp_file = resources_dir + "/out_jar_dir/res/xml/power_profile.xml"
+	def __extractPowerProfile(self, resources_dir, filename):
+		# extracting power_profile.xml from device
+		res, suc, _ = execute_shell_command("adb pull /system/framework/framework-res.apk %s" % resources_dir)
 		if res==0:
-			# cp to profiles, remove out_jar_dir and framework-res.apk
-			res,_,_=  execute_shell_command("cp {extracted_file} \"{res_dir}/profiles/{new_file}\" ; rm -rf {res_dir}/out_jar_dir {res_dir}/framework-res.apk".format(extracted_file=pp_file, new_file=filename, res_dir=resources_dir ))
-			if res ==0:
-				return filename
+			cmd = """java -jar {res_dir}/apktool_2.4.0.jar d -s {res_dir}/framework-res.apk -o {res_dir}/out_jar_dir/""".format(res_dir=resources_dir)
+			res, suc, _ = execute_shell_command(cmd)
+			pp_file = resources_dir + "/out_jar_dir/res/xml/power_profile.xml"
+			if res==0:
+				# cp to profiles, remove out_jar_dir and framework-res.apk
+				res,_,_=  execute_shell_command("cp {extracted_file} \"{res_dir}/profiles/{new_file}\" ; rm -rf {res_dir}/out_jar_dir {res_dir}/framework-res.apk".format(extracted_file=pp_file, new_file=filename, res_dir=resources_dir ))
+				if res ==0:
+					return filename
 
-	return DEFAULT_PROFILE
-
-def inferPowerProfile(resources_dir):
-	res, device_model, _ = execute_shell_command("adb shell getprop ro.product.model")
-	if res == 0 and device_model != "":
-		model_profile_file = """power_profile_{device_model}.xml""".format(device_model=device_model.replace(" ", "").strip().lower())
-		matching_profiles = mega_find(resources_dir, pattern=model_profile_file, maxdepth=2)
-		if len(matching_profiles) > 0:
-			return matching_profiles[0]
-		else:
-			# if power profile not present in profiles directory, extract from device
-			power_profile = extractPowerProfile(resources_dir,model_profile_file)
-			return power_profile
-	else:
 		return DEFAULT_PROFILE
 
-def inferTimezone():
-	res,out,err = execute_shell_command("adb shell date")
-	default_tz = DEFAULT_TIMEZONE
-	if res == 0 and len(out) > 0:
-		default_tz = out.split(" ")[-2]
-	log("Using timezone: %s" % default_tz)
-	return default_tz
+	def inferPowerProfile(self):
+		res, device_model, _ = execute_shell_command("adb shell getprop ro.product.model")
+		if res == 0 and device_model != "":
+			model_profile_file = """power_profile_{device_model}.xml""".format(device_model=device_model.replace(" ", "").strip().lower())
+			matching_profiles = mega_find(self.resources_dir, pattern=model_profile_file, maxdepth=2)
+			if len(matching_profiles) > 0:
+				return matching_profiles[0]
+			else:
+				# if power profile not present in profiles directory, extract from device
+				power_profile = self.__extractPowerProfile(self.resources_dir, model_profile_file)
+				return power_profile
+		else:
+			return DEFAULT_PROFILE
+
+	def __inferTimezone(self):
+		res,out,err = execute_shell_command("adb shell date")
+		default_tz = DEFAULT_TIMEZONE
+		if res == 0 and len(out) > 0:
+			default_tz = out.split(" ")[-2]
+		log("Using timezone: %s" % default_tz)
+		return "UTC" if default_tz == "WEST" else default_tz
 
 
 if __name__ == '__main__':
 	default_resources_dir = "resources"
 	parser = argparse.ArgumentParser()
-	parser.add_argument("-p", "--profile", default=inferPowerProfile(default_resources_dir), type=str)
-	parser.add_argument("-t", "--timezone", default=inferTimezone(), type=str)
+	parser.add_argument("-p", "--profile", default=None, type=str)
+	parser.add_argument("-t", "--timezone", default=None, type=str)
 	args = parser.parse_args()
-	g = EManafa(power_profile=args.profile, timezone=args.timezone,resources_dir=default_resources_dir)
+	g = EManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=default_resources_dir)
 	g.init()
 	g.start()
 	time.sleep(7) # do work
 	bts_file, pf_file = g.stop()
 	#bts_file = "results/batterystats/bstats-1615831762.log"
 	#pf_file = "results/perfetto/trace-1615831762.systrace"
-	g.parseResults(bts_file, pf_file )
+	g.parseResults(bts_file, pf_file)
 	begin = g.bat_events.events[0].time
 	end = g.bat_events.events[-1].time
 	consumption, per_component_consumption = g.getConsumptionInBetween(begin, end)
