@@ -3,10 +3,11 @@ import re,json
 from collections import Iterable
 
 from manafa.powerProfile.PowerProfile import PowerProfile
+from manafa.utils.Utils import get_pack_dir
 from manafa.utils.dateUtils import convertBatStatTimeToTimeStamp,batStatResetTimeToTimeStamp
 import copy
 
-DEFAULT_JSON_PATH = "manafa/batteryStats/BatteryStatus.json"
+DEFAULT_JSON_PATH = get_pack_dir() +"/batteryStats/BatteryStatus.json"
 
 
 KNOWN_VALUES=set(

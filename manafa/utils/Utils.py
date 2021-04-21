@@ -1,5 +1,28 @@
+import sysconfig
 from subprocess import Popen, PIPE
 from textops import find
+
+DEV=False
+
+
+def get_resources_dir(packname="manafa", default_res_dir="resources"):
+    if DEV:
+        return packname + "/" + default_res_dir
+    return sysconfig.get_path("purelib") + "/" + packname + "/" + default_res_dir
+
+
+def get_pack_dir(packname="manafa"):
+    if DEV:
+        return packname
+    return sysconfig.get_path("purelib") + "/" + packname
+
+
+def get_results_dir(packname="manafa", default_results_dir="results"):
+    if DEV:
+        return packname + "/" + default_results_dir
+    return sysconfig.get_path("purelib") + "/" + packname + "/" + default_results_dir
+    #return packname + "/" + default_results_dir
+
 
 def execute_shell_command(cmd, args=[]):
     command = cmd + " " + " ".join(args) if len(args) > 0 else cmd
@@ -9,6 +32,6 @@ def execute_shell_command(cmd, args=[]):
 
 def mega_find(basedir, pattern="*", maxdepth=999, mindepth=0, type_file='n'):
     basedir_len = len(basedir.split("/"))
-    res = find(basedir, pattern=pattern, only_files=type_file=='f',only_dirs=type_file=='d' )
+    res = find(basedir, pattern=pattern, only_files=type_file=='f', only_dirs=type_file=='d' )
     # filter by depth
     return list( filter(lambda x : len(x.split("/")) >= basedir_len + mindepth and len(x.split("/")) <= maxdepth + basedir_len , res ) )

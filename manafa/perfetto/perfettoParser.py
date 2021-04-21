@@ -78,7 +78,6 @@ class PerfettoCPUfreqParser(object):
 		self.events = []
 		self.start_time = start_time
 		self.power_profile = self.loadPowerProfile(power_profile) if power_profile is not None else {}
-		
 
 	def loadPowerProfile(self, xml_profile ):
 		return PowerProfile(xml_profile)

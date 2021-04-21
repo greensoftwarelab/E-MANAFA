@@ -1,7 +1,6 @@
 from .service import Service
 
-import time
-from termcolor import colored
+
 
 from ..utils.Logger import log
 from ..utils.Utils import execute_shell_command
