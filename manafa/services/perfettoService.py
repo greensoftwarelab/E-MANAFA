@@ -5,12 +5,13 @@ from .service import Service
 import time
 import os
 
-from manafa.utils.Utils import execute_shell_command
+from manafa.utils.Utils import execute_shell_command, get_resources_dir
 
+RESOURCES_DIR = get_resources_dir()
 
 class PerfettoService(Service):
 	"""docstring for BatteryStatsService"""
-	def __init__(self,boot_time=0, output_res_folder="perfetto"):
+	def __init__(self, boot_time=0, output_res_folder="perfetto"):
 		Service.__init__(self, output_res_folder)
 		self.boot_time = boot_time
 
@@ -36,7 +37,7 @@ class PerfettoService(Service):
 	def export(self):
 		last_exported = ""
 		for f in os.listdir(self.results_dir):
-			execute_shell_command("./resources/traceconv systrace %s/%s %s/%s.systrace" %(self.results_dir,f,self.results_dir,f) )
+			res, o, e = execute_shell_command("chmod +x %s/traceconv ; %s/traceconv systrace %s/%s %s/%s.systrace" %(RESOURCES_DIR,RESOURCES_DIR,self.results_dir,f,self.results_dir,f) )
 			last_exported = "%s/%s.systrace" %(self.results_dir,f)
 		return last_exported
 

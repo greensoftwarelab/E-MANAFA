@@ -1,5 +1,5 @@
-import time
 
+import time
 from manafa.services.batteryStatsService import BatteryStatsService
 from manafa.services.service import *
 from manafa.services.perfettoService import PerfettoService
@@ -7,12 +7,14 @@ from manafa.perfetto.perfettoParser import PerfettoCPUfreqParser
 from manafa.batteryStats.BatteryStatsParser import BatteryStatsParser
 import argparse
 from manafa.utils.Logger import log, LogSeverity
-from manafa.utils.Utils import execute_shell_command, mega_find
+from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir
 
-DEFAULT_PROFILE="resources/profiles/power_profile.xml"
-DEFAULT_TIMEZONE="GMT"
+MANAFA_RESOURCES_DIR = get_resources_dir()
 
-def getLastBootTime(bts_file=None):
+DEFAULT_PROFILE = MANAFA_RESOURCES_DIR + "/profiles/power_profile.xml"
+DEFAULT_TIMEZONE = "GMT"
+
+def get_last_boot_time(bts_file=None):
 	res, out, err = execute_shell_command("adb shell cat /proc/stat | grep btime | awk '{print $2}'") #executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
 	if res != 0 or len(out) == 0:
 		log("no device connected. Assuming Boot time of battery stats file", LogSeverity.ERROR)
@@ -36,7 +38,7 @@ def is_float(string):
 
 class EManafa(Service):
 	"""docstring for GreenStats"""
-	def __init__(self, power_profile=None, timezone=None, resources_dir="resources"):
+	def __init__(self, power_profile=None, timezone=None, resources_dir=MANAFA_RESOURCES_DIR):
 		Service.__init__(self)
 		self.resources_dir = resources_dir
 		self.power_profile = power_profile if power_profile is not None else self.inferPowerProfile()
@@ -46,14 +48,16 @@ class EManafa(Service):
 		self.perf_events = None
 		self.perfetto = PerfettoService()
 		self.timezone = timezone if timezone is not None else self.__inferTimezone()
+		self.unplugged=False
 
 	def config(self, **kwargs):
 		pass
 
 	def init(self):
-		self.boot_time = getLastBootTime()
+		self.boot_time = get_last_boot_time()
 		self.batterystats.init(boot_time=self.boot_time)
 		self.perfetto.init(boot_time=self.boot_time)
+		self.__unplug_if_fully_charged()
 		
 	def start(self):
 		self.batterystats.start()
@@ -62,6 +66,8 @@ class EManafa(Service):
 	def stop(self):
 		b_out = self.batterystats.stop()
 		p_out = self.perfetto.stop()
+		if self.unplugged:
+			self.__plug_back()
 		return b_out, p_out
 	
 	def clean(self):
@@ -72,7 +78,7 @@ class EManafa(Service):
 		if bts_file == "" or pf_file == "":
 			log("Empty result files", LogSeverity.FATAL)
 			raise Exception()
-		self.b_time = getLastBootTime(bts_file)
+		self.b_time = get_last_boot_time(bts_file)
 		self.bat_events = BatteryStatsParser(self.power_profile, timezone=self.timezone)
 		self.bat_events.parseFile(bts_file)
 		self.perf_events = PerfettoCPUfreqParser(self.power_profile, self.b_time, timezone=self.timezone)
@@ -163,16 +169,16 @@ class EManafa(Service):
 		return lasti,lasti
 
 
-	def __extractPowerProfile(self, resources_dir, filename):
+	def __extractPowerProfile(self, filename):
 		# extracting power_profile.xml from device
-		res, suc, _ = execute_shell_command("adb pull /system/framework/framework-res.apk %s" % resources_dir)
+		res, suc, v = execute_shell_command("adb pull /system/framework/framework-res.apk %s" % self.resources_dir)
 		if res==0:
-			cmd = """java -jar {res_dir}/apktool_2.4.0.jar d -s {res_dir}/framework-res.apk -o {res_dir}/out_jar_dir/""".format(res_dir=resources_dir)
-			res, suc, _ = execute_shell_command(cmd)
-			pp_file = resources_dir + "/out_jar_dir/res/xml/power_profile.xml"
+			cmd = """java -jar {res_dir}/apktool_2.4.0.jar d -s {res_dir}/framework-res.apk -f -o {res_dir}/out_jar_dir/""".format(res_dir=self.resources_dir)
+			res, suc, v = execute_shell_command(cmd)
+			pp_file = self.resources_dir + "/out_jar_dir/res/xml/power_profile.xml"
 			if res==0:
 				# cp to profiles, remove out_jar_dir and framework-res.apk
-				res,_,_=  execute_shell_command("cp {extracted_file} \"{res_dir}/profiles/{new_file}\" ; rm -rf {res_dir}/out_jar_dir {res_dir}/framework-res.apk".format(extracted_file=pp_file, new_file=filename, res_dir=resources_dir ))
+				res,_,_=  execute_shell_command("cp {extracted_file} \"{res_dir}/profiles/{new_file}\" ; rm -rf {res_dir}/out_jar_dir {res_dir}/framework-res.apk".format(extracted_file=pp_file, new_file=filename, res_dir=self.resources_dir ))
 				if res ==0:
 					return filename
 
@@ -187,7 +193,8 @@ class EManafa(Service):
 				return matching_profiles[0]
 			else:
 				# if power profile not present in profiles directory, extract from device
-				power_profile = self.__extractPowerProfile(self.resources_dir, model_profile_file)
+				power_profile = self.__extractPowerProfile( model_profile_file)
+				print(power_profile)
 				return power_profile
 		else:
 			return DEFAULT_PROFILE
@@ -200,21 +207,50 @@ class EManafa(Service):
 		log("Using timezone: %s" % default_tz)
 		return "UTC" if default_tz == "WEST" else default_tz
 
+	def __unplug_if_fully_charged(self):
+		# battery stats file comes empty when battery level == 100
+		# using adb to trick device to think it is not charging th battery
+		res, o, e = execute_shell_command("adb shell dumpsys battery | grep level | grep 100")
+		has_full_charge = res ==0 and "100" in o
+		if has_full_charge:
+			#mock unplug
+			res, o, e = execute_shell_command("adb shell dumpsys battery unplug")
+			if res == 0:
+				self.unplugged=True
+				log("virtually unplugging battery charger while running (battery == 100)", LogSeverity.WARNING)
+
+	def __plug_back(self):
+		res, o, e = execute_shell_command("adb shell dumpsys battery reset")
+		self.unplugged=False
+
+
+
+
+
+def have_connected_devices():
+	res,o,e = execute_shell_command("adb devices -l | grep -v attached")
+	return res == 0 and len(o) > 2
+
 
 if __name__ == '__main__':
-	default_resources_dir = "resources"
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-p", "--profile", default=None, type=str)
 	parser.add_argument("-t", "--timezone", default=None, type=str)
+	parser.add_argument("-pft", "--perfettofile", default=None, type=str)
+	parser.add_argument("-bts", "--batstatsfile", default=None, type=str)
 	args = parser.parse_args()
-	g = EManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=default_resources_dir)
-	g.init()
-	g.start()
-	time.sleep(7) # do work
-	bts_file, pf_file = g.stop()
-	#bts_file = "results/batterystats/bstats-1615831762.log"
-	#pf_file = "results/perfetto/trace-1615831762.systrace"
-	g.parseResults(bts_file, pf_file)
+	has_device_conn = have_connected_devices()
+	invalid_file_args = (args.perfettofile is None or args.batstatsfile is None )
+	if not has_device_conn and invalid_file_args:
+		log("Fatal error. No connected devices and result files submitted for analysis", LogSeverity.FATAL)
+		exit(-1)
+	g = EManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=MANAFA_RESOURCES_DIR)
+	if has_device_conn and invalid_file_args:
+		g.init()
+		g.start()
+		time.sleep(7) #do work
+		args.batstatsfile, args.perfettofile = g.stop()
+	g.parseResults(args.batstatsfile, args.perfettofile)
 	begin = g.bat_events.events[0].time
 	end = g.bat_events.events[-1].time
 	consumption, per_component_consumption = g.getConsumptionInBetween(begin, end)

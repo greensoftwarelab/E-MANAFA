@@ -145,7 +145,7 @@ def main():
     host_file = args.out
     host_dir = os.path.dirname(host_file)
     if host_dir == '':
-      host_dir = '..'
+      host_dir = '../..'
       host_file = './' + host_file
   if not os.path.exists(host_dir):
     shutil.os.makedirs(host_dir)
