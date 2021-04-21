@@ -11,18 +11,20 @@ E-MANAFA is a software model-based tool for performing fine-grained estimates of
 # SETUP
 
 In order to run this tool, the following resources are required:
-- A rooted Android device (running Android 9 or above);
-- A *nix-based environment (MAC OS , Linux);
+- rooted Android device (running Android 9 or above);
+- *nix-based environment (MAC OS , Linux);
 - Python 3.6 or above;
 - Android Sdk tools (https://developer.android.com/studio/releases/platform-tools)
 
 # Installation
 
+## 1. Via python-pip
+
 ```
 pip install manafa
 ```
 
-## define environment variables
+### 1.1 define environment variables
 
 In order to run this tool, there are at least 2 env. variables that need to be defined in the shell startup script (e.g .bashrc or .bash_profile file)
 
@@ -30,52 +32,74 @@ In order to run this tool, there are at least 2 env. variables that need to be d
 export ANDROID_HOME=$HOME/<your-android-instalation-folder>/ 
 export PATH=$ANDROID_HOME/platform-tools:$PATH
 ```
-## Replicate the environment
+
+## 2. From sources
+
+### 2.1 Clone repo
+
+```
+$ git clone https://github.com/RRua/e-manafa.git
+```
+
+### 2.2 Replicate the environment
 
 Install virtual virtualenv enviroment  (via python-pip):
 ```
 $ python -m pip install --user virtualenv
 ```
-## Replicate locally the dev virtualenv
+### 2.3 Replicate locally the dev virtualenv
 
 ```
 $ virtualenv env/
 ```
-## Activate the virtual environment
+
+### 2.4 Activate the virtual environment
 ```
 $ source env/bin/activate
 ```
 
-## Extract power_profile.xml file from device (https://source.android.com/devices/tech/power/values)
-Note: This file present in every device since Android 5 should contain values that were estimated by device manufacturers using external apparatus. However, most 
-devices don't provide a fine-grained power profile. Google provides a set of instructions in order to complete this file with more accurate values(https://source.android.com/devices/tech/power/component).
-
-```
-TODO
-
-```
-# Install required packages
+### 2.6 Install required packages
 ```
 $ pip install -r requirements.txt
 
 ```
-# Examples
+### 2.6 define environment variables
+
+In order to run this tool, there are at least 2 env. variables that need to be defined in the shell startup script (e.g .bashrc or .bash_profile file)
+
 ```
-# getting the energy consumed during a profiling session (between first and last measurement)
-g = GreenStats(power_profile=DEFAULT_PROFILE, timezone="EST")
-g.init()
-g.start()
-do_some_work()
-batstats_out_file, perfetto_out_file = g.stop()
-g.parseResults( DEFAULT_PROFILE, batstats_out_file , perfetto_out_file )
-begin = g.bat_events.events[0].time
-end = g.bat_events.events[-1].time
-consumption,per_component_consumption = g.getConsumptionInBetween(begin, end)
-print("Energy consumed: %f Joules" % consumption)
+export ANDROID_HOME=$HOME/<your-android-instalation-folder>/ 
+export PATH=$ANDROID_HOME/platform-tools:$PATH
+```
+# Usage
+
+## Command line
+
+```
+$ python emanafa.py [-p|--profile <prof>] 
+            [-t|--timezone <tz>] 
+            [-pft|--perfettofile <pf>] 
+            [-bts|--batstatsfile <bf>] 
+```
+
+## Source
+
+```
+m = EManafa()
+m.init()
+m.start()
+do_work_to_profile() # replace by procedure to be measured 
+args.batstatsfile, args.perfettofile = g.stop()
+g.parseResults(args.batstatsfile, args.perfettofile)
+begin = g.bat_events.events[0].time # first collected sample from batterystats
+end = g.bat_events.events[-1].time # last collected sample from batterystats
+global_consumption, per_component_consumption = g.getConsumptionInBetween(begin, end) # returns consumption between two instants of time between the profiling time
+print(per_component_consumption)
+print(global_consumption)
 ```
 
 # Supported devices:
-This tool can be used with any Android device able to run Perfetto, that is available since Android 9 (P). The tool so far was successfuly executed on the following devices:
+This tool can be used with any Android device able to run Perfetto, available since Android 9 (P). The tool so far was successfuly executed on the following devices:
 - Pixel 3a
 - Pixel 4a 5G
 - Xiaomi Mi 9 Lite
@@ -83,4 +107,3 @@ This tool can be used with any Android device able to run Perfetto, that is avai
 # TODO
 - calibrate the model
 - test using flashlight
-- wifi pixel4a
