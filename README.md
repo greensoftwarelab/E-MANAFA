@@ -89,11 +89,11 @@ m = EManafa()
 m.init()
 m.start()
 do_work_to_profile() # replace by procedure to be measured 
-args.batstatsfile, args.perfettofile = g.stop()
-g.parseResults(args.batstatsfile, args.perfettofile)
-begin = g.bat_events.events[0].time # first collected sample from batterystats
-end = g.bat_events.events[-1].time # last collected sample from batterystats
-global_consumption, per_component_consumption = g.getConsumptionInBetween(begin, end) # returns consumption between two instants of time between the profiling time
+b_file, p_file = m.stop()
+m.parseResults(b_file, p_file)
+begin = m.bat_events.events[0].time # first collected sample from batterystats
+end = m.bat_events.events[-1].time # last collected sample from batterystats
+global_consumption, per_component_consumption = m.getConsumptionInBetween(begin, end) # returns consumption between two instants of time between the profiling time
 print(per_component_consumption)
 print(global_consumption)
 ```
