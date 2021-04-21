@@ -1,5 +1,5 @@
-
 import time
+import pprint
 from manafa.services.batteryStatsService import BatteryStatsService
 from manafa.services.service import *
 from manafa.services.perfettoService import PerfettoService
@@ -13,6 +13,7 @@ MANAFA_RESOURCES_DIR = get_resources_dir()
 
 DEFAULT_PROFILE = MANAFA_RESOURCES_DIR + "/profiles/power_profile.xml"
 DEFAULT_TIMEZONE = "GMT"
+DEFAULT_PACKAGE_NAME = "in.blogspot.anselmbros.torchie"
 
 def get_last_boot_time(bts_file=None):
 	res, out, err = execute_shell_command("adb shell cat /proc/stat | grep btime | awk '{print $2}'") #executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
@@ -49,11 +50,13 @@ class EManafa(Service):
 		self.perfetto = PerfettoService()
 		self.timezone = timezone if timezone is not None else self.__inferTimezone()
 		self.unplugged=False
+    self.hunter = HunterService()
 
 	def config(self, **kwargs):
 		pass
 
 	def init(self):
+    self.hunter.init()
 		self.boot_time = get_last_boot_time()
 		self.batterystats.init(boot_time=self.boot_time)
 		self.perfetto.init(boot_time=self.boot_time)
@@ -62,6 +65,19 @@ class EManafa(Service):
 	def start(self):
 		self.batterystats.start()
 		self.perfetto.start()
+
+	def hunterStart(self):
+		filename = self.hunter.start()
+		return filename
+
+	def hunterParse(self,logfile):
+		self.hunter.parseFile(logfile)	
+
+	def hunterAddConsumption(self, function_name, position, consumption, per_component_consumption):
+		self.hunter.addConsumption(function_name,position,consumption,per_component_consumption)
+
+	def addConsumptionToTraceFile(self, filename):
+		self.hunter.addConsumptionToTraceFile(filename)	
 
 	def stop(self):
 		b_out = self.batterystats.stop()
@@ -83,6 +99,7 @@ class EManafa(Service):
 		self.bat_events.parseFile(bts_file)
 		self.perf_events = PerfettoCPUfreqParser(self.power_profile, self.b_time, timezone=self.timezone)
 		self.perf_events.parseFile(pf_file)
+
 
 	# energy calc related stuff
 	def getConsumptionInBetween(self, start_time=0, end_time=9905715380):
@@ -231,6 +248,11 @@ def have_connected_devices():
 	res,o,e = execute_shell_command("adb devices -l | grep -v attached")
 	return res == 0 and len(o) > 2
 
+def inferAppPackageName():
+	return DEFAULT_PACKAGE_NAME
+
+def startTesting(app_package_name, interval, number_of_tests):
+	execute_shell_command("adb shell monkey -v --throttle %s -p %s %s" % (interval, app_package_name, number_of_tests))
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
@@ -251,9 +273,35 @@ if __name__ == '__main__':
 		time.sleep(7) #do work
 		args.batstatsfile, args.perfettofile = g.stop()
 	g.parseResults(args.batstatsfile, args.perfettofile)
-	begin = g.bat_events.events[0].time
-	end = g.bat_events.events[-1].time
-	consumption, per_component_consumption = g.getConsumptionInBetween(begin, end)
-	print(per_component_consumption)
-	log("Energy consumed: %f Joules" % consumption, log_sev=LogSeverity.SUCCESS)
+  
+  if(len(g.bat_events.events) > 0):
+		hunter_file = g.hunterStart() #hunter start is to write to a log file (same as stop)
+		#hunter_file = "results/hunter/hunter.log"
+		g.hunterParse(hunter_file)
+		hunter_trace = g.hunter.trace
+		
+		for i, function in enumerate(hunter_trace):
+			func_consumption = 0
+			for j, times in enumerate(hunter_trace[function]):
+				time = hunter_trace[function][j]
+				begin = time['begin_time']
+				end = time['end_time']
+				consumption, per_component_consumption = g.getConsumptionInBetween(begin, end)
+				g.hunterAddConsumption(function,j,consumption,per_component_consumption)
+				func_consumption += consumption
+			log("Total energy consumed by %s: %f Joules" % (function, func_consumption) , log_sev=LogSeverity.SUCCESS)
 
+		print("-----------------")
+		pprint.pprint(hunter_trace)
+		print("-----------------\nTIME_BAT_EVENTS")
+		begin = g.bat_events.events[0].time
+		print("BEGIN: " + str(begin))
+		end = g.bat_events.events[-1].time
+		print("END: " + str(end))
+
+		g.addConsumptionToTraceFile(hunter_file)
+		#print("-----------------")
+		#pprint.pprint(hunter_trace)
+
+	else: 
+		log("Error with battery stats events", log_sev=LogSeverity.ERROR)
