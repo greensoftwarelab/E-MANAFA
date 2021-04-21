@@ -50,13 +50,13 @@ class EManafa(Service):
 		self.perfetto = PerfettoService()
 		self.timezone = timezone if timezone is not None else self.__inferTimezone()
 		self.unplugged=False
-    self.hunter = HunterService()
+		self.hunter = HunterService()
 
 	def config(self, **kwargs):
 		pass
 
 	def init(self):
-    self.hunter.init()
+		self.hunter.init()
 		self.boot_time = get_last_boot_time()
 		self.batterystats.init(boot_time=self.boot_time)
 		self.perfetto.init(boot_time=self.boot_time)
@@ -274,7 +274,7 @@ if __name__ == '__main__':
 		args.batstatsfile, args.perfettofile = g.stop()
 	g.parseResults(args.batstatsfile, args.perfettofile)
   
-  if(len(g.bat_events.events) > 0):
+	if(len(g.bat_events.events) > 0):
 		hunter_file = g.hunterStart() #hunter start is to write to a log file (same as stop)
 		#hunter_file = "results/hunter/hunter.log"
 		g.hunterParse(hunter_file)
@@ -302,6 +302,5 @@ if __name__ == '__main__':
 		g.addConsumptionToTraceFile(hunter_file)
 		#print("-----------------")
 		#pprint.pprint(hunter_trace)
-
 	else: 
 		log("Error with battery stats events", log_sev=LogSeverity.ERROR)
