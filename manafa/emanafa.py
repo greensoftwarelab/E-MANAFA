@@ -57,8 +57,8 @@ class EManafa(Service):
 		pass
 
 	def init(self):
-		self.hunter.init()
 		self.boot_time = get_last_boot_time()
+		self.hunter.init(boot_time=self.boot_time)
 		self.batterystats.init(boot_time=self.boot_time)
 		self.perfetto.init(boot_time=self.boot_time)
 		self.__unplug_if_fully_charged()
@@ -96,10 +96,10 @@ class EManafa(Service):
 			end = g.bat_events.events[-1].time
 			print("END: " + str(end))
 
-			self.hunter.addConsumptionToTraceFile(hunter_file)
+			self.hunter.addConsumptionToTraceFile(hunter_out)
 		if self.unplugged:
 			self.__plug_back()
-		return b_out, p_out
+		return b_out, p_out, hunter_trace
 	
 	def clean(self):
 		self.batterystats.clean()

@@ -4,18 +4,20 @@ import re
 from ..utils.Utils import execute_shell_command
 
 class HunterService(Service):
-	def __init__(self, output_res_folder="hunter"):
+	def __init__(self, boot_time = 0, output_res_folder="hunter"):
 		Service.__init__(self,output_res_folder)
 		self.trace = {}
+		self.boot_time = boot_time
 
 	def config(self,**kwargs):
 		pass
 
-	def init(self):
+	def init(self,boot_time=0,**kwargs):
+		self.boot_time = boot_time
 		self.clean()
 
 	def start(self):
-		filename = self.results_dir + "hunter.log"
+		filename = self.results_dir + "/hunter-%s.log" % (str(self.boot_time))
 		execute_shell_command("adb logcat -d | grep -io \"[<>].*m=example.*]\" > %s" % filename)
 		return filename
 
