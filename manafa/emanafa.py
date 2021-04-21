@@ -3,6 +3,7 @@ import pprint
 from manafa.services.batteryStatsService import BatteryStatsService
 from manafa.services.service import *
 from manafa.services.perfettoService import PerfettoService
+from manafa.services.hunterService import HunterService
 from manafa.perfetto.perfettoParser import PerfettoCPUfreqParser
 from manafa.batteryStats.BatteryStatsParser import BatteryStatsParser
 import argparse
@@ -66,22 +67,36 @@ class EManafa(Service):
 		self.batterystats.start()
 		self.perfetto.start()
 
-	def hunterStart(self):
-		filename = self.hunter.start()
-		return filename
-
-	def hunterParse(self,logfile):
-		self.hunter.parseFile(logfile)	
-
-	def hunterAddConsumption(self, function_name, position, consumption, per_component_consumption):
-		self.hunter.addConsumption(function_name,position,consumption,per_component_consumption)
-
-	def addConsumptionToTraceFile(self, filename):
-		self.hunter.addConsumptionToTraceFile(filename)	
-
 	def stop(self):
 		b_out = self.batterystats.stop()
 		p_out = self.perfetto.stop()
+		self.parseResults(b_out, p_out)
+  
+		if(len(self.bat_events.events) > 0):
+			hunter_out = self.hunter.start() #hunter start is to write to a log file (same as stop)
+			self.hunter.parseFile(hunter_out)	
+			hunter_trace = self.hunter.trace
+			
+			for i, function in enumerate(hunter_trace):
+				func_consumption = 0
+				for j, times in enumerate(hunter_trace[function]):
+					time = hunter_trace[function][j]
+					begin = time['begin_time']
+					end = time['end_time']
+					consumption, per_component_consumption = g.getConsumptionInBetween(begin, end)
+					self.hunter.addConsumption(function,j,consumption,per_component_consumption)
+					func_consumption += consumption
+				log("Total energy consumed by %s: %f Joules" % (function, func_consumption) , log_sev=LogSeverity.SUCCESS)
+
+			print("-----------------")
+			pprint.pprint(hunter_trace)
+			print("-----------------\nTIME_BAT_EVENTS")
+			begin = self.bat_events.events[0].time
+			print("BEGIN: " + str(begin))
+			end = g.bat_events.events[-1].time
+			print("END: " + str(end))
+
+			self.hunter.addConsumptionToTraceFile(hunter_file)
 		if self.unplugged:
 			self.__plug_back()
 		return b_out, p_out
@@ -302,5 +317,6 @@ if __name__ == '__main__':
 		g.addConsumptionToTraceFile(hunter_file)
 		#print("-----------------")
 		#pprint.pprint(hunter_trace)
+
 	else: 
 		log("Error with battery stats events", log_sev=LogSeverity.ERROR)
