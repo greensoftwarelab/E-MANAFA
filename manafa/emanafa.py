@@ -105,7 +105,7 @@ class EManafa(Service):
 		self.batterystats.clean()
 		self.perfetto.clean()
 
-	def parseResults(self, bts_file="", pf_file=""):
+	def 	parseResults(self, bts_file="", pf_file=""):
 		if bts_file == "" or pf_file == "":
 			log("Empty result files", LogSeverity.FATAL)
 			raise Exception()
@@ -288,35 +288,8 @@ if __name__ == '__main__':
 		time.sleep(7) #do work
 		args.batstatsfile, args.perfettofile = g.stop()
 	g.parseResults(args.batstatsfile, args.perfettofile)
-  
-	if(len(g.bat_events.events) > 0):
-		hunter_file = g.hunterStart() #hunter start is to write to a log file (same as stop)
-		#hunter_file = "results/hunter/hunter.log"
-		g.hunterParse(hunter_file)
-		hunter_trace = g.hunter.trace
-		
-		for i, function in enumerate(hunter_trace):
-			func_consumption = 0
-			for j, times in enumerate(hunter_trace[function]):
-				time = hunter_trace[function][j]
-				begin = time['begin_time']
-				end = time['end_time']
-				consumption, per_component_consumption = g.getConsumptionInBetween(begin, end)
-				g.hunterAddConsumption(function,j,consumption,per_component_consumption)
-				func_consumption += consumption
-			log("Total energy consumed by %s: %f Joules" % (function, func_consumption) , log_sev=LogSeverity.SUCCESS)
-
-		print("-----------------")
-		pprint.pprint(hunter_trace)
-		print("-----------------\nTIME_BAT_EVENTS")
-		begin = g.bat_events.events[0].time
-		print("BEGIN: " + str(begin))
-		end = g.bat_events.events[-1].time
-		print("END: " + str(end))
-
-		g.addConsumptionToTraceFile(hunter_file)
-		#print("-----------------")
-		#pprint.pprint(hunter_trace)
-
-	else: 
-		log("Error with battery stats events", log_sev=LogSeverity.ERROR)
+	begin = g.bat_events.events[0].time  # first collected sample from batterystats
+	end = g.bat_events.events[-1].time  # last collected sample from batterystats
+	p,c = g.getConsumptionInBetween(begin,end)
+	print(p)
+	print(c)

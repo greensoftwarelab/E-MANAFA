@@ -1,13 +1,20 @@
 sudo: false
 language: python
 python:
-  - "3.8"
+- '3.8'
 install:
-  - pip install -r requirements.txt
-# command to run tests
-script:
-  pytest manafa/tests
-
+- pip install -r requirements.txt
+script: pytest manafa/tests
 notifications:
   email:
-    - rui.rrua@gmail.com
+  - rui.rrua@gmail.com
+deploy:
+  provider: pypi
+  username: __token__
+  password:
+    secure: hykKRRPtX3KroLah6YRHtb/sDmFOysMty2nQE8RufE8iW63768ptakMhVHhUViAEQXmCjUhE2/i8VPebPrUTxOhFYdgA8DwONgwZVAtTjPu+Xl77/4vEJdklhfDJc4TAGB6CVDjPUFK7SjY4MktZgMUCkrRx6RuoM5IVwzHvG5dY2n6pCtM99H8q7JNPpEt1DrkqMgqZQedxMl8sfXfWXe/Nw/8ECF/iC/rnzm0rlSR/ePJJIqs7AxWrqKpPay7eCg0iCpAxpAO0CtDSE6x1tVloVhYQpOVB2W0P+E4N55WxlJ248PRsb2JLdwQVs32Nw0zzJ1OOFOmW8T9rfIqmwTo2FTyXlB+CY5QxW+07Qt2wXAGxSvwsAtvgEEj8m/OZWi/xzDlFie/wd1429HRkGwDyI2Yr81e9Feg923k8/gEhxt14hLJB4o9o9esw9ro9NH8qvE0QSFumE1v5DbK/q8uC6SWGxOjVAm50M8TNgng5T9Wbrrue8UbQehcMRWJWxgW5qfBIYFUNsAIJbPoV4PeRZFcJWOfwCCt7ByiGmZkoGZddpneuwiIcHrmlxXDK5uIoAZOmRzPW2OubKAkHXBa3Rv7dUJNcknpy7yDLLM1b0TK2mhvRkASigI77ZftLt42Dj3mhpizQJg/vv1EYdRaliB8xdz+8Sv0sjwZ9WlU=
+  on:
+    branch: main
+  distributions: "sdist"
+  skip_existing: true
+  before_deploy: "TODO ENSURE DEV=FALSE and upgrade version"

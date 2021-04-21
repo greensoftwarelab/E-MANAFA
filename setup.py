@@ -6,7 +6,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setup(
     name='manafa',
-    version='0.3.01',
+    version='0.3.32',
     description='E-MANAFA: Energy Monitor and ANAlyzer For Android',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -14,7 +14,6 @@ setup(
     author_email='rui.rrua@gmail.com',
     url='https://github.com/RRua/e-manafa',
     license='MIT',
-    #package_dir={"": "manafa"},
     packages=setuptools.find_packages(),
     install_requires=[
         'pytz==2021.1',
@@ -37,15 +36,3 @@ setup(
         },
     python_requires=">=3.8",
 )
-
-'''setup(
-    name='e-manafa',
-    version='0.1.0',
-    packages=[ 'tests.perfetto', 'tests.batterystats', 'manafa', 'manafa.utils', 'manafa.perfetto',
-              'manafa.services', 'manafa.batteryStats', 'manafa.powerProfile', 'manafa.resources', 'manafa.results'],
-    url='https://github.com/RRua/e-manafa',
-    license='MIT',
-    author='ruirua',
-    author_email='rui.rrua@gmail.com',
-    description='e-manafa tool'
-)'''
