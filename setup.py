@@ -9,7 +9,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setup(
     name='manafa',
-    version="0.3.60",
+    version="0.3.61",
     description='E-MANAFA: Energy Monitor and ANAlyzer For Android',
     long_description=long_description,
     long_description_content_type='text/markdown',
