@@ -1,11 +1,15 @@
-sudo: false
 language: python
 os: linux
 python:
 - '3.8'
+
 install:
 - pip install -r requirements.txt
+
+before_script: "python -m incremental.update manafa --patch"
+
 script: pytest manafa/tests
+
 notifications:
   email:
   - rui.rrua@gmail.com
@@ -17,5 +21,3 @@ deploy:
   on:
     branch: main
   distributions: "sdist"
-
-before_deploy: "echo 'TODO ENSURE DEV=FALSE and upgrade version'"
