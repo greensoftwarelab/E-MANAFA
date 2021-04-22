@@ -1,6 +1,6 @@
 import setuptools
 from setuptools import setup
-from manafa._version import __version__
+#from manafa._version import __version__
 
 with open("README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
@@ -9,7 +9,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setup(
     name='manafa',
-    version=__version__,
+    version="0.3.60",
     description='E-MANAFA: Energy Monitor and ANAlyzer For Android',
     long_description=long_description,
     long_description_content_type='text/markdown',
