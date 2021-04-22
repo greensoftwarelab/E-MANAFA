@@ -6,6 +6,10 @@ install:
 - pip install -r requirements.txt
 before_script: python -m incremental.update manafa --patch
 script: pytest manafa/tests
+after_script:
+  - git add manafa/_version.py
+  - git commit -m "incremented version"
+  - git push origin main
 notifications:
   email:
   - rui.rrua@gmail.com
