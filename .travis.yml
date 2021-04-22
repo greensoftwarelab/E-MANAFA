@@ -2,14 +2,10 @@ language: python
 os: linux
 python:
 - '3.8'
-
 install:
 - pip install -r requirements.txt
-
-before_script: "python -m incremental.update manafa --patch"
-
+before_script: python -m incremental.update manafa --patch
 script: pytest manafa/tests
-
 notifications:
   email:
   - rui.rrua@gmail.com
@@ -17,7 +13,7 @@ deploy:
   provider: pypi
   username: __token__
   password:
-    secure: hykKRRPtX3KroLah6YRHtb/sDmFOysMty2nQE8RufE8iW63768ptakMhVHhUViAEQXmCjUhE2/i8VPebPrUTxOhFYdgA8DwONgwZVAtTjPu+Xl77/4vEJdklhfDJc4TAGB6CVDjPUFK7SjY4MktZgMUCkrRx6RuoM5IVwzHvG5dY2n6pCtM99H8q7JNPpEt1DrkqMgqZQedxMl8sfXfWXe/Nw/8ECF/iC/rnzm0rlSR/ePJJIqs7AxWrqKpPay7eCg0iCpAxpAO0CtDSE6x1tVloVhYQpOVB2W0P+E4N55WxlJ248PRsb2JLdwQVs32Nw0zzJ1OOFOmW8T9rfIqmwTo2FTyXlB+CY5QxW+07Qt2wXAGxSvwsAtvgEEj8m/OZWi/xzDlFie/wd1429HRkGwDyI2Yr81e9Feg923k8/gEhxt14hLJB4o9o9esw9ro9NH8qvE0QSFumE1v5DbK/q8uC6SWGxOjVAm50M8TNgng5T9Wbrrue8UbQehcMRWJWxgW5qfBIYFUNsAIJbPoV4PeRZFcJWOfwCCt7ByiGmZkoGZddpneuwiIcHrmlxXDK5uIoAZOmRzPW2OubKAkHXBa3Rv7dUJNcknpy7yDLLM1b0TK2mhvRkASigI77ZftLt42Dj3mhpizQJg/vv1EYdRaliB8xdz+8Sv0sjwZ9WlU=
+    secure: cGZ6TsRm5QM/nWjdwNJAWcxbX+V3NlPgxKjeW5cWJypDYpHtFM62d7ckIe1oHu5NQxQm47/MO8iCUEdLfQmE5e1/gKmC7kjitJNXkeBnC0TIMVzkANTfX2a6Pl+hlqNpdjBo1Mnt20L5NqkF5DnLm7p1xrIo7SEvtfejUR0O2wmTSkBjnXf1h8ecf2YBw1k7rsNF39YhAoTPXsakYXtHX4nX7FlwTbR0UdeN8zHKXcWeE96SLbn6yFdRDn2sc2ClpkuaeSUeE6gKL2UYPr0FK8A8lFpR2ZBGp35IcbvuWOjQp+BLzpmBnkl7hfTEAS4zzQUsjxzjtpbDVYcEpW/WmXeTXVuzhwwRa59sGAqex0g4dUg1KEkS9u6XaEiO5YcAWFUOYSBhAFqGMJXpSGNsPZVCDRFCYqT1TFyxLlWgZ0cKSDfTROqYLCEiMD6/BAWl57hjiKy1PSlQRhEJKHArl0uppAQZSd+HdW/ayXQy2q/nzoC7kULd9g3J6NgWiCMfbqyMW0qA6IoqJtG09aXFpaCBwMXbcS+63567m5AnMGzf5RfEEeRO10FJhp4eSVHl0AsdjSk271QJl8GyOo4W1g8pOU6gW2UNQaziIxTGGg/SVx1waq2YNe0GcqJ8B2ylgPmQbZcVf5oQCRJCESMJOhqRXQcFuknYJFDNCcy5ucY=
   on:
     branch: main
-  distributions: "sdist"
+  distributions: sdist
