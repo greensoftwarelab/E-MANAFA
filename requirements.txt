@@ -15,7 +15,6 @@ importlib-metadata==3.7.3
 incremental==21.3.0
 iniconfig==1.1.1
 keyring==23.0.0
-manafa==0.2.0
 noattr==0.0.9
 packaging==20.9
 pep517==0.10.0
@@ -33,7 +32,6 @@ readme-renderer==29.0
 requests==2.25.1
 requests-toolbelt==0.9.1
 rfc3986==1.4.0
-rrua==0.1.0
 six==1.15.0
 termcolor==1.1.0
 text-unidecode==1.3
