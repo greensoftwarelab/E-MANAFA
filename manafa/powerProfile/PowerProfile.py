@@ -47,7 +47,7 @@ class PowerProfile(object):
 					begin_d[at]={} if at not in begin_d else begin_d[at]
 					last_b = begin_d
 					begin_d = begin_d[at]
-				last_b[at]= list( map( lambda xxz : float(xxz.text), child.getchildren() ) )
+				last_b[at]= list( map( lambda xxz : float(xxz.text),  list(child)))
 
 	
 	def getCPUStateCurrent(self,state):
@@ -74,7 +74,7 @@ class PowerProfile(object):
 		freq = 0
 		# find adequate freq
 		for i,f in enumerate(profile_speeds):
-			if f > core_freq:
+			if f >= core_freq:
 				freq = i
 				break
 			mini_fr = i
