@@ -286,7 +286,7 @@ if __name__ == '__main__':
 		g.init()
 		g.start()
 		time.sleep(7) #do work
-		args.batstatsfile, args.perfettofile = g.stop()
+		args.batstatsfile, args.perfettofile, hunter_file = g.stop()
 	g.parseResults(args.batstatsfile, args.perfettofile)
 	begin = g.bat_events.events[0].time  # first collected sample from batterystats
 	end = g.bat_events.events[-1].time  # last collected sample from batterystats

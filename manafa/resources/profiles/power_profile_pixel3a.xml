@@ -67,7 +67,6 @@
         <value>1747200</value> <!-- 1747 MHz CPU speed -->
         <value>1843200</value> <!-- 1843 MHz CPU speed -->
         <value>1996800</value> <!-- 1996 MHz CPU speed -->
-        <value>2016000</value> <!-- 2016 MHz CPU speed -->
     </array>
 
     <!-- Additional power used by a CPU core from cluster 0 when running at
