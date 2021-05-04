@@ -90,7 +90,7 @@ class EManafa(Service):
                     time = hunter_trace[function][j]
                     begin = time['begin_time']
                     end = time['end_time']
-                    consumption, per_component_consumption = g.getConsumptionInBetween(begin, end)
+                    consumption, per_component_consumption = self.getConsumptionInBetween(begin, end)
                     self.hunter.addConsumption(function, j, consumption, per_component_consumption)
                     func_consumption += consumption
                 log("Total energy consumed by %s: %f Joules" % (function, func_consumption),
