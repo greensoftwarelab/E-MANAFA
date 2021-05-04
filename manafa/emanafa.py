@@ -75,7 +75,7 @@ class EManafa(Service):
     def stop(self):
         b_out = self.batterystats.stop()
         p_out = self.perfetto.stop()
-        log("Perfetto file  %s" % p_out)
+        log("Perfetto file:  %s" % p_out)
         self.parseResults(b_out, p_out)
 
         if len(self.bat_events.events) > 0:
@@ -163,7 +163,6 @@ class EManafa(Service):
         return total, per_component_consumption
 
     def calculateCPUEnergy(self, start_time, end_time):
-        print(self.perf_events.events)
         c_beg_bef, c_beg_aft = self.__getClosestPair(self.perf_events.events, start_time)
         # c_end_bef,c_end_aft =  getClosestPair(self.perf_events.events, end_time)
         total = 0
@@ -294,7 +293,7 @@ if __name__ == '__main__':
     if has_device_conn and invalid_file_args:
         g.init()
         g.start()
-        time.sleep(10)  # do work
+        time.sleep(5)  # do work
         args.batstatsfile, args.perfettofile, hunter_file = g.stop()
     g.parseResults(args.batstatsfile, args.perfettofile)
     begin = g.bat_events.events[0].time  # first collected sample from batterystats
