@@ -5,3 +5,4 @@ include manafa/resources/traceconv
 include manafa/resources/profiles/power_profile_mi9lite.xml
 include manafa/resources/profiles/power_profile_pixel3a.xml
 include manafa/resources/profiles/power_profile_pixel4a(5g).xml
+include manafa/resources/profiles/power_profile.xml
