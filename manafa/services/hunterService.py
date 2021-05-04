@@ -30,6 +30,7 @@ class HunterService(Service):
         pass
 
     def clean(self):
+        execute_shell_command("find %s -type f  | xargs rm " % self.results_dir)
         execute_shell_command("adb logcat -c")  # or   adb logcat -b all -c
 
     # parses function to other module HunterParser
