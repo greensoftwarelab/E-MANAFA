@@ -2,6 +2,7 @@ from .service import Service
 
 import re
 from ..utils.Utils import execute_shell_command
+from manafa.utils.Logger import log
 
 
 class HunterService(Service):
@@ -19,7 +20,7 @@ class HunterService(Service):
 
     def start(self):
         filename = self.results_dir + "/hunter-%s.log" % (str(self.boot_time))
-        print(filename)
+        log("Hunter file:  %s" % filename)
         execute_shell_command("adb logcat -d | grep -io \"[<>].*m=example.*]\" > %s" % filename)
         return filename
 
@@ -70,10 +71,15 @@ class HunterService(Service):
     def addConsumptionToTraceFile(self, filename):
         with open(filename, 'r+') as fr, open(filename, 'r+') as fw:
             for line in fr:
-                components = re.split('[ ,><=\[\]]', line)
-                function_name = components[1]
                 checked = False
-                if (re.match(r"^<", line)):
+                if re.match(r"^>", line):
+                    before_components = re.split('^>', line)
+                    components = re.split('[,=\[\] ]', before_components[1])
+                    function_name = components[0]
+                elif re.match(r"^<", line):
+                    before_components = re.split('^<', line)
+                    components = re.split('[,=\[\] ]', before_components[1])
+                    function_name = components[0]
                     checked = True
                 consumption, time = self.returnConsumptionAndTimeByFunction(function_name, checked)
                 cpu = re.split('cpu = \d+', line)
