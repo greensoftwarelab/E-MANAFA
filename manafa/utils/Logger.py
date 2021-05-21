@@ -16,7 +16,7 @@ class LogSeverity(Enum):
 
 def getColor(sev):
     return {
-        'Success' : 'green',
+        'Success': 'green',
         'Warning': 'yellow',
         'Info': 'blue',
         'Error': 'magenta',

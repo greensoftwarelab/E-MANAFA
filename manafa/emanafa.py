@@ -293,7 +293,7 @@ if __name__ == '__main__':
     if has_device_conn and invalid_file_args:
         g.init()
         g.start()
-        time.sleep(5)  # do work
+        time.sleep(6)  # do work
         args.batstatsfile, args.perfettofile, hunter_file = g.stop()
     g.parseResults(args.batstatsfile, args.perfettofile)
     begin = g.bat_events.events[0].time  # first collected sample from batterystats

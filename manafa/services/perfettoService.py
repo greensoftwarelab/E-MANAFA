@@ -11,11 +11,16 @@ from manafa.utils.Utils import execute_shell_command, get_resources_dir
 
 RESOURCES_DIR = get_resources_dir()
 
+DEFAULT_OUT_DIR = "/sdcard/perfetto-traces"
+
 class PerfettoService(Service):
 	"""docstring for BatteryStatsService"""
-	def __init__(self, boot_time=0, output_res_folder="perfetto"):
+	def __init__(self, boot_time=0, output_res_folder="perfetto", default_out_dir=DEFAULT_OUT_DIR):
 		Service.__init__(self, output_res_folder)
 		self.boot_time = boot_time
+		self.output_dir = default_out_dir
+		self.output_filename = os.path.join(self.output_dir,"trace")
+		execute_shell_command(f"adb shell mkdir -p {self.output_dir}")
 
 	def config(self, **kwargs):
 		pass
@@ -25,7 +30,8 @@ class PerfettoService(Service):
 		self.clean()
 
 	def start(self):
-		execute_shell_command("adb shell perfetto -o /data/misc/perfetto-traces/trace freq  -t 1h --background ")
+
+		execute_shell_command(f"adb shell perfetto -o {self.output_filename} freq  -t 1h --background ")
 	
 	def stop(self, file_id=None):
 		if file_id is None:
@@ -33,7 +39,7 @@ class PerfettoService(Service):
 		#executeShCommand("adb shell su -c \"killall perfetto\"")
 		execute_shell_command("adb shell killall perfetto")
 		time.sleep(1)
-		execute_shell_command("adb pull /data/misc/perfetto-traces/trace " + ("%strace" % self.results_dir ) + "-" + file_id + "-" + str(self.boot_time))
+		execute_shell_command(f"adb pull {self.output_filename} " + ("%strace" % self.results_dir) + "-" + file_id + "-" + str(self.boot_time))
 		return self.export()
 
 	def export(self):
