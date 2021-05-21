@@ -11,7 +11,7 @@ from manafa.utils.Utils import execute_shell_command, get_resources_dir
 
 RESOURCES_DIR = get_resources_dir()
 
-DEFAULT_OUT_DIR = "/sdcard/perfetto-traces"
+DEFAULT_OUT_DIR = "/data/misc/perfetto-traces"
 
 class PerfettoService(Service):
 	"""docstring for BatteryStatsService"""
