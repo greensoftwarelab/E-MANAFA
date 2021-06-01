@@ -22,7 +22,7 @@ class BatteryStatsService(Service):
 	def start(self):
 		execute_shell_command("adb shell dumpsys batterystats --reset")
 
-	def stop(self,fil=None):
+	def stop(self, fil=None):
 		
 		if fil is None:
 			uid_file = execute_shell_command("date +%s")[1].strip()

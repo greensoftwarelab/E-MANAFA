@@ -104,7 +104,7 @@ class PerfettoCPUfreqParser(object):
 				raise Exception ("Error parsing file")
 		
 	def addEvent(self,time,cpu_id,cpu_freq):
-		if len(self.events)==0:
+		if len(self.events) == 0:
 			z = PerfettoEvent(time)
 			z.initAll(default_len=8,val=cpu_freq)
 			self.events.append(z)

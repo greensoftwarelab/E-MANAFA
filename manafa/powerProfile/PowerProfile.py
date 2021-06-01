@@ -57,7 +57,7 @@ class PowerProfile(object):
 	def getCPUCoreSpeedPair(self,core_id,core_freq):
 		#measured in KHz
 		profile_speeds = self.components["cpu"]["speeds"]  if "speeds" in self.components["cpu"]else self.components["cpu"]["core_speeds"] 
-		profile_currents =  self.components["cpu"]["active"]  if ("speeds" in self.components["cpu"] and isinstance( self.components["cpu"]["active"] ,list ) ) else self.components["cpu"]["core_power"] 
+		profile_currents =  self.components["cpu"]["active"]  if ("speeds" in self.components["cpu"] and isinstance( self.components["cpu"]["active"] ,list ) ) else self.components["cpu"]["core_power"]
 
 		if isinstance(profile_speeds, dict ):
 			# select respective cluster of core_id	
