@@ -22,7 +22,6 @@ class HunterService(Service):
         if file_id is None:
             file_id = execute_shell_command("date +%s")[1].strip()
         filename = self.results_dir + "/hunter-%s-%s.log" % (file_id, str(self.boot_time))
-        log("Hunter file:  %s" % filename)
         execute_shell_command("adb logcat -d | grep -io \"[<>].*m=example.*]\" > %s" % filename)
         return filename
 
@@ -57,7 +56,7 @@ class HunterService(Service):
                     if function_name not in self.trace:
                         self.trace[function_name] = {}
                         self.trace[function_name][0] = {'begin_time': float(begin_time) * (pow(10, -3))}
-                    elif len(self.trace[function_name]) not in self.trace[function_name]:
+                    else:
                         self.trace[function_name][len(self.trace[function_name])] = {
                             'begin_time': float(begin_time) * (pow(10, -3))}
             elif re.match(r"^<", line):
@@ -71,8 +70,7 @@ class HunterService(Service):
                         break
                 if add_function:
                     end_time = components[13]
-                    self.trace[function_name][len(self.trace[function_name]) - 1].update(
-                        {'end_time': float(end_time) * (pow(10, -3))})
+                    self.updateTraceReturn(function_name, end_time)
             else:
                 print("linha invalida" + line)
 
@@ -87,7 +85,13 @@ class HunterService(Service):
 
     def addConsumptionToTraceFile(self, filename):
         not_functions = ["<init>", "get", "set"]
-        with open(filename, 'r+') as fr, open(filename, 'r+') as fw:
+
+        split_filename = re.split("/", filename)
+
+        new_filename = "/".join(split_filename[0: len(split_filename) - 1])
+        new_filename += '[edited]' + split_filename[len(split_filename) - 1]
+
+        with open(filename, 'r+') as fr, open(new_filename, 'w') as fw:
             for line in fr:
                 checked = False
                 if re.match(r"^>", line):
@@ -111,7 +115,9 @@ class HunterService(Service):
                         fw.write(line)
                     else:
                         fw.write(cpu[0] + 'cpu = ' + str(consumption) + ', t = ' + str(time) + ']\n')
-            fw.truncate()
+
+        execute_shell_command("rm %s" % filename)
+        return new_filename
 
     def returnConsumptionAndTimeByFunction(self, function_name, checked):
         consumption = 0.0
@@ -134,3 +140,12 @@ class HunterService(Service):
                 'checked': True
             }
         )
+
+    def updateTraceReturn(self, function_name, end_time):
+        i = len(self.trace[function_name]) - 1
+        while i >= 0:
+            times = self.trace[function_name][i]
+            if 'end_time' not in times:
+                times.update({'end_time': float(end_time) * (pow(10, -3))})
+                break
+            i -= 1
