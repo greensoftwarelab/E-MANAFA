@@ -253,7 +253,6 @@ Thumbs.db #thumbnail cache on Windows
 
 # local results
 results/*
-manafa/results/*
 
 # others
 .idea/*
