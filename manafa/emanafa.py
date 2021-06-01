@@ -9,6 +9,7 @@ from manafa.batteryStats.BatteryStatsParser import BatteryStatsParser
 import argparse
 from manafa.utils.Logger import log, LogSeverity
 from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir
+from datetime import datetime, timezone
 
 MANAFA_RESOURCES_DIR = get_resources_dir()
 
@@ -80,31 +81,31 @@ class EManafa(Service):
 
         if len(self.bat_events.events) > 0:
             hunter_out = self.hunter.start()  # hunter start is to write to a log file (same as stop)
-            #hunter_out = '/usr/local/Cellar/python@3.9/3.9.0_4/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/manafa/results/hunter//hunter-1614351254.0.log'
             self.hunter.parseFile(hunter_out)
             hunter_trace = self.hunter.trace
 
+            total_consumption = 0
             for i, function in enumerate(hunter_trace):
                 func_consumption = 0
                 for j, times in enumerate(hunter_trace[function]):
                     time = hunter_trace[function][j]
                     begin = time['begin_time']
-                    end = time['end_time']
+                    if 'end_time' in time:
+                        end = time['end_time']
+                    else:
+                        end = begin
+
                     consumption, per_component_consumption = self.getConsumptionInBetween(begin, end)
                     self.hunter.addConsumption(function, j, consumption, per_component_consumption)
                     func_consumption += consumption
+                total_consumption += func_consumption
                 log("Total energy consumed by %s: %f Joules" % (function, func_consumption),
                     log_sev=LogSeverity.SUCCESS)
+            log("Total energy consumed by APP: %f Joules" % total_consumption,
+                log_sev=LogSeverity.INFO)
 
-            print("-----------------")
-            pprint.pprint(hunter_trace)
-            print("-----------------\nTIME_BAT_EVENTS")
-            begin = self.bat_events.events[0].time
-            print("BEGIN: " + str(begin))
-            end = self.bat_events.events[-1].time
-            print("END: " + str(end))
-
-            self.hunter.addConsumptionToTraceFile(hunter_out)
+            hunter_edited = self.hunter.addConsumptionToTraceFile(hunter_out)
+            log("Hunter file:  %s" % hunter_edited)
         if self.unplugged:
             self.__plug_back()
         return b_out, p_out, hunter_out
@@ -245,7 +246,7 @@ class EManafa(Service):
         if res == 0 and len(out) > 0:
             default_tz = out.split(" ")[-2]
         log("Using timezone: %s" % default_tz)
-        return "UTC" if default_tz == "WEST" else default_tz
+        return "WET" if default_tz == "WEST" else default_tz
 
     def __unplug_if_fully_charged(self):
         # battery stats file comes empty when battery level == 100
@@ -293,11 +294,14 @@ if __name__ == '__main__':
     if has_device_conn and invalid_file_args:
         g.init()
         g.start()
-        time.sleep(5)  # do work
+        print("start testing...")
+        time.sleep(15)  # do work
+        print("stop testing...")
         args.batstatsfile, args.perfettofile, hunter_file = g.stop()
     g.parseResults(args.batstatsfile, args.perfettofile)
     begin = g.bat_events.events[0].time  # first collected sample from batterystats
     end = g.bat_events.events[-1].time  # last collected sample from batterystats
     p, c = g.getConsumptionInBetween(begin, end)
+    print("TOTAL: ")
     print(p)
     print(c)
