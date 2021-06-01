@@ -1,3 +1,5 @@
+from textops import cat
+
 from .service import Service
 
 import re
@@ -17,6 +19,7 @@ class HunterService(Service):
     def init(self, boot_time=0, **kwargs):
         self.boot_time = boot_time
         self.clean()
+        self.trace = {}
 
     def start(self, file_id=None):
         if file_id is None:
