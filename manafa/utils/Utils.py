@@ -7,7 +7,8 @@ DEV=False
 def get_resources_dir(packname="manafa", default_res_dir="resources"):
     if DEV:
         return packname + "/" + default_res_dir
-    return sysconfig.get_path("purelib") + "/git " + packname + "/" + default_res_dir
+    return sysconfig.get_path("purelib") + "/" + packname + "/" + default_res_dir
+    #return sysconfig.get_path("purelib") + "/git " + packname + "/" + default_res_dir
 
 
 def get_pack_dir(packname="manafa"):
