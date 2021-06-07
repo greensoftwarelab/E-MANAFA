@@ -353,12 +353,12 @@ class BatteryStatsParser(object):
 				current += possible_states["scanning"] if "scanning" in possible_states else 0
 
 			elif "mobile_radio" in  bt_event.updates:
-				on_vals =  list(possible_states["on"]) if "on" in possible_states else []
+				on_vals = list(possible_states["on"]) if "on" in possible_states else []
 				signal_stren = bt_event.updates["phone_signal_strength"] if "phone_signal_strength" in bt_event.updates else 0
-				if signal_stren > len(on_vals) and len(on_vals)>0:
+				if signal_stren >= len(on_vals) and len(on_vals)>0:
 					 current+= on_vals[-1]
 				elif len(on_vals)>0:
-					current+= on_vals[signal_stren]
+					current += on_vals[signal_stren]
 				# radio.active == mobile_radio - transmiting
 				
 		elif comp_name == "modem":
