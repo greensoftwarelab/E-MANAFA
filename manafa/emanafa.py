@@ -96,6 +96,8 @@ class EManafa(Service):
                         end = begin
 
                     consumption, per_component_consumption = self.getConsumptionInBetween(begin, end)
+                    if consumption < 0:
+                        consumption = 0.0
                     self.hunter.addConsumption(function, j, consumption, per_component_consumption)
                     func_consumption += consumption
                 total_consumption += func_consumption
