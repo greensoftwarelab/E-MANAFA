@@ -295,7 +295,7 @@ if __name__ == '__main__':
         g.init()
         g.start()
         print("start testing...")
-        time.sleep(15)  # do work
+        time.sleep(8)  # do work
         print("stop testing...")
         args.batstatsfile, args.perfettofile, hunter_file = g.stop()
     g.parseResults(args.batstatsfile, args.perfettofile)
