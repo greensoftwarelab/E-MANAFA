@@ -90,17 +90,17 @@ $ python emanafa.py [-p|--profile <prof>]
 ## Source
 
 ```
-m = EManafa()
-m.init()
-m.start()
+# Example 
+em = EManafa()
+em.init()
+em.start()
 do_work_to_profile() # replace by procedure to be measured 
-b_file, p_file = m.stop()
-m.parseResults(b_file, p_file)
-begin = m.bat_events.events[0].time # timestamp from first sample of batterystats
-end = m.bat_events.events[-1].time # timestamp from last sample of batterystats
-prof_session_consumption, per_component_consumption, battery_events_metrics = m.getConsumptionInBetween(begin, end) # returns energy-related results occured between two instants of time between the profiling time
-print(per_component_consumption)
-print(prof_session_consumption)
+em.stop()
+em.parseResults()
+begin = em.bat_events.events[0].time  # first collected sample from batterystats
+end = em.bat_events.events[-1].time  # last collected sample from batterystats
+p, c, z = em.getConsumptionInBetween(begin, end)
+print(f"TOTAL: {p} Joules")
 ```
 
 # Supported devices:
@@ -111,3 +111,4 @@ This tool can be used with any Android device able to run Perfetto, available si
 
 # TODO
 - support for memory power calculator (MemoryPowerCalculator is a new addition in 8.0, mainly to count the power consumption on DDR memory . formula: MemoryPower = (mAatRail_1 * timeMs_1 + mAatRail_2 * timeMs_2 +… + mAatRail_n * timeMs_n) / (1000 * 60 * 60) (mAatRail_n: is the power at the read/write rate level, timeMs_n: is the time at the mAatRail_n level))
+- start perfetto with protobuf config file
