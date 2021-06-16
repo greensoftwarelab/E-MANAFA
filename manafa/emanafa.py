@@ -25,8 +25,9 @@ def get_last_boot_time(bts_file=None):
         log("no device connected. Assuming Boot time of battery stats file", LogSeverity.ERROR)
         flds = bts_file.split("-") if bts_file is not None else []
         if len(flds) > 1:
-            log("Boot time: " + flds[2], LogSeverity.WARNING)
-            return int(flds[2])
+            boot_time = flds[2].replace(".log", "")
+            log("Boot time: " + boot_time, LogSeverity.WARNING)
+            return int(float(boot_time))
         else:
             log("no device connected. Assuming Boot time 0", LogSeverity.WARNING)
             return 0
@@ -58,6 +59,7 @@ class EManafa(Service):
         self.timezone = timezone if timezone is not None else self.__inferTimezone()
         self.unplugged = False
         self.hunter = HunterService()
+        self.bat_events = None
 
     def config(self, **kwargs):
         pass
@@ -78,7 +80,6 @@ class EManafa(Service):
         p_out = self.perfetto.stop()
         log("Perfetto file:  %s" % p_out)
         self.parseResults(b_out, p_out)
-
         if len(self.bat_events.events) > 0:
             hunter_out = self.hunter.start()  # hunter start is to write to a log file (same as stop)
             self.hunter.parseFile(hunter_out)
@@ -94,7 +95,6 @@ class EManafa(Service):
                         end = time['end_time']
                     else:
                         end = begin
-
                     consumption, per_component_consumption = self.getConsumptionInBetween(begin, end)
                     self.hunter.addConsumption(function, j, consumption, per_component_consumption)
                     func_consumption += consumption
@@ -124,15 +124,17 @@ class EManafa(Service):
         self.perf_events = PerfettoCPUfreqParser(self.power_profile, self.b_time, timezone=self.timezone)
         self.perf_events.parseFile(pf_file)
 
+
     # energy calc related stuff
     def getConsumptionInBetween(self, start_time=0, end_time=9905715380):
         total, per_component = self.calculateNonCpuEnergy(start_time, end_time)
         total_cpu = self.calculateCPUEnergy(start_time, end_time)
+        metrics = self.bat_events.getEventsInBetween(start_time,end_time)
         per_component['cpu'] += total_cpu
-        return total + total_cpu, per_component
+        return total + total_cpu, per_component, metrics
 
     def calculateNonCpuEnergy(self, start_time, end_time):
-        c_beg_bef, c_beg_aft = self.__getClosestPair(self.bat_events.events, start_time)
+        c_beg_bef, c_beg_aft = self.bat_events.getClosestPair( start_time)
         total = 0
         per_component_consumption = {}
         last_event = self.bat_events.events[c_beg_bef]
@@ -164,7 +166,7 @@ class EManafa(Service):
         return total, per_component_consumption
 
     def calculateCPUEnergy(self, start_time, end_time):
-        c_beg_bef, c_beg_aft = self.__getClosestPair(self.perf_events.events, start_time)
+        c_beg_bef, c_beg_aft = self.bat_events.getClosestPair(start_time)
         # c_end_bef,c_end_aft =  getClosestPair(self.perf_events.events, end_time)
         total = 0
         last_event = self.perf_events.events[c_beg_bef]
@@ -198,13 +200,7 @@ class EManafa(Service):
         # print(tot_time)
         return total
 
-    def __getClosestPair(self, events, time):
-        lasti = 0
-        for i, x in enumerate(events):
-            if x.time > time:
-                return lasti, i
-            lasti = i
-        return lasti, lasti
+
 
     def __extractPowerProfile(self, filename):
         # extracting power_profile.xml from device
@@ -264,19 +260,12 @@ class EManafa(Service):
         res, o, e = execute_shell_command("adb shell dumpsys battery reset")
         self.unplugged = False
 
-
-def have_connected_devices():
+def has_connected_devices():
     res, o, e = execute_shell_command("adb devices -l | grep -v attached")
     return res == 0 and len(o) > 2
 
-
-def inferAppPackageName():
-    return DEFAULT_PACKAGE_NAME
-
-
 def startTesting(app_package_name, interval, number_of_tests):
     execute_shell_command("adb shell monkey -v --throttle %s -p %s %s" % (interval, app_package_name, number_of_tests))
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -285,7 +274,7 @@ if __name__ == '__main__':
     parser.add_argument("-pft", "--perfettofile", default=None, type=str)
     parser.add_argument("-bts", "--batstatsfile", default=None, type=str)
     args = parser.parse_args()
-    has_device_conn = have_connected_devices()
+    has_device_conn = has_connected_devices()
     invalid_file_args = (args.perfettofile is None or args.batstatsfile is None)
     if not has_device_conn and invalid_file_args:
         log("Fatal error. No connected devices and result files submitted for analysis", LogSeverity.FATAL)
@@ -295,13 +284,14 @@ if __name__ == '__main__':
         g.init()
         g.start()
         print("start testing...")
-        time.sleep(15)  # do work
+        time.sleep(7)  # do work
         print("stop testing...")
         args.batstatsfile, args.perfettofile, hunter_file = g.stop()
     g.parseResults(args.batstatsfile, args.perfettofile)
     begin = g.bat_events.events[0].time  # first collected sample from batterystats
     end = g.bat_events.events[-1].time  # last collected sample from batterystats
-    p, c = g.getConsumptionInBetween(begin, end)
+    p, c, z = g.getConsumptionInBetween(begin, end)
     print("TOTAL: ")
     print(p)
     print(c)
+    print(z)

@@ -22,7 +22,7 @@ __
 - screen - 
 
 -screen_doze - display state: The display is dozing in a low power state; it is still on but is optimized for showing system-provided content while the device is non-interactive. https://developer.android.com/reference/android/view/Display.html#STATE_DOZE
-		- equivalent to ambient.on no power profile
+		- equivalent to ambient.on on power profile
 		- https://www.protechtraining.com/blog/post/diving-into-android-m-doze-875
 
 - whitelist -  whitelisted from Doze – these apps are not restricted in their alarms, etc.

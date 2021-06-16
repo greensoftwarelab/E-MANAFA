@@ -1,3 +1,4 @@
+import os
 import re,json
 #sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 from collections import Iterable
@@ -7,16 +8,16 @@ from manafa.utils.Utils import get_pack_dir
 from manafa.utils.dateUtils import convertBatStatTimeToTimeStamp,batStatResetTimeToTimeStamp
 import copy
 
-DEFAULT_JSON_PATH = get_pack_dir() +"/batteryStats/BatteryStatus.json"
+DEFAULT_JSON_PATH = os.path.join(get_pack_dir(), "batteryStats", "BatteryStatus.json")
 
 
-KNOWN_VALUES=set(
+KNOWN_VALUES = set(
 	"screen.on"
 	#TODO put here all values in https://source.android.com/devices/tech/power/values
 )
 
 
-def areInMinCPUFreq( cpu_freq , possible_cpu_states  ):
+def areInMinCPUFreq(cpu_freq, possible_cpu_states  ):
 	possible_freqs = possible_cpu_states["speeds"] if "speeds" in possible_cpu_states else []
 	if len(possible_freqs)==0:
 		possible_freqs = possible_cpu_states["core_speeds"] if "core_speeds" in possible_cpu_states else []
@@ -100,7 +101,7 @@ class BatteryEvent(object):
 
 class BatteryStatsParser(object):
 	"""docstring for BatteryStatsParser"""
-	def __init__(self, powerProfile=None , timezone="EST", def_file=DEFAULT_JSON_PATH, android_version=10):
+	def __init__(self, powerProfile=None, timezone="EST", def_file=DEFAULT_JSON_PATH, android_version=10):
 		self.events = []
 		self.definitions = self.loadDefinitionFile(def_file)
 		self.powerProfile = self.loadPowerProfile(powerProfile) if powerProfile is not None else {}
@@ -189,9 +190,9 @@ class BatteryStatsParser(object):
 				# TODO Handle DcpuStats and DpstStats
 				print("linha invalida" + line)
 
-	def addUpdate(self, time,bat_events):
-		if len(self.events)==0:
-			bt = BatteryEvent( time,bat_events )
+	def addUpdate(self, time, bat_events):
+		if len(self.events) == 0:
+			bt = BatteryEvent(time, bat_events )
 			self.estimateCurrentConsumption(bt)
 			self.events.append(bt )
 		else:	
@@ -210,12 +211,72 @@ class BatteryStatsParser(object):
 
 	def estimateCurrentConsumption(self,bt_event):
 		power={}
-		for p,v in self.powerProfile.components.items():
-			st = self.determinateComponentCurrent(bt_event,p,v)
+		for p, v in self.powerProfile.components.items():
+			st = self.determinateComponentCurrent(bt_event, p, v)
 			power[p]=st
 			#print("%s %s" %(p , str(st)))
 		bt_event.currents=power
-		
+
+	def getClosestPair(self, time):
+		lasti = 0
+		for i, x in enumerate(self.events):
+			if x.time > time:
+				return lasti, i
+			lasti = i
+		return lasti, lasti
+
+	def getEventsInBetween(self,start_time, end_time):
+		c_beg_bef, c_beg_aft = self.getClosestPair(start_time)
+		metrics = {}  # {'health: [(event_state,start,end, pctage_duration)], ..}
+		prev_time = self.events[c_beg_aft].time if len(self.events) > 0 else start_time
+		fst_time = prev_time
+		for ev in self.events[c_beg_aft:]:
+			if ev.time > end_time:
+				break
+			for kup, upval in ev.updates.items():
+				metrics[kup] = [] if kup not in metrics else metrics[kup]
+				contains_update_val = metrics[kup][-1][0] == upval if len(
+					metrics[kup]) > 0 else None  # next(filter(lambda x: x[0] == upval, metrics[kup]), None)
+				if not contains_update_val:
+					if len(metrics[kup]) > 0:
+						# update previous state
+						duration_pctage = 100 * ((ev.time - metrics[kup][-1][1]) / (end_time - start_time))
+						metrics[kup][-1] = (
+						metrics[kup][-1][0], metrics[kup][-1][1], ev.time, duration_pctage)  # last_time?
+					init_time = start_time if fst_time == ev.time else ev.time
+					duration_pctage = 100 * ((end_time - init_time) / (end_time - start_time))
+					metrics[kup].append((upval, init_time, end_time, duration_pctage))
+			# concs
+			for cup, cupval in ev.concurrentUpdates.items():
+				metrics[cup] = [] if cup not in metrics else metrics[cup]
+				# detect pushes
+				for c_i, cval in enumerate(cupval):
+					#is_in_metrics = metrics[cup][-1][0]['val'] == cval['val'] and metrics[cup][-1][0]['val2'] == cval['val2']  if len(metrics[cup]) > 0 else False
+					is_in_metrics = next(filter(lambda x: x[0]['val'] == cval['val'] and x[0]['val2'] == cval['val2'] and x[2] == end_time ,metrics[cup]), None)
+					if not is_in_metrics:
+						# new state, add
+						init_time = start_time if prev_time == ev.time else ev.time
+						duration_pctage = 100 * ((end_time - init_time) / (end_time - start_time))
+						metrics[cup].append((cval, init_time, end_time, duration_pctage))
+				# detect pops
+				for i, val_of_metrics in enumerate(metrics[cup]):
+					this_ev_contains_val = next(filter(
+						lambda t: t['val'] == val_of_metrics[0]['val'] and t['val2'] == val_of_metrics[0]['val2'],
+						cupval), None)
+					if not this_ev_contains_val:
+						# was popped, update
+						already_popped = val_of_metrics[2] != end_time
+						if not already_popped:
+							prev_start_time = val_of_metrics[1]
+							duration_pctage = 100 * ((ev.time - prev_start_time) / (end_time - start_time))
+							metrics[cup][i] = (val_of_metrics[0], prev_start_time, ev.time, duration_pctage)
+			prev_time = ev.time
+		for k, v in metrics.items():
+			if len(v) > 1:
+				x = sum(map(lambda z: z[3], v))
+				if x > 100:
+					print("Mais de 100 em " + k)
+		return metrics
 
 	def getCPUSamplesInBetween(self,start_time, end_time ):
 		l =[]
@@ -246,7 +307,7 @@ class BatteryStatsParser(object):
 		if comp_name == "screen" and "screen" in bt_event.updates:
 				on_current = possible_states["on"]
 				brightness_level = bt_event.updates["brightness"] if "brightness" in bt_event.updates else 1
-				relative_full_current = ( brightness_level * possible_states["full"] / ( len( self.definitions["nominal"]["brightness"] ) -1) ) 
+				relative_full_current = (brightness_level * possible_states["full"] / (len( self.definitions["nominal"]["brightness"]) -1) )
 				current+= on_current + relative_full_current 
 
 		elif comp_name == "ambient" and "screen_doze" in bt_event.updates:
@@ -327,16 +388,16 @@ class BatteryStatsParser(object):
 		
 		#bluetooth
 		elif comp_name == "bluetooth":
-			if self.android_version<7 or "controller" not in possible_states:
+			if self.android_version < 7 or "controller" not in possible_states:
 				#account blue on and active vals
-				if "ble_scan" in  bt_event.updates:
-					current+=  possible_states["active"] if "active" in possible_states else 0
-					current+=  possible_states["on"] if "on" in possible_states else 0
-				elif "bluetooth" in  bt_event.updates:
-					current+=  possible_states["on"] if "on" in possible_states else 0
+				if "ble_scan" in bt_event.updates:
+					current += possible_states["active"] if "active" in possible_states else 0
+					current+= possible_states["on"] if "on" in possible_states else 0
+				elif "bluetooth" in bt_event.updates:
+					current += possible_states["on"] if "on" in possible_states else 0
 			elif "controller" in possible_states:
-				current += possible_states["controller"]["idle"] if ( "idle" in possible_states["controller"] ) else 0
-				if "ble_scan" in  bt_event.updates:
+				current += possible_states["controller"]["idle"] if ("idle" in possible_states["controller"]) else 0
+				if "ble_scan" in bt_event.updates:
 					if "tx" in possible_states["controller"]:
 						curravg+=possible_states["controller"]["tx"]
 						avg_ct+=1

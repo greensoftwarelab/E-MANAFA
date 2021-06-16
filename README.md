@@ -5,8 +5,13 @@
 [![PyPI status](https://img.shields.io/pypi/status/ansicolortags.svg)](https://pypi.python.org/pypi/manafa)
 # E-MANAFA: Energy Monitor and ANAlyzer For Android
 
-E-MANAFA is a software model-based tool for performing fine-grained estimates of energy consumption on Android devices. For this purpose, it uses values from power_profile.xml and from the BatteryStats and Perfetto services to estimate the energy consumption of each resource / component of the device. 
+E-MANAFA is a plug-and-play software model-based tool for performing fine-grained estimates of energy consumption on Android devices. E-Manafa estimates system-level  and per-component energy consumption, by extracting information from the following sources:
 
+- power_profile.xml: Device-specific file provided by manufacturers containing current consumption per component state;
+- batterystats: Tool from Android framework that logs each power-related event that occurs between device charges;
+- Perfetto: System-wide profiling for Linux and Android, that profiles high-frequency data, such as CPU frequency.
+
+Note: Manufacturers not always supply information about the current consumed by an individual component in the power profile file. Use this information if it accurately represents the current drawn from the device battery in practice. The file can also be derived using external apparatus such as Monsoon. Google provides a set of guidelines to estimating the current of each component (https://source.android.com/devices/tech/power/component)
 
 # SETUP
 
@@ -91,11 +96,11 @@ m.start()
 do_work_to_profile() # replace by procedure to be measured 
 b_file, p_file = m.stop()
 m.parseResults(b_file, p_file)
-begin = m.bat_events.events[0].time # first collected sample from batterystats
-end = m.bat_events.events[-1].time # last collected sample from batterystats
-global_consumption, per_component_consumption = m.getConsumptionInBetween(begin, end) # returns consumption between two instants of time between the profiling time
+begin = m.bat_events.events[0].time # timestamp from first sample of batterystats
+end = m.bat_events.events[-1].time # timestamp from last sample of batterystats
+prof_session_consumption, per_component_consumption, battery_events_metrics = m.getConsumptionInBetween(begin, end) # returns energy-related results occured between two instants of time between the profiling time
 print(per_component_consumption)
-print(global_consumption)
+print(prof_session_consumption)
 ```
 
 # Supported devices:
@@ -105,5 +110,4 @@ This tool can be used with any Android device able to run Perfetto, available si
 - Xiaomi Mi 9 Lite
 
 # TODO
-- calibrate the model
-- test using flashlight
+- support for memory power calculator (MemoryPowerCalculator is a new addition in 8.0, mainly to count the power consumption on DDR memory . formula: MemoryPower = (mAatRail_1 * timeMs_1 + mAatRail_2 * timeMs_2 +… + mAatRail_n * timeMs_n) / (1000 * 60 * 60) (mAatRail_n: is the power at the read/write rate level, timeMs_n: is the time at the mAatRail_n level))

@@ -1,0 +1,873 @@
+# tracer: nop
+#
+# entries-in-buffer/entries-written: 30624/30624   #P:4
+#
+#                                      _-----=> irqs-off
+#                                     / _----=> need-resched
+#                                    | / _---=> hardirq/softirq
+#                                    || / _--=> preempt-depth
+#                                    ||| /     delay
+#           TASK-PID    TGID   CPU#  ||||    TIMESTAMP  FUNCTION
+#              | |        |      |   ||||       |         |
+       <unknown>-3056  (-----) [006] .... 1334765.291836: cpu_frequency: state=979200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334765.291889: cpu_frequency: state=979200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334765.293102: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334765.293109: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-3055  (    2) [005] .... 1334765.293296: cpu_frequency: state=998400 cpu_id=0
+       <unknown>-3055  (    2) [002] .... 1334765.294087: cpu_frequency: state=998400 cpu_id=1
+       <unknown>-3055  (    2) [002] .... 1334765.294156: cpu_frequency: state=998400 cpu_id=2
+       <unknown>-3055  (    2) [002] .... 1334765.294165: cpu_frequency: state=998400 cpu_id=3
+       <unknown>-3055  (    2) [002] .... 1334765.294174: cpu_frequency: state=998400 cpu_id=4
+       <unknown>-3055  (    2) [002] .... 1334765.294182: cpu_frequency: state=998400 cpu_id=5
+       <unknown>-12795 (-----) [000] .... 1334765.304053: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.304248: cpu_frequency: state=1209600 cpu_id=0
+       <unknown>-12795 (-----) [000] .... 1334765.304285: cpu_frequency: state=1209600 cpu_id=1
+       <unknown>-12795 (-----) [000] .... 1334765.304292: cpu_frequency: state=1209600 cpu_id=2
+       <unknown>-12795 (-----) [000] .... 1334765.304297: cpu_frequency: state=1209600 cpu_id=3
+       <unknown>-12795 (-----) [000] .... 1334765.304300: cpu_frequency: state=1209600 cpu_id=4
+       <unknown>-12795 (-----) [000] .... 1334765.304304: cpu_frequency: state=1209600 cpu_id=5
+       <unknown>-12795 (-----) [000] .... 1334765.304315: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.304320: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.304326: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.304331: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.304336: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.304344: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334765.304349: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334765.343105: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.343127: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.343142: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.343151: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.343156: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.343162: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.343170: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334765.343174: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-3055  (    2) [002] .... 1334765.349000: cpu_frequency: state=576000 cpu_id=0
+       <unknown>-3055  (    2) [002] .... 1334765.349442: cpu_frequency: state=576000 cpu_id=1
+       <unknown>-3055  (    2) [002] .... 1334765.349456: cpu_frequency: state=576000 cpu_id=2
+       <unknown>-3055  (    2) [002] .... 1334765.349463: cpu_frequency: state=576000 cpu_id=3
+       <unknown>-3055  (    2) [002] .... 1334765.349471: cpu_frequency: state=576000 cpu_id=4
+       <unknown>-3055  (    2) [002] .... 1334765.349478: cpu_frequency: state=576000 cpu_id=5
+       <unknown>-3055  (    2) [002] .... 1334765.393145: cpu_frequency: state=998400 cpu_id=0
+       <unknown>-3055  (    2) [002] .... 1334765.394000: cpu_frequency: state=998400 cpu_id=1
+       <unknown>-3055  (    2) [002] .... 1334765.394014: cpu_frequency: state=998400 cpu_id=2
+       <unknown>-3055  (    2) [002] .... 1334765.394018: cpu_frequency: state=998400 cpu_id=3
+       <unknown>-3055  (    2) [002] .... 1334765.394023: cpu_frequency: state=998400 cpu_id=4
+       <unknown>-3055  (    2) [002] .... 1334765.394027: cpu_frequency: state=998400 cpu_id=5
+       <unknown>-3055  (    2) [002] .... 1334765.394212: cpu_frequency: state=748800 cpu_id=0
+       <unknown>-3055  (    2) [002] .... 1334765.394651: cpu_frequency: state=748800 cpu_id=1
+       <unknown>-3055  (    2) [002] .... 1334765.394663: cpu_frequency: state=748800 cpu_id=2
+       <unknown>-3055  (    2) [002] .... 1334765.394669: cpu_frequency: state=748800 cpu_id=3
+       <unknown>-3055  (    2) [002] .... 1334765.394674: cpu_frequency: state=748800 cpu_id=4
+       <unknown>-3055  (    2) [002] .... 1334765.394680: cpu_frequency: state=748800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334765.403381: cpu_frequency: state=576000 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334765.403522: cpu_frequency: state=576000 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334765.403537: cpu_frequency: state=576000 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334765.403545: cpu_frequency: state=576000 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334765.403553: cpu_frequency: state=576000 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334765.403560: cpu_frequency: state=576000 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334765.413444: cpu_frequency: state=1209600 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334765.413952: cpu_frequency: state=1209600 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334765.413963: cpu_frequency: state=1209600 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334765.413967: cpu_frequency: state=1209600 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334765.413971: cpu_frequency: state=1209600 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334765.413974: cpu_frequency: state=1209600 cpu_id=5
+       <unknown>-3055  (    2) [000] .... 1334765.433761: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-3055  (    2) [000] .... 1334765.434448: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-3055  (    2) [000] .... 1334765.434455: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-3055  (    2) [000] .... 1334765.434458: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-3055  (    2) [000] .... 1334765.434461: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-3055  (    2) [000] .... 1334765.434464: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334765.435653: cpu_frequency: state=1516800 cpu_id=0
+       <unknown>-3055  (    2) [001] .... 1334765.436000: cpu_frequency: state=1516800 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334765.436060: cpu_frequency: state=1516800 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334765.436063: cpu_frequency: state=1516800 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334765.436067: cpu_frequency: state=1516800 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334765.436069: cpu_frequency: state=1516800 cpu_id=5
+       <unknown>-3055  (    2) [001] .... 1334765.453477: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-3055  (    2) [001] .... 1334765.453876: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334765.453881: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334765.453884: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334765.453887: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334765.453889: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334765.466432: cpu_frequency: state=1612800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334765.466821: cpu_frequency: state=1612800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334765.466828: cpu_frequency: state=1612800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334765.466832: cpu_frequency: state=1612800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334765.466835: cpu_frequency: state=1612800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334765.466838: cpu_frequency: state=1612800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334765.467083: cpu_frequency: state=1516800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334765.467092: cpu_frequency: state=1516800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334765.467095: cpu_frequency: state=1516800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334765.467098: cpu_frequency: state=1516800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334765.467100: cpu_frequency: state=1516800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334765.467103: cpu_frequency: state=1516800 cpu_id=5
+       <unknown>-3056  (-----) [007] .... 1334765.468337: cpu_frequency: state=825600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334765.468425: cpu_frequency: state=825600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334765.469111: cpu_frequency: state=1363200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334765.469121: cpu_frequency: state=1363200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334765.469353: cpu_frequency: state=825600 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334765.469369: cpu_frequency: state=825600 cpu_id=7
+       <unknown>-3055  (    2) [003] .... 1334765.469521: cpu_frequency: state=1209600 cpu_id=0
+       <unknown>-3056  (-----) [006] .... 1334765.469753: cpu_frequency: state=1363200 cpu_id=6
+       <unknown>-3055  (    2) [001] .... 1334765.470020: cpu_frequency: state=1209600 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334765.470031: cpu_frequency: state=1209600 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334765.470035: cpu_frequency: state=1209600 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334765.470039: cpu_frequency: state=1209600 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334765.470042: cpu_frequency: state=1209600 cpu_id=5
+       <unknown>-3056  (-----) [006] .... 1334765.470789: cpu_frequency: state=1363200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334765.472393: cpu_frequency: state=825600 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334765.472729: cpu_frequency: state=825600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334765.473126: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334765.473141: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-3055  (    2) [001] .... 1334765.473372: cpu_frequency: state=998400 cpu_id=0
+       <unknown>-3055  (    2) [001] .... 1334765.473393: cpu_frequency: state=998400 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334765.473397: cpu_frequency: state=998400 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334765.473402: cpu_frequency: state=998400 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334765.473406: cpu_frequency: state=998400 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334765.473411: cpu_frequency: state=998400 cpu_id=5
+       <unknown>-3056  (-----) [007] .... 1334765.474388: cpu_frequency: state=979200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334765.474402: cpu_frequency: state=979200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334765.479243: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334765.479256: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-3055  (    2) [001] .... 1334765.493483: cpu_frequency: state=576000 cpu_id=0
+       <unknown>-3055  (    2) [001] .... 1334765.494373: cpu_frequency: state=576000 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334765.494385: cpu_frequency: state=576000 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334765.494393: cpu_frequency: state=576000 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334765.494400: cpu_frequency: state=576000 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334765.494407: cpu_frequency: state=576000 cpu_id=5
+       <unknown>-12795 (-----) [000] .... 1334765.537878: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.538019: cpu_frequency: state=1209600 cpu_id=0
+       <unknown>-12795 (-----) [000] .... 1334765.538530: cpu_frequency: state=1209600 cpu_id=1
+       <unknown>-12795 (-----) [000] .... 1334765.538542: cpu_frequency: state=1209600 cpu_id=2
+       <unknown>-12795 (-----) [000] .... 1334765.538546: cpu_frequency: state=1209600 cpu_id=3
+       <unknown>-12795 (-----) [000] .... 1334765.538550: cpu_frequency: state=1209600 cpu_id=4
+       <unknown>-12795 (-----) [000] .... 1334765.538554: cpu_frequency: state=1209600 cpu_id=5
+       <unknown>-12795 (-----) [000] .... 1334765.538575: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.538581: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.538587: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.538694: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.538699: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.538709: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334765.538715: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-868   (  832) [003] .... 1334765.541860: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-868   (  832) [003] .... 1334765.541932: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-868   (  832) [006] .... 1334765.545227: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-868   (  832) [006] .... 1334765.545515: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-868   (  832) [002] .... 1334765.546099: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-868   (  832) [002] .... 1334765.546123: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-868   (  832) [002] .... 1334765.546128: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-868   (  832) [002] .... 1334765.546131: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-868   (  832) [002] .... 1334765.546135: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-868   (  832) [002] .... 1334765.546138: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-12795 (-----) [000] .... 1334765.573480: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.573491: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.573496: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.573500: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.573504: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.573509: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334765.573514: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334765.573518: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12603 (-----) [002] .... 1334765.695362: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.695373: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.695377: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.695381: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.695384: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.695388: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.695393: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12603 (-----) [002] .... 1334765.695397: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12603 (-----) [002] .... 1334765.733043: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.733054: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.733058: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.733062: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.733066: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.733070: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334765.733075: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12603 (-----) [002] .... 1334765.733079: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334765.848180: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.848214: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.848218: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.848222: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.848226: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.848230: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.848236: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334765.848240: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334765.883035: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.883045: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.883049: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.883053: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.883057: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.883061: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334765.883066: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334765.883069: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334766.006122: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.006133: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.006137: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.006140: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.006144: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.006249: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.006256: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334766.006259: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334766.043267: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.043278: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.043282: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.043285: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.043289: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.043293: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.043297: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334766.043301: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-868   (  832) [006] .... 1334766.146600: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-868   (  832) [006] .... 1334766.146626: cpu_frequency_limits: cpu_id=6 min_freq=1747200 max_freq=2208000
+       <unknown>-4564  (-----) [002] .... 1334766.161537: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.161555: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.161559: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.161562: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.161566: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.161570: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.161575: cpu_frequency_limits: cpu_id=6 min_freq=1747200 max_freq=2208000
+       <unknown>-4564  (-----) [002] .... 1334766.161579: cpu_frequency_limits: cpu_id=6 min_freq=1747200 max_freq=2208000
+       <unknown>-4564  (-----) [002] .... 1334766.193089: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.193100: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.193104: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.193108: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.193112: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.193117: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-4564  (-----) [002] .... 1334766.193121: cpu_frequency_limits: cpu_id=6 min_freq=1747200 max_freq=2208000
+       <unknown>-4564  (-----) [002] .... 1334766.193125: cpu_frequency_limits: cpu_id=6 min_freq=1747200 max_freq=2208000
+       <unknown>-868   (  832) [004] .... 1334766.200318: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-868   (  832) [004] .... 1334766.200438: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-868   (  832) [004] .... 1334766.200485: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-868   (  832) [004] .... 1334766.200517: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-3056  (-----) [006] .... 1334766.213775: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.214016: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.214141: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.214328: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.215085: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.215324: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.215919: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.216140: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.217267: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.217498: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.217512: cpu_frequency: state=2054400 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.217515: cpu_frequency: state=2054400 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.217974: cpu_frequency: state=1536000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.218203: cpu_frequency: state=1536000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.218658: cpu_frequency: state=2054400 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.218869: cpu_frequency: state=2054400 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.219928: cpu_frequency: state=1536000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.220290: cpu_frequency: state=1536000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.221253: cpu_frequency: state=2054400 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.221478: cpu_frequency: state=2054400 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.221564: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.221743: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334766.222916: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.223190: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334766.224821: cpu_frequency: state=1843200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334766.225186: cpu_frequency: state=1843200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334766.225199: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334766.225201: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334766.225831: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334766.226209: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-868   (  832) [004] .... 1334766.235911: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-868   (  832) [004] .... 1334766.235953: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.314213: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.314224: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.314228: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.314253: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.314258: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.314261: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.314266: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334766.314270: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334766.353061: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.353072: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.353076: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.353079: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.353083: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.353091: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334766.353102: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334766.353105: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334766.468907: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.468919: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.468923: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.468927: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.468930: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.468934: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.468939: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334766.468943: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334766.503028: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.503039: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.503044: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.503047: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.503051: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.503055: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.503060: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334766.503064: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-918   (  918) [004] .... 1334766.584311: tracing_mark_write: B|918|beginDrawToFbo
+       <unknown>-918   (  918) [004] .... 1334766.584692: tracing_mark_write: E|918
+       <unknown>-918   (  918) [004] .... 1334766.585602: tracing_mark_write: B|918|endDrawToFbo
+       <unknown>-918   (  918) [004] .... 1334766.586726: tracing_mark_write: E|918
+       <unknown>-918   (  918) [004] .... 1334766.586736: tracing_mark_write: B|918|makeFboBlur
+       <unknown>-918   (  918) [004] .... 1334766.586928: tracing_mark_write: E|918
+       <unknown>-918   (  918) [001] .... 1334766.598868: tracing_mark_write: B|918|beginDrawToFbo
+       <unknown>-918   (  918) [001] .... 1334766.599303: tracing_mark_write: E|918
+       <unknown>-918   (  918) [001] .... 1334766.600309: tracing_mark_write: B|918|endDrawToFbo
+       <unknown>-918   (  918) [001] .... 1334766.601442: tracing_mark_write: E|918
+       <unknown>-918   (  918) [001] .... 1334766.601453: tracing_mark_write: B|918|makeFboBlur
+       <unknown>-918   (  918) [001] .... 1334766.601627: tracing_mark_write: E|918
+       <unknown>-918   (  918) [001] .... 1334766.614698: tracing_mark_write: B|918|beginDrawToFbo
+       <unknown>-918   (  918) [001] .... 1334766.614944: tracing_mark_write: E|918
+       <unknown>-918   (  918) [001] .... 1334766.616067: tracing_mark_write: B|918|endDrawToFbo
+       <unknown>-918   (  918) [001] .... 1334766.617175: tracing_mark_write: E|918
+       <unknown>-918   (  918) [001] .... 1334766.617185: tracing_mark_write: B|918|makeFboBlur
+       <unknown>-918   (  918) [001] .... 1334766.617345: tracing_mark_write: E|918
+       <unknown>-12795 (-----) [000] .... 1334766.620934: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.620945: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.620949: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.620952: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.620956: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.620959: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.620964: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334766.620968: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334766.653831: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.653842: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.653846: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.653850: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.653853: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.653857: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334766.653862: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334766.653866: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334767.123220: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.123268: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.123310: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.123315: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.123319: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.123323: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.123329: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334767.123333: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334767.163460: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.163531: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.163545: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.163549: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.163553: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.163574: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12795 (-----) [000] .... 1334767.163579: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12795 (-----) [000] .... 1334767.163583: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334767.691477: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.691488: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.691492: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.691496: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.691499: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.691503: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.691509: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334767.691512: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334767.723252: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.723366: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.723370: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.723374: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.723378: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.723381: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334767.723387: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334767.723391: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334768.055735: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.055749: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.055753: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.055757: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.055761: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.055766: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.055772: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334768.055776: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334768.093050: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.093061: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.093065: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.093069: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.093072: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.093076: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.093080: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334768.093084: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-868   (  832) [002] .... 1334768.236657: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-868   (  832) [002] .... 1334768.236731: cpu_frequency_limits: cpu_id=6 min_freq=1132800 max_freq=2208000
+       <unknown>-868   (  832) [002] .... 1334768.236773: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-868   (  832) [002] .... 1334768.236804: cpu_frequency_limits: cpu_id=6 min_freq=1132800 max_freq=2208000
+       <unknown>-3056  (-----) [006] .... 1334768.250282: cpu_frequency: state=1132800 cpu_id=6
+       <unknown>-3055  (    2) [003] .... 1334768.250504: cpu_frequency: state=1209600 cpu_id=0
+       <unknown>-3056  (-----) [006] .... 1334768.250598: cpu_frequency: state=1132800 cpu_id=7
+       <unknown>-3055  (    2) [003] .... 1334768.250844: cpu_frequency: state=1209600 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334768.250850: cpu_frequency: state=1209600 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334768.250854: cpu_frequency: state=1209600 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334768.250857: cpu_frequency: state=1209600 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334768.250861: cpu_frequency: state=1209600 cpu_id=5
+       <unknown>-3055  (    2) [000] .... 1334768.253169: cpu_frequency: state=1324800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334768.253425: cpu_frequency: state=1324800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334768.253433: cpu_frequency: state=1324800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334768.253436: cpu_frequency: state=1324800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334768.253440: cpu_frequency: state=1324800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334768.253443: cpu_frequency: state=1324800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334768.273218: cpu_frequency: state=1516800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334768.273252: cpu_frequency: state=1516800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334768.273257: cpu_frequency: state=1516800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334768.273261: cpu_frequency: state=1516800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334768.273264: cpu_frequency: state=1516800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334768.273267: cpu_frequency: state=1516800 cpu_id=5
+       <unknown>-3055  (    2) [001] .... 1334768.293447: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334768.293998: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334768.294006: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334768.294009: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334768.294012: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334768.294015: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-3056  (-----) [007] .... 1334768.315146: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3055  (    2) [002] .... 1334768.315373: cpu_frequency: state=1209600 cpu_id=0
+       <unknown>-3056  (-----) [007] .... 1334768.316632: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3055  (    2) [001] .... 1334768.316650: cpu_frequency: state=1209600 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334768.316661: cpu_frequency: state=1209600 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334768.316666: cpu_frequency: state=1209600 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334768.316670: cpu_frequency: state=1209600 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334768.316674: cpu_frequency: state=1209600 cpu_id=5
+       <unknown>-3056  (-----) [007] .... 1334768.324360: cpu_frequency: state=1363200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334768.324636: cpu_frequency: state=1363200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334768.345607: cpu_frequency: state=1132800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334768.345902: cpu_frequency: state=1132800 cpu_id=7
+       <unknown>-3055  (    2) [001] .... 1334768.366325: cpu_frequency: state=1324800 cpu_id=0
+       <unknown>-3055  (    2) [001] .... 1334768.366647: cpu_frequency: state=1324800 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334768.366655: cpu_frequency: state=1324800 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334768.366658: cpu_frequency: state=1324800 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334768.366662: cpu_frequency: state=1324800 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334768.366665: cpu_frequency: state=1324800 cpu_id=5
+       <unknown>-3055  (    2) [001] .... 1334768.366825: cpu_frequency: state=1209600 cpu_id=0
+       <unknown>-3055  (    2) [001] .... 1334768.367055: cpu_frequency: state=1209600 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334768.367060: cpu_frequency: state=1209600 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334768.367064: cpu_frequency: state=1209600 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334768.367067: cpu_frequency: state=1209600 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334768.367071: cpu_frequency: state=1209600 cpu_id=5
+       <unknown>-3055  (    2) [002] .... 1334768.513243: cpu_frequency: state=1324800 cpu_id=0
+       <unknown>-3055  (    2) [002] .... 1334768.513617: cpu_frequency: state=1324800 cpu_id=1
+       <unknown>-3055  (    2) [002] .... 1334768.513625: cpu_frequency: state=1324800 cpu_id=2
+       <unknown>-3055  (    2) [002] .... 1334768.513628: cpu_frequency: state=1324800 cpu_id=3
+       <unknown>-3055  (    2) [002] .... 1334768.513632: cpu_frequency: state=1324800 cpu_id=4
+       <unknown>-3055  (    2) [002] .... 1334768.513635: cpu_frequency: state=1324800 cpu_id=5
+       <unknown>-3055  (    2) [002] .... 1334768.533343: cpu_frequency: state=1209600 cpu_id=0
+       <unknown>-3055  (    2) [000] .... 1334768.533758: cpu_frequency: state=1209600 cpu_id=1
+       <unknown>-3055  (    2) [000] .... 1334768.533770: cpu_frequency: state=1209600 cpu_id=2
+       <unknown>-3055  (    2) [000] .... 1334768.533774: cpu_frequency: state=1209600 cpu_id=3
+       <unknown>-3055  (    2) [000] .... 1334768.533777: cpu_frequency: state=1209600 cpu_id=4
+       <unknown>-3055  (    2) [000] .... 1334768.533781: cpu_frequency: state=1209600 cpu_id=5
+       <unknown>-3055  (    2) [002] .... 1334768.603394: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-3055  (    2) [002] .... 1334768.603762: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-3055  (    2) [002] .... 1334768.603770: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-3055  (    2) [002] .... 1334768.603773: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-3055  (    2) [002] .... 1334768.603776: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-3055  (    2) [002] .... 1334768.603778: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-3055  (    2) [002] .... 1334768.621981: cpu_frequency: state=1324800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334768.622523: cpu_frequency: state=1324800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334768.622535: cpu_frequency: state=1324800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334768.622539: cpu_frequency: state=1324800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334768.622542: cpu_frequency: state=1324800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334768.622546: cpu_frequency: state=1324800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334768.624204: cpu_frequency: state=1516800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334768.624228: cpu_frequency: state=1516800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334768.624231: cpu_frequency: state=1516800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334768.624236: cpu_frequency: state=1516800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334768.624242: cpu_frequency: state=1516800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334768.624247: cpu_frequency: state=1516800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334768.624509: cpu_frequency: state=1324800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334768.624516: cpu_frequency: state=1324800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334768.624520: cpu_frequency: state=1324800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334768.624523: cpu_frequency: state=1324800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334768.624526: cpu_frequency: state=1324800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334768.624530: cpu_frequency: state=1324800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334768.633228: cpu_frequency: state=1209600 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334768.633591: cpu_frequency: state=1209600 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334768.633598: cpu_frequency: state=1209600 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334768.633602: cpu_frequency: state=1209600 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334768.633605: cpu_frequency: state=1209600 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334768.633609: cpu_frequency: state=1209600 cpu_id=5
+       <unknown>-12660 (    2) [001] .... 1334768.818276: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.818293: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.818299: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.818304: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.818310: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.818314: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.818322: cpu_frequency_limits: cpu_id=6 min_freq=1132800 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334768.818328: cpu_frequency_limits: cpu_id=6 min_freq=1132800 max_freq=2208000
+       <unknown>-868   (  832) [001] .... 1334768.823388: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-868   (  832) [003] .... 1334768.823596: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-3056  (-----) [007] .... 1334768.823820: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334768.823838: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-12660 (    2) [001] .... 1334768.853157: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.853171: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.853176: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.853186: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.853195: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.853203: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334768.853209: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334768.853214: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-3055  (    2) [003] .... 1334768.873432: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334768.873730: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334768.873734: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334768.873737: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334768.873739: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334768.873742: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334768.893231: cpu_frequency: state=1516800 cpu_id=0
+       <unknown>-3055  (    2) [002] .... 1334768.893585: cpu_frequency: state=1516800 cpu_id=1
+       <unknown>-3055  (    2) [002] .... 1334768.893603: cpu_frequency: state=1516800 cpu_id=2
+       <unknown>-3055  (    2) [002] .... 1334768.893610: cpu_frequency: state=1516800 cpu_id=3
+       <unknown>-3055  (    2) [002] .... 1334768.893616: cpu_frequency: state=1516800 cpu_id=4
+       <unknown>-3055  (    2) [002] .... 1334768.893621: cpu_frequency: state=1516800 cpu_id=5
+       <unknown>-3056  (-----) [007] .... 1334768.894414: cpu_frequency: state=825600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334768.894430: cpu_frequency: state=825600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334768.909074: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334768.909096: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-868   (  832) [000] .... 1334768.909944: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-868   (  832) [000] .... 1334768.909980: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-868   (  832) [001] .... 1334768.911529: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-868   (  832) [001] .... 1334768.911651: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-868   (  832) [001] .... 1334768.911968: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-868   (  832) [001] .... 1334768.911986: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-868   (  832) [001] .... 1334768.911989: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-868   (  832) [001] .... 1334768.911992: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-868   (  832) [001] .... 1334768.911996: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-868   (  832) [001] .... 1334768.912001: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-12660 (    2) [001] .... 1334770.724079: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.724092: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.724096: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.724100: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.724104: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.724108: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.724114: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334770.724119: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334770.763045: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.763056: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.763060: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.763064: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.763067: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.763071: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-12660 (    2) [001] .... 1334770.763076: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-12660 (    2) [001] .... 1334770.763080: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-868   (  832) [007] .... 1334770.912547: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-868   (  832) [007] .... 1334770.912578: cpu_frequency_limits: cpu_id=6 min_freq=1747200 max_freq=2208000
+       <unknown>-3056  (-----) [006] .... 1334770.936486: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.936498: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.936630: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.936635: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.939527: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.939540: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.939655: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.940053: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.940073: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.940284: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.940299: cpu_frequency: state=1843200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.940516: cpu_frequency: state=1843200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.940661: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.940666: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.941585: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.941837: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.946148: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.946397: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.946689: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.946893: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.949630: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.949644: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.950062: cpu_frequency: state=2054400 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.950068: cpu_frequency: state=2054400 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.950880: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.951199: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.951287: cpu_frequency: state=1843200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.951292: cpu_frequency: state=1843200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.951682: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.951909: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.952014: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.952230: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.952243: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.952245: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.958569: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.958826: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.959540: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.959776: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.959792: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.959979: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.961085: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.961325: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.961340: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.961523: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.963029: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.963264: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.964557: cpu_frequency: state=1843200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.964812: cpu_frequency: state=1843200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.964826: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.965036: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.965054: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.965236: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.977474: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.977489: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.978621: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.978635: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.979405: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.979418: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.980638: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.980650: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.982090: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.982103: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.982115: cpu_frequency: state=2054400 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.982117: cpu_frequency: state=2054400 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.982563: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.983017: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.984035: cpu_frequency: state=2054400 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.984310: cpu_frequency: state=2054400 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.984326: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.984329: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.984628: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.984943: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.984958: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.985191: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.986994: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.987007: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.987135: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.987382: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.990961: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.991201: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.991216: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.991397: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.992194: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.992454: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.993053: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.993285: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.994138: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334770.994367: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.994380: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.994571: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.995081: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.995329: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334770.995455: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.995749: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.995835: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.996228: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.996346: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.996544: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.999454: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.999743: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334770.999757: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334770.999946: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.000732: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.000743: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.053058: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.053311: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.056340: cpu_frequency: state=1843200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.056572: cpu_frequency: state=1843200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.058720: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.058978: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.060074: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.060319: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.060584: cpu_frequency: state=1843200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.060591: cpu_frequency: state=1843200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.063021: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.063295: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.067134: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.067365: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.068368: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.068606: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.073041: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.073275: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.076643: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.076658: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.078129: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.078144: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.144591: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.144860: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.144959: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.145179: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.145194: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.145471: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.145615: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.145829: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.145841: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.146013: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.146026: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.146198: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.157676: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.157954: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.163024: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.163360: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.178333: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.178577: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.182526: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.182763: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.233037: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.233050: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.239413: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.239426: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.241766: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.241780: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.243434: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.243723: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.244071: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.244289: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.244303: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.244305: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.250345: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.250600: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-868   (  832) [007] .... 1334771.270382: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-868   (  832) [007] .... 1334771.270404: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-868   (  832) [007] .... 1334771.270425: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-868   (  832) [007] .... 1334771.270439: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-3056  (-----) [007] .... 1334771.270608: cpu_frequency: state=1363200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.270619: cpu_frequency: state=1363200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.271979: cpu_frequency: state=1132800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.271985: cpu_frequency: state=1132800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.273159: cpu_frequency: state=825600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.273166: cpu_frequency: state=825600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.274263: cpu_frequency: state=979200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.274277: cpu_frequency: state=979200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.275081: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.275099: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.325142: cpu_frequency: state=825600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.325160: cpu_frequency: state=825600 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.327946: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.327964: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.433384: cpu_frequency: state=1536000 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.433402: cpu_frequency: state=1536000 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.440037: cpu_frequency: state=1363200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.440053: cpu_frequency: state=1363200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.442765: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.442784: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.444120: cpu_frequency: state=1536000 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.444138: cpu_frequency: state=1536000 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.445215: cpu_frequency: state=1363200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.445229: cpu_frequency: state=1363200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.453757: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.453775: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.457845: cpu_frequency: state=979200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.457866: cpu_frequency: state=979200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.473279: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.473300: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.474222: cpu_frequency: state=979200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.474238: cpu_frequency: state=979200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.475233: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.475248: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.491572: cpu_frequency: state=979200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.491590: cpu_frequency: state=979200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.493255: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.493286: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-12603 (-----) [002] .... 1334771.640557: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.640579: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.640584: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.640589: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.640594: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.640598: cpu_frequency_limits: cpu_id=0 min_freq=1209600 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.640608: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-12603 (-----) [002] .... 1334771.640613: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-12603 (-----) [002] .... 1334771.673229: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.673244: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.673248: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.673252: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.673256: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.673259: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-12603 (-----) [002] .... 1334771.673264: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-12603 (-----) [002] .... 1334771.673268: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-3056  (-----) [007] .... 1334771.693412: cpu_frequency: state=1132800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.693431: cpu_frequency: state=1132800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.693860: cpu_frequency: state=1363200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.693869: cpu_frequency: state=1363200 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.704861: cpu_frequency: state=1132800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.704879: cpu_frequency: state=1132800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.706489: cpu_frequency: state=1363200 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.706502: cpu_frequency: state=1363200 cpu_id=7
+       <unknown>-868   (  832) [003] .... 1334771.710176: cpu_frequency_limits: cpu_id=6 min_freq=1747200 max_freq=2208000
+       <unknown>-868   (  832) [003] .... 1334771.710209: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-868   (  832) [003] .... 1334771.710220: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-868   (  832) [003] .... 1334771.710266: cpu_frequency_limits: cpu_id=0 min_freq=1516800 max_freq=1708800
+       <unknown>-3055  (    2) [001] .... 1334771.713351: cpu_frequency: state=1516800 cpu_id=0
+       <unknown>-3055  (    2) [001] .... 1334771.713378: cpu_frequency: state=1516800 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334771.713381: cpu_frequency: state=1516800 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334771.713385: cpu_frequency: state=1516800 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334771.713387: cpu_frequency: state=1516800 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334771.713390: cpu_frequency: state=1516800 cpu_id=5
+       <unknown>-3056  (-----) [007] .... 1334771.717858: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.718107: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.721418: cpu_frequency: state=1747200 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.721726: cpu_frequency: state=1747200 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.727948: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.728265: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [006] .... 1334771.729880: cpu_frequency: state=2054400 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.731023: cpu_frequency: state=2054400 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.731047: cpu_frequency: state=1996800 cpu_id=6
+       <unknown>-3056  (-----) [006] .... 1334771.731360: cpu_frequency: state=1996800 cpu_id=7
+       <unknown>-3056  (-----) [007] .... 1334771.733076: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-3056  (-----) [007] .... 1334771.734262: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-868   (  832) [002] .... 1334771.734392: cpu_frequency: state=2169600 cpu_id=6
+       <unknown>-868   (  832) [002] .... 1334771.734399: cpu_frequency: state=2169600 cpu_id=7
+       <unknown>-868   (  832) [002] .... 1334771.734413: cpu_frequency_limits: cpu_id=6 min_freq=2208000 max_freq=2208000
+       <unknown>-868   (  832) [002] .... 1334771.734441: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-868   (  832) [002] .... 1334771.734451: cpu_frequency: state=2208000 cpu_id=7
+       <unknown>-868   (  832) [002] .... 1334771.734570: cpu_frequency_limits: cpu_id=0 min_freq=1708800 max_freq=1708800
+       <unknown>-868   (  832) [006] .... 1334771.734764: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-868   (  832) [006] .... 1334771.734772: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-868   (  832) [006] .... 1334771.734774: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-868   (  832) [006] .... 1334771.734775: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-868   (  832) [006] .... 1334771.734777: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-868   (  832) [006] .... 1334771.734778: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-868   (  832) [001] .... 1334772.135330: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-868   (  832) [001] .... 1334772.135387: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-868   (  832) [001] .... 1334772.135433: cpu_frequency_limits: cpu_id=0 min_freq=576000 max_freq=1708800
+       <unknown>-868   (  832) [001] .... 1334772.135464: cpu_frequency_limits: cpu_id=6 min_freq=652800 max_freq=2208000
+       <unknown>-3055  (    2) [005] .... 1334772.136265: cpu_frequency: state=576000 cpu_id=0
+       <unknown>-3056  (-----) [006] .... 1334772.136277: cpu_frequency: state=652800 cpu_id=6
+       <unknown>-3055  (    2) [005] .... 1334772.136299: cpu_frequency: state=576000 cpu_id=1
+       <unknown>-3056  (-----) [006] .... 1334772.136952: cpu_frequency: state=652800 cpu_id=7
+       <unknown>-3055  (    2) [005] .... 1334772.136970: cpu_frequency: state=576000 cpu_id=2
+       <unknown>-3055  (    2) [005] .... 1334772.136981: cpu_frequency: state=576000 cpu_id=3
+       <unknown>-3055  (    2) [005] .... 1334772.136988: cpu_frequency: state=576000 cpu_id=4
+       <unknown>-3055  (    2) [005] .... 1334772.136996: cpu_frequency: state=576000 cpu_id=5
+       <unknown>-3055  (    2) [005] .... 1334772.214541: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-3055  (    2) [001] .... 1334772.215358: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334772.215369: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334772.215372: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334772.215375: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334772.215378: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-3055  (    2) [001] .... 1334772.253485: cpu_frequency: state=1324800 cpu_id=0
+       <unknown>-3055  (    2) [002] .... 1334772.253832: cpu_frequency: state=1324800 cpu_id=1
+       <unknown>-3055  (    2) [002] .... 1334772.253844: cpu_frequency: state=1324800 cpu_id=2
+       <unknown>-3055  (    2) [002] .... 1334772.253847: cpu_frequency: state=1324800 cpu_id=3
+       <unknown>-3055  (    2) [002] .... 1334772.253851: cpu_frequency: state=1324800 cpu_id=4
+       <unknown>-3055  (    2) [002] .... 1334772.253854: cpu_frequency: state=1324800 cpu_id=5
+       <unknown>-3055  (    2) [002] .... 1334772.268436: cpu_frequency: state=1209600 cpu_id=0
+       <unknown>-3055  (    2) [002] .... 1334772.268965: cpu_frequency: state=1209600 cpu_id=1
+       <unknown>-3055  (    2) [002] .... 1334772.268973: cpu_frequency: state=1209600 cpu_id=2
+       <unknown>-3055  (    2) [002] .... 1334772.268977: cpu_frequency: state=1209600 cpu_id=3
+       <unknown>-3055  (    2) [002] .... 1334772.268980: cpu_frequency: state=1209600 cpu_id=4
+       <unknown>-3055  (    2) [002] .... 1334772.268984: cpu_frequency: state=1209600 cpu_id=5
+       <unknown>-3055  (    2) [002] .... 1334772.273328: cpu_frequency: state=1612800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334772.273855: cpu_frequency: state=1612800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334772.273865: cpu_frequency: state=1612800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334772.273868: cpu_frequency: state=1612800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334772.273871: cpu_frequency: state=1612800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334772.273874: cpu_frequency: state=1612800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334772.294283: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334772.294935: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334772.294943: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334772.294947: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334772.294950: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334772.294953: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334772.333693: cpu_frequency: state=576000 cpu_id=0
+       <unknown>-3055  (    2) [001] .... 1334772.334462: cpu_frequency: state=576000 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334772.334483: cpu_frequency: state=576000 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334772.334490: cpu_frequency: state=576000 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334772.334498: cpu_frequency: state=576000 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334772.334505: cpu_frequency: state=576000 cpu_id=5
+       <unknown>-3055  (    2) [001] .... 1334772.373523: cpu_frequency: state=748800 cpu_id=0
+       <unknown>-3055  (    2) [001] .... 1334772.373586: cpu_frequency: state=748800 cpu_id=1
+       <unknown>-3055  (    2) [001] .... 1334772.373593: cpu_frequency: state=748800 cpu_id=2
+       <unknown>-3055  (    2) [001] .... 1334772.373599: cpu_frequency: state=748800 cpu_id=3
+       <unknown>-3055  (    2) [001] .... 1334772.373604: cpu_frequency: state=748800 cpu_id=4
+       <unknown>-3055  (    2) [001] .... 1334772.373610: cpu_frequency: state=748800 cpu_id=5
+       <unknown>-3055  (    2) [003] .... 1334772.394277: cpu_frequency: state=1708800 cpu_id=0
+       <unknown>-3055  (    2) [003] .... 1334772.395273: cpu_frequency: state=1708800 cpu_id=1
+       <unknown>-3055  (    2) [003] .... 1334772.395282: cpu_frequency: state=1708800 cpu_id=2
+       <unknown>-3055  (    2) [003] .... 1334772.395285: cpu_frequency: state=1708800 cpu_id=3
+       <unknown>-3055  (    2) [003] .... 1334772.395287: cpu_frequency: state=1708800 cpu_id=4
+       <unknown>-3055  (    2) [003] .... 1334772.395290: cpu_frequency: state=1708800 cpu_id=5
+       <unknown>-3055  (    2) [002] .... 1334772.433602: cpu_frequency: state=748800 cpu_id=0
+       <unknown>-3056  (-----) [007] .... 1334772.433872: cpu_frequency: state=2208000 cpu_id=6
+       <unknown>-3055  (    2) [002] .... 1334772.434341: cpu_frequency: state=748800 cpu_id=1
+       <unknown>-3055  (    2) [002] .... 1334772.434352: cpu_frequency: state=748800 cpu_id=2
+       <unknown>-3055  (    2) [002] .... 1334772.434358: cpu_frequency: state=748800 cpu_id=3
+       <unknown>-3055  (    2) [002] .... 1334772.434364: cpu_frequency: state=748800 cpu_id=4
+       <unknown>-3055  (    2) [002] .... 1334772.434369: cpu_frequency: state=748800 cpu_id=5
+       <unknown>-3056  (-----) [007] .... 1334772.436375: cpu_frequency: state=2208000 cpu_id=7

@@ -25,7 +25,7 @@ class PerfettoService(Service):
 	def config(self, **kwargs):
 		pass
 
-	def init(self,boot_time=0,**kwargs):
+	def init(self,boot_time=0, **kwargs):
 		self.boot_time = boot_time
 		self.clean()
 
@@ -44,9 +44,9 @@ class PerfettoService(Service):
 
 	def export(self):
 		last_exported = ""
-		for f in filter( lambda x : re.match(r'trace-*', x) is not None,  os.listdir(self.results_dir)):
+		for f in filter(lambda x: re.match(r'trace-*', x) is not None,  os.listdir(self.results_dir)):
 			res, o, e = execute_shell_command("chmod +x %s/traceconv ; %s/traceconv systrace %s/%s %s/%s.systrace" %(RESOURCES_DIR,RESOURCES_DIR,self.results_dir,f,self.results_dir,f) )
-			last_exported = "%s/%s.systrace" %(self.results_dir,f)
+			last_exported = "%s/%s.systrace" %(self.results_dir, f)
 		return last_exported
 
 	def clean(self):
