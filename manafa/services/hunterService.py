@@ -42,13 +42,13 @@ class HunterService(Service):
             self.parseHistory(lines)
 
     def parseHistory(self, lines_list):
-        not_functions = ["<init>", "get", "set"]
+        not_functions = ["<init>", "get", "set", "Util"]
 
         for i, line in enumerate(lines_list):
             if re.match(r"^>", line):
                 before_components = re.split('^>', line)
                 components = re.split('[,=\[\] ]', before_components[1])
-                function_name = components[0]
+                function_name = components[0].replace("$", "_")
                 add_function = True
                 for not_function in not_functions:
                     if not_function in function_name:
@@ -65,7 +65,7 @@ class HunterService(Service):
             elif re.match(r"^<", line):
                 before_components = re.split('^<', line)
                 components = re.split('[,=\[\] ]', before_components[1])
-                function_name = components[0]
+                function_name = components[0].replace("$", "_")
                 add_function = True
                 for not_function in not_functions:
                     if not_function in function_name:
@@ -87,7 +87,7 @@ class HunterService(Service):
         )
 
     def addConsumptionToTraceFile(self, filename):
-        not_functions = ["<init>", "get", "set"]
+        not_functions = ["<init>", "get", "set", "Util"]
 
         split_filename = re.split("/", filename)
 
@@ -97,15 +97,18 @@ class HunterService(Service):
         with open(filename, 'r+') as fr, open(new_filename, 'w') as fw:
             for line in fr:
                 checked = False
+                function_begin = ">"
                 if re.match(r"^>", line):
                     before_components = re.split('^>', line)
                     components = re.split('[,=\[\] ]', before_components[1])
-                    function_name = components[0]
+                    function_name = components[0].replace("$", "_")
                 elif re.match(r"^<", line):
                     before_components = re.split('^<', line)
                     components = re.split('[,=\[\] ]', before_components[1])
-                    function_name = components[0]
+                    function_name = components[0].replace("$", "_")
                     checked = True
+                    function_begin = "<"
+
                 add_function = True
                 for not_function in not_functions:
                     if not_function in function_name:
@@ -113,11 +116,8 @@ class HunterService(Service):
                         break
                 if add_function:
                     consumption, time = self.returnConsumptionAndTimeByFunction(function_name, checked)
-                    cpu = re.split('cpu = \d+', line)
-                    if len(cpu) < 2:
-                        fw.write(line)
-                    else:
-                        fw.write(cpu[0] + 'cpu = ' + str(consumption) + ', t = ' + str(time) + ']\n')
+                    new_line = function_begin + function_name + " [m=example, " + 'cpu = ' + str(consumption) + ', t = ' + str(time) + ']\n'
+                    fw.write(new_line)
 
         execute_shell_command("rm %s" % filename)
         return new_filename
