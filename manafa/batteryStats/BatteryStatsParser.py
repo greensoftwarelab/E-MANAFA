@@ -271,11 +271,6 @@ class BatteryStatsParser(object):
 							duration_pctage = 100 * ((ev.time - prev_start_time) / (end_time - start_time))
 							metrics[cup][i] = (val_of_metrics[0], prev_start_time, ev.time, duration_pctage)
 			prev_time = ev.time
-		for k, v in metrics.items():
-			if len(v) > 1:
-				x = sum(map(lambda z: z[3], v))
-				if x > 100:
-					print("Mais de 100 em " + k)
 		return metrics
 
 	def getCPUSamplesInBetween(self,start_time, end_time ):
@@ -291,7 +286,6 @@ class BatteryStatsParser(object):
 				l.append(pair)
 				last_time= x.time
 			last_ev = x
-		# 
 		last_delta = end_time - last_time
 		last_state = last_ev.currents["cpu"]
 		last_voltage = last_ev.getVoltageValue() #float(last_ev.updates["volt"])
@@ -428,13 +422,12 @@ class BatteryStatsParser(object):
 				curravg=0
 				avg_ct=0
 				if "tx" in possible_states["controller"]:
-					on_vals =  possible_states["controller"]["tx"] if "tx" in possible_states["controller"] else [] 
+					on_vals = possible_states["controller"]["tx"] if "tx" in possible_states["controller"] else []
 					signal_stren = bt_event.updates["phone_signal_strength"] if "phone_signal_strength" in bt_event.updates else 0
 					if signal_stren > len(on_vals) and len(on_vals)>0:
 						curravg+= on_vals[-1]
-					elif  len(on_vals)>0:
-						curravg+= on_vals[signal_stren]
-
+					elif len(on_vals) > 0:
+						curravg += on_vals[signal_stren]
 					avg_ct+=1
 				if "rx" in possible_states["controller"]:
 					curravg+=possible_states["controller"]["rx"]

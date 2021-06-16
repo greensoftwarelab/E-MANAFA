@@ -12,7 +12,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     author='Rui Rua',
-    author_email='rui.rrua@gmailgit.com',
+    author_email='rui.rrua@gmail.com',
     url='https://github.com/RRua/e-manafa',
     license='MIT',
     packages=setuptools.find_packages(),

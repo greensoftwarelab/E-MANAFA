@@ -60,6 +60,10 @@ class EManafa(Service):
         self.unplugged = False
         self.hunter = HunterService()
         self.bat_events = None
+        self.pft_out_file = None
+        self.bts_out_file = None
+        self.hunter_out_file = None
+
 
     def config(self, **kwargs):
         pass
@@ -76,13 +80,13 @@ class EManafa(Service):
         self.perfetto.start()
 
     def stop(self):
-        b_out = self.batterystats.stop()
-        p_out = self.perfetto.stop()
-        log("Perfetto file:  %s" % p_out)
-        self.parseResults(b_out, p_out)
+        self.bts_out_file = self.batterystats.stop()
+        self.pft_out_file = self.perfetto.stop()
+        log("Perfetto file:  %s" % self.pft_out_file)
+        self.parseResults(self.bts_out_file, self.pft_out_file)
         if len(self.bat_events.events) > 0:
-            hunter_out = self.hunter.start()  # hunter start is to write to a log file (same as stop)
-            self.hunter.parseFile(hunter_out)
+            self.hunter_out_file = self.hunter.start()  # hunter start is to write to a log file (same as stop)
+            self.hunter.parseFile(self.hunter_out_file)
             hunter_trace = self.hunter.trace
 
             total_consumption = 0
@@ -95,7 +99,7 @@ class EManafa(Service):
                         end = time['end_time']
                     else:
                         end = begin
-                    consumption, per_component_consumption = self.getConsumptionInBetween(begin, end)
+                    consumption, per_component_consumption, m = self.getConsumptionInBetween(begin, end)
                     if consumption < 0:
                         consumption = 0.0
                     self.hunter.addConsumption(function, j, consumption, per_component_consumption)
@@ -106,20 +110,24 @@ class EManafa(Service):
             log("Total energy consumed by APP: %f Joules" % total_consumption,
                 log_sev=LogSeverity.INFO)
 
-            hunter_edited = self.hunter.addConsumptionToTraceFile(hunter_out)
+            hunter_edited = self.hunter.addConsumptionToTraceFile(self.hunter_out_file)
             log("Hunter file:  %s" % hunter_edited)
         if self.unplugged:
             self.__plug_back()
-        return b_out, p_out, hunter_out
+        return self.bts_out_file, self.pft_out_file, self.hunter_out_file
 
     def clean(self):
         self.batterystats.clean()
         self.perfetto.clean()
 
-    def parseResults(self, bts_file="", pf_file=""):
-        if bts_file == "" or pf_file == "":
-            log("Empty result files", LogSeverity.FATAL)
-            raise Exception()
+    def parseResults(self, bts_file=None, pf_file=None):
+        if bts_file is None:
+            bts_file = self.bts_out_file
+        if pf_file is None:
+            pf_file = self.pft_out_file
+        if bts_file is None or pf_file is None:
+            log("Empty result files",
+                log_sev=LogSeverity.FATAL)
         self.b_time = get_last_boot_time(bts_file)
         self.bat_events = BatteryStatsParser(self.power_profile, timezone=self.timezone)
         self.bat_events.parseFile(bts_file)
@@ -288,7 +296,7 @@ if __name__ == '__main__':
         print("start testing...")
         time.sleep(7)  # do work
         print("stop testing...")
-        args.batstatsfile, args.perfettofile, hunter_file = g.stop()
+    g.stop()
     g.parseResults(args.batstatsfile, args.perfettofile)
     begin = g.bat_events.events[0].time  # first collected sample from batterystats
     end = g.bat_events.events[-1].time  # last collected sample from batterystats
