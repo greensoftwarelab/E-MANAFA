@@ -1,6 +1,8 @@
 
 
 import re
+from enum import Enum
+
 from manafa.powerProfile.PowerProfile import PowerProfile
 
 x="""import time
@@ -30,8 +32,20 @@ def interpolate(x1: float, x2: float, y1: float, y2: float, x: float):
 	#print("---")
 	#return val
 
-class PerfettoEvent(object):
-	"""docstring for BatteryEvent"""
+
+class CPU_STATE(Enum):
+	SUSPEND = "suspend"
+	IDLE = "idle"
+	AWAKE = "awake"
+	ACTIVE = "active"
+
+class PerfettoCPUEvent(object):
+	"""Stores information regarding each cpu frequency in a given time
+		A perfetto  cpufreq event information, corresponding to a line in an results output file in systrace format
+		Attributes:
+		time: event_time
+		vals: frequency for each cpu of device
+	"""
 	def __init__(self, time=0.0, values=[]):
 		self.time=time
 		self.vals=[]
@@ -44,32 +58,38 @@ class PerfettoEvent(object):
 	def __repr__(self):
 		return str(self)
 
-	def initAll(self,default_len=8,val=0):
-		for x in range(0,default_len):
-			if len(self.vals)> x :
-				self.vals[x]=val 
-			else: 
+	def initAll(self, default_len=8, val=0):
+		"""Inits vals for each cpu"""
+		for x in range(0, default_len):
+			if len(self.vals) > x:
+				self.vals[x] = val
+			else:
 				self.vals.append(val)
 
 	def update(self, cpu_id,cpu_freq):
+		"""update/insert cpufreq val for each cpu id"""
 		if len(self.vals)> cpu_id:
-			self.vals[cpu_id]=cpu_freq 
-		else: 
-			for x in range(len(self.vals)-1,cpu_id ):
-				self.vals.append( cpu_freq)
+			self.vals[cpu_id]=cpu_freq
+		else:
+			for x in range(len(self.vals)-1, cpu_id):
+				self.vals.append(cpu_freq)
 
-	
+
 	def calculateCPUsCurrent(self,state, profile):
+		"""given a power profile and a cpu state, returns the instantaneous current being consumed by all cpu cores in that state
+			Args:
+				state: cpu state in CPU_STATE values
+				profile: power profile class
+		"""
 		total=0
-		if state not in ["idle","suspend"]:
+		if state not in ["idle", "suspend"]:
 			for core_id, freq in enumerate(self.vals):
-				bf,aft = profile.getCPUCoreSpeedPair(core_id,freq)
-				lin_inter_val = interpolate( bf[0], aft[0], bf[1], aft[1], freq )
+				bf, aft = profile.getCPUCoreSpeedPair(core_id,freq)
+				lin_inter_val = interpolate(bf[0], aft[0], bf[1], aft[1], freq)
 				total += lin_inter_val
 			total = total / len(self.vals)
 		else:
 			total = profile.getCPUStateCurrent(state)
-
 		return total / 1000
 
 
@@ -81,7 +101,7 @@ class PerfettoCPUfreqParser(object):
 
 	def loadPowerProfile(self, xml_profile ):
 		return PowerProfile(xml_profile)
-	
+
 	def parseFile(self, filename):
 		with open(filename, 'r') as filehandle:
 			lines=filehandle.read().splitlines()
@@ -99,28 +119,28 @@ class PerfettoCPUfreqParser(object):
 				if ev_pair is not None:
 					cpu_id = ev_pair[0]
 					cpu_freq = ev_pair[1]
-					self.addEvent(time,cpu_id,cpu_freq)
+					self.addEvent(time, cpu_id, cpu_freq)
 			else:
-				raise Exception ("Error parsing file")
-		
-	def addEvent(self,time,cpu_id,cpu_freq):
+				raise Exception("Error parsing file")
+
+	def addEvent(self, time, cpu_id, cpu_freq):
 		if len(self.events) == 0:
-			z = PerfettoEvent(time)
-			z.initAll(default_len=8,val=cpu_freq)
+			z = PerfettoCPUEvent(time)
+			z.initAll(default_len=8, val=cpu_freq)
 			self.events.append(z)
 		else:
 			last = self.events[-1]
-			z = PerfettoEvent(time, last.vals)
+			z = PerfettoCPUEvent(time, last.vals)
 			z.update(cpu_id,cpu_freq)
 			self.events.append(z)
 
 	def parseEvent(self, ev_str):
-		mat = re.match (r"cpu_frequency: state=(\d+) cpu_id=(\d+)", ev_str)
+		mat = re.match(r'cpu_frequency: state=(\d+) cpu_id=(\d+)', ev_str)
 		if mat:
 			cpu_id=int(mat.groups()[1])
 			cpu_freq=int(mat.groups()[0])
 			return cpu_id,cpu_freq
-	
+
 
 #bootTime = float ( executeShCommand ("adb shell cat /proc/stat | grep btime | awk '{print $2}'").strip() )
 #print(bootTime)
