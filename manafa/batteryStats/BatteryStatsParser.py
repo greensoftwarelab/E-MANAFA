@@ -7,6 +7,7 @@ from manafa.powerProfile.PowerProfile import PowerProfile
 from manafa.utils.Utils import get_pack_dir
 from manafa.utils.dateUtils import convertBatStatTimeToTimeStamp,batStatResetTimeToTimeStamp
 import copy
+from manafa.utils.Logger import log, LogSeverity
 
 DEFAULT_JSON_PATH = os.path.join(get_pack_dir(), "batteryStats", "BatteryStatus.json")
 
@@ -117,25 +118,26 @@ class BatteryStatsParser(object):
 			return json.load(dff)
 
 	def getDefinitionVal(self,key,val=""):
-		if re.sub(r"\+|\-", "", key) in self.definitions["monoval"]:
+		res = re.sub(r"\+|\-", "", key)
+		if res in self.definitions["monoval"]:
 			return 0 if "-" in key else 1
-		elif re.sub(r"\+|\-", "", key) in self.definitions["trival"]:
+		elif res in self.definitions["trival"]:
 			return key
-		elif re.sub(r"\+|\-", "", key) in self.definitions["numerical"]:
+		elif res in self.definitions["numerical"]:
 			return val
-		elif re.sub(r"\+|\-", "", key) in self.definitions["nominal"]:
+		elif res in self.definitions["nominal"]:
 			return self.definitions["nominal"][str(key)][val]
 		return None
 
-	def isTrival(self,key):
+	def isTrival(self, key):
 		return re.sub(r"\+|\-", "", key) in self.definitions["trival"]
 
-	def parseStates(self,states):
+	def parseStates(self, states):
 		accum=False
 		accumulator = ""
 		latest_state=None
 		events={}
-		for state in re.sub(r"^ ","",states).split(" "):
+		for state in re.sub(r"^ ", "", states).split(" "):
 			#print("->" +state)
 			if accum:
 				accumulator+=state
@@ -153,10 +155,9 @@ class BatteryStatsParser(object):
 					val = state.split("=")[1]
 					state = self.getDefinitionVal(key,val)
 					if self.isTrival(key):
-						#print("TODO: split in trival")
 						#print("%s - %s -%s" %(key,val.split(":")[0],val.split(":")[1]))
 						#return key,val.split(":")[0],val.split(":")[1]
-						events[key]= {"val": val.split(":")[0] , "val2": val.split(":")[1]}
+						events[key] = {"val": val.split(":")[0], "val2": "".join(val.split(":")[1:])}
 					else:
 						#print("%s = %s" %(key,state))
 						events[key]=state
@@ -188,13 +189,13 @@ class BatteryStatsParser(object):
 					#print(epochToDate(self.start_time))
 			else:
 				# TODO Handle DcpuStats and DpstStats
-				print("linha invalida" + line)
+				log("invalid line in batstats file", LogSeverity.ERROR)
 
 	def addUpdate(self, time, bat_events):
 		if len(self.events) == 0:
-			bt = BatteryEvent(time, bat_events )
+			bt = BatteryEvent(time, bat_events)
 			self.estimateCurrentConsumption(bt)
-			self.events.append(bt )
+			self.events.append(bt)
 		else:	
 			last_added = self.events[-1]
 			if last_added.time == time:
