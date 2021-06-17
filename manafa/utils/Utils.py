@@ -32,3 +32,10 @@ def mega_find(basedir, pattern="*", maxdepth=999, mindepth=0, type_file='n'):
     res = find(basedir, pattern=pattern, only_files=type_file=='f', only_dirs=type_file=='d' )
     # filter by depth
     return list( filter(lambda x : len(x.split("/")) >= basedir_len + mindepth and len(x.split("/")) <= maxdepth + basedir_len , res ) )
+
+def is_float(string):
+    try:
+        float(string)
+    except ValueError:
+        return False
+    return True
