@@ -41,7 +41,7 @@ class CPU_STATE(Enum):
 
 class PerfettoCPUEvent(object):
 	"""Stores information regarding each cpu frequency in a given time
-	A perfetto  cpufreq event information, corresponding to a line in an results output file in systrace format
+		A perfetto  cpufreq event information, corresponding to a line in an results output file in systrace format
 		Attributes:
 		time: event_time
 		vals: frequency for each cpu of device

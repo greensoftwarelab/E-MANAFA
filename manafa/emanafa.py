@@ -182,7 +182,6 @@ class EManafa(Service):
                 per_component: per-component energy consumption
                 metrics: batterystats info containing events occurred during the interval. for each type of event, it
                 presents
-
         """
         total, per_component = self.calculateNonCpuEnergy(start_time, end_time)
         total_cpu = self.calculateCPUEnergy(start_time, end_time)
@@ -300,10 +299,8 @@ class EManafa(Service):
         return DEFAULT_PROFILE
 
     def inferPowerProfile(self):
-        """picks the most appropriate power profile file. power profile files present in self.resources_dir contains a device model id in the filename,
-            which is determinated by ro.product.model property
-            if there is an adequate file locally, it retrieves such filename. Otherwise, it extracts the profile from the device using __extractPowerProfile
-           Returns:
+        """picks the most appropriate power profile file. power profile files present in self.resources_dir contains a device model id in the filename, which is determinated by ro.product.model property. if there is an adequate file locally, it retrieves such filename. Otherwise, it extracts the profile from the device using __extractPowerProfile
+            Returns:
                filename: the name of the  xml file
        """
         res, device_model, _ = execute_shell_command("adb shell getprop ro.product.model")
