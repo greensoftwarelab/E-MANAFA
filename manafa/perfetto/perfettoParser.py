@@ -141,6 +141,13 @@ class PerfettoCPUfreqParser(object):
 			cpu_freq=int(mat.groups()[0])
 			return cpu_id,cpu_freq
 
+	def getClosestPair(self, time):
+		lasti = 0
+		for i, x in enumerate(self.events):
+			if x.time > time:
+				return lasti, i
+			lasti = i
+		return lasti, lasti
 
 #bootTime = float ( executeShCommand ("adb shell cat /proc/stat | grep btime | awk '{print $2}'").strip() )
 #print(bootTime)

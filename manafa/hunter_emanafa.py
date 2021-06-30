@@ -1,10 +1,14 @@
 import argparse
+import json
+import sys
 import time
 
 from manafa.emanafa import EManafa, MANAFA_RESOURCES_DIR, has_connected_devices
 from manafa.services.hunterService import HunterService
 from manafa.utils.Logger import log, LogSeverity
+from manafa.utils.Utils import execute_shell_command
 
+MAX_SIZE = sys.maxsize
 
 class HunterEManafa(EManafa):
     def __init__(self, power_profile=None, timezone=None, resources_dir=MANAFA_RESOURCES_DIR):
@@ -19,22 +23,25 @@ class HunterEManafa(EManafa):
 
     def start(self):
         """starts inner services"""
+        super().start()
         self.hunter.start()
-        super().init()
 
-    def stop(self):
+    def stop(self, run_id=None):
         """starts inner services"""
-        self.bts_out_file = self.batterystats.stop()
-        self.pft_out_file = self.perfetto.stop()
+        if run_id is None:
+            run_id = execute_shell_command("date +%s")[1].strip()
+        self.bts_out_file = self.batterystats.stop(run_id)
+        self.pft_out_file = self.perfetto.stop(run_id)
         log("Perfetto file:  %s" % self.pft_out_file)
         self.parseResults(self.bts_out_file, self.pft_out_file)
-
         if len(self.bat_events.events) > 0:
-            self.hunter_out_file = self.hunter.start()  # hunter start is to write to a log file (same as stop)
+            self.hunter_out_file = self.hunter.stop(run_id)
         self.calculate_function_consumption(self.hunter_out_file)
         if self.unplugged:
-            self.__plug_back()
+            self.plug_back()
         return self.bts_out_file, self.pft_out_file, self.hunter_out_file
+
+
 
     def calculate_function_consumption(self, hunterfile):
         self.hunter.parseFile(hunterfile)
@@ -54,12 +61,12 @@ class HunterEManafa(EManafa):
                 consumption, per_component_consumption, m = self.getConsumptionInBetween(begin, end)
                 if consumption < 0:
                     consumption = 0.0
-                self.hunter.addConsumption(function, j, consumption, per_component_consumption)
+                self.hunter.addConsumption(function, j, consumption, per_component_consumption, m)
                 func_consumption += consumption
             total_consumption += func_consumption
             log("Total energy consumed by %s: %f Joules" % (function, func_consumption),
                 log_sev=LogSeverity.SUCCESS)
-        log("Total energy consumed by APP: %f Joules" % total_consumption,
+        log("Total energy consumed by app methods: %f Joules" % total_consumption,
             log_sev=LogSeverity.INFO)
 
         hunter_edited = self.hunter.addConsumptionToTraceFile(self.hunter_out_file)
@@ -72,8 +79,7 @@ class HunterEManafa(EManafa):
         self.hunter.clean()
 
     def parseResults(self, bts_file=None, pf_file=None, htr_file=None):
-        super().parseResults(bts_file,pf_file)
-
+        super().parseResults(bts_file, pf_file)
 
 
 if __name__ == '__main__':
@@ -89,20 +95,21 @@ if __name__ == '__main__':
     if not has_device_conn and invalid_file_args:
         log("Fatal error. No connected devices and result files submitted for analysis", LogSeverity.FATAL)
         exit(-1)
-    g = HunterEManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=MANAFA_RESOURCES_DIR)
+    manafa = HunterEManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=MANAFA_RESOURCES_DIR)
     if has_device_conn and invalid_file_args:
-        g.init()
-        g.start()
+        manafa.init()
+        manafa.start()
         print("start testing...")
         time.sleep(7)  # do work
         print("stop testing...")
-        g.stop()
+        manafa.stop()
     else:
-        g.parseResults(args.batstatsfile, args.perfettofile,args.hunterfile)
-    begin = g.bat_events.events[0].time  # first collected sample from batterystats
-    end = g.bat_events.events[-1].time  # last collected sample from batterystats
-    p, c, z = g.getConsumptionInBetween(begin, end)
-    print("TOTAL: ")
+        manafa.parseResults(args.batstatsfile, args.perfettofile, args.hunterfile)
+    begin = manafa.perf_events.events[0].time  # first collected sample from perfetto
+    end = manafa.perf_events.events[-1].time  # last collected sample from perfetto
+    elapsed = end - begin
+    p, c, z = manafa.getConsumptionInBetween(begin, end)
     print(p)
     print(c)
     print(z)
+    print("trace")

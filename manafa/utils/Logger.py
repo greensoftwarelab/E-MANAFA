@@ -21,7 +21,7 @@ def getColor(sev):
         'Info': 'blue',
         'Error': 'magenta',
         'Fatal': 'red'
-    }.get(sev, 'white')
+    }.get(sev, 'green')
 
 
 def log(message, log_sev=LogSeverity.INFO, time=time.time()):

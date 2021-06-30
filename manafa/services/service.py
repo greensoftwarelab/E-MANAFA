@@ -18,7 +18,7 @@ class Service(ABC):
 		pass
 
 	@abstractmethod
-	def stop(self):
+	def stop(self, run_id):
 		pass
 
 	def clean(self):

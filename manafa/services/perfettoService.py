@@ -30,13 +30,11 @@ class PerfettoService(Service):
 		self.clean()
 
 	def start(self):
-
 		execute_shell_command(f"adb shell perfetto -o {self.output_filename} freq  -t 1h --background ")
 	
-	def stop(self, file_id=None):
+	def stop(self, file_id):
 		if file_id is None:
 			file_id = execute_shell_command("date +%s")[1].strip()
-		#executeShCommand("adb shell su -c \"killall perfetto\"")
 		execute_shell_command("adb shell killall perfetto")
 		time.sleep(1)
 		execute_shell_command(f"adb pull {self.output_filename} " + ("%strace" % self.results_dir) + "-" + file_id + "-" + str(self.boot_time))

@@ -35,7 +35,7 @@ def safe_division(a,b):
 
 class BatteryEvent(object):
 	"""docstring for BatteryEvent"""
-	def __init__(self,time=0.0,vals={}):
+	def __init__(self,time=0.0, vals={}):
 		self.time=time
 		self.updates = {}
 		self.currents = {}
@@ -189,7 +189,8 @@ class BatteryStatsParser(object):
 					#print(epochToDate(self.start_time))
 			else:
 				# TODO Handle DcpuStats and DpstStats
-				log("invalid line in batstats file", LogSeverity.ERROR)
+				#print(line)
+				log("Unrecognized patter in line of batstats file", LogSeverity.WARNING)
 
 	def addUpdate(self, time, bat_events):
 		if len(self.events) == 0:
@@ -290,11 +291,11 @@ class BatteryStatsParser(object):
 		last_delta = end_time - last_time
 		last_state = last_ev.currents["cpu"]
 		last_voltage = last_ev.getVoltageValue() #float(last_ev.updates["volt"])
-		last_pair = ( last_delta, last_state,last_voltage)
+		last_pair = (last_delta, last_state, last_voltage)
 		l.append(last_pair)
 		return l
 
-	def determinateComponentCurrent(self,bt_event,comp_name, possible_states):
+	def determinateComponentCurrent(self, bt_event,comp_name, possible_states):
 		current = 0.0
 		curravg=0
 		avg_ct=0
@@ -303,7 +304,7 @@ class BatteryStatsParser(object):
 				on_current = possible_states["on"]
 				brightness_level = bt_event.updates["brightness"] if "brightness" in bt_event.updates else 1
 				relative_full_current = (brightness_level * possible_states["full"] / (len( self.definitions["nominal"]["brightness"]) -1) )
-				current+= on_current + relative_full_current 
+				current+= on_current + relative_full_current
 
 		elif comp_name == "ambient" and "screen_doze" in bt_event.updates:
 				# power profile might have a defined value for ambient/doze screen consumpri

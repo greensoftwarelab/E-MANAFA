@@ -1,3 +1,5 @@
+import time
+
 from textops import cat
 
 from .service import Service
@@ -18,18 +20,18 @@ class HunterService(Service):
 
     def init(self, boot_time=0, **kwargs):
         self.boot_time = boot_time
-        self.clean()
         self.trace = {}
 
-    def start(self, file_id=None):
-        if file_id is None:
-            file_id = execute_shell_command("date +%s")[1].strip()
-        filename = self.results_dir + "/hunter-%s-%s.log" % (file_id, str(self.boot_time))
+    def start(self, run_id=None):
+        self.clean()
+
+    def stop(self, run_id=None):
+        if run_id is None:
+            run_id = execute_shell_command("date +%s")[1].strip()
+        time.sleep(1)
+        filename = self.results_dir + "/hunter-%s-%s.log" % (run_id, str(self.boot_time))
         execute_shell_command("adb logcat -d | grep -io \"[<>].*m=example.*]\" > %s" % filename)
         return filename
-
-    def stop(self):
-        pass
 
     def clean(self):
         execute_shell_command("find %s -type f  | xargs rm " % self.results_dir)
@@ -43,11 +45,10 @@ class HunterService(Service):
 
     def parseHistory(self, lines_list):
         not_functions = ["<init>", "get", "set", "Util"]
-
         for i, line in enumerate(lines_list):
             if re.match(r"^>", line):
-                before_components = re.split('^>', line)
-                components = re.split('[,=\[\] ]', before_components[1])
+                before_components = re.split('^>', line.replace(" ",""))
+                components = re.split('[,=\[\]]',  before_components[1])
                 function_name = components[0].replace("$", "_")
                 add_function = True
                 for not_function in not_functions:
@@ -55,7 +56,7 @@ class HunterService(Service):
                         add_function = False
                         break
                 if add_function:
-                    begin_time = components[13]
+                    begin_time = components[6]
                     if function_name not in self.trace:
                         self.trace[function_name] = {}
                         self.trace[function_name][0] = {'begin_time': float(begin_time) * (pow(10, -3))}
@@ -63,7 +64,7 @@ class HunterService(Service):
                         self.trace[function_name][len(self.trace[function_name])] = {
                             'begin_time': float(begin_time) * (pow(10, -3))}
             elif re.match(r"^<", line):
-                before_components = re.split('^<', line)
+                before_components = re.split('^<', line.replace(" ",""))
                 components = re.split('[,=\[\] ]', before_components[1])
                 function_name = components[0].replace("$", "_")
                 add_function = True
@@ -72,17 +73,18 @@ class HunterService(Service):
                         add_function = False
                         break
                 if add_function:
-                    end_time = components[13]
+                    end_time = components[6]
                     self.updateTraceReturn(function_name, end_time)
             else:
-                print("linha invalida" + line)
+                log("invalid line")
 
-    def addConsumption(self, function_name, position, consumption, per_component_consumption):
+    def addConsumption(self, function_name, position, consumption, per_component_consumption, metrics):
         self.trace[function_name][position].update(
             {
                 'checked': False,
                 'consumption': consumption,
-                'per_component_consumption': per_component_consumption
+                'per_component_consumption': per_component_consumption,
+                'metrics': metrics
             }
         )
 
