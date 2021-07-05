@@ -71,7 +71,7 @@ class HunterEManafa(EManafa):
 
         hunter_edited = self.hunter.addConsumptionToTraceFile(self.hunter_out_file)
         log("Hunter file:  %s" % hunter_edited)
-        return self.hunter_out_file
+        return hunter_edited
 
     def clean(self):
         """calls clean methods from inner services to clean previous result files"""
