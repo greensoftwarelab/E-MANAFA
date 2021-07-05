@@ -36,7 +36,7 @@ class HunterEManafa(EManafa):
         self.parseResults(self.bts_out_file, self.pft_out_file)
         if len(self.bat_events.events) > 0:
             self.hunter_out_file = self.hunter.stop(run_id)
-        self.calculate_function_consumption(self.hunter_out_file)
+        self.hunter_out_file = self.calculate_function_consumption(self.hunter_out_file)
         if self.unplugged:
             self.plug_back()
         return self.bts_out_file, self.pft_out_file, self.hunter_out_file
