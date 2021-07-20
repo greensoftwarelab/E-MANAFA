@@ -37,24 +37,21 @@ class HunterService(Service):
         execute_shell_command("find %s -type f  | xargs rm " % self.results_dir)
         execute_shell_command("adb logcat -c")  # or   adb logcat -b all -c
 
-    # parses function to other module HunterParser
-    def parseFile(self, filename):
+    def parseFile(self, filename, functions, instrument=False):
+        """array functions to decide which methods collect instrumentation data
+        variable instrument to decide if array functions is an array of methods
+        to collect information or to discard"""
         with open(filename, 'r') as filehandle:
             lines = filehandle.read().splitlines()
-            self.parseHistory(lines)
+            self.parseHistory(lines, functions, instrument)
 
-    def parseHistory(self, lines_list):
-        not_functions = ["<init>", "get", "set", "Util"]
+    def parseHistory(self, lines_list, functions, instrument=False):
         for i, line in enumerate(lines_list):
             if re.match(r"^>", line):
-                before_components = re.split('^>', line.replace(" ",""))
-                components = re.split('[,=\[\]]',  before_components[1])
+                before_components = re.split('^>', line.replace(" ", ""))
+                components = re.split('[,=\[\]]', before_components[1])
                 function_name = components[0].replace("$", "_")
-                add_function = True
-                for not_function in not_functions:
-                    if not_function in function_name:
-                        add_function = False
-                        break
+                add_function = self.verifyFunction(function_name, functions, instrument)
                 if add_function:
                     begin_time = components[6]
                     if function_name not in self.trace:
@@ -64,14 +61,10 @@ class HunterService(Service):
                         self.trace[function_name][len(self.trace[function_name])] = {
                             'begin_time': float(begin_time) * (pow(10, -3))}
             elif re.match(r"^<", line):
-                before_components = re.split('^<', line.replace(" ",""))
+                before_components = re.split('^<', line.replace(" ", ""))
                 components = re.split('[,=\[\] ]', before_components[1])
                 function_name = components[0].replace("$", "_")
-                add_function = True
-                for not_function in not_functions:
-                    if not_function in function_name:
-                        add_function = False
-                        break
+                add_function = self.verifyFunction(function_name, functions, instrument)
                 if add_function:
                     end_time = components[6]
                     self.updateTraceReturn(function_name, end_time)
@@ -88,9 +81,7 @@ class HunterService(Service):
             }
         )
 
-    def addConsumptionToTraceFile(self, filename):
-        not_functions = ["<init>", "get", "set", "Util"]
-
+    def addConsumptionToTraceFile(self, filename, functions, instrument=False):
         split_filename = re.split("/", filename)
 
         new_filename = "/".join(split_filename[0: len(split_filename) - 1])
@@ -111,14 +102,11 @@ class HunterService(Service):
                     checked = True
                     function_begin = "<"
 
-                add_function = True
-                for not_function in not_functions:
-                    if not_function in function_name:
-                        add_function = False
-                        break
+                add_function = self.verifyFunction(function_name, functions, instrument)
                 if add_function:
                     consumption, time = self.returnConsumptionAndTimeByFunction(function_name, checked)
-                    new_line = function_begin + function_name + " [m=example, " + 'cpu = ' + str(consumption) + ', t = ' + str(time) + ']\n'
+                    new_line = function_begin + function_name + " [m=example, " + 'cpu = ' + str(
+                        consumption) + ', t = ' + str(time) + ']\n'
                     fw.write(new_line)
 
         execute_shell_command("rm %s" % filename)
@@ -154,3 +142,15 @@ class HunterService(Service):
                 times.update({'end_time': float(end_time) * (pow(10, -3))})
                 break
             i -= 1
+
+    # Verify if it is to add the function to hunter_trace or get consumption
+    def verifyFunction(self, function_name, functions, add_function=False):
+        if len(functions) == 0:
+            return True
+        res = not add_function
+        for function in functions:
+            if function in function_name:
+                res = not res
+                break
+
+        return res
