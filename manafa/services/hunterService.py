@@ -112,20 +112,26 @@ class HunterService(Service):
         execute_shell_command("rm %s" % filename)
         return new_filename
 
+    '''
+        Returns cpu consumption instead total consumption
+    '''
     def returnConsumptionAndTimeByFunction(self, function_name, checked):
         consumption = 0.0
+        cpu_consumption = 0.0
         time = 0.0
         for i, times in enumerate(self.trace[function_name]):
             results = self.trace[function_name][i]
             if not results['checked']:
                 if checked:
                     consumption = results['consumption']
+                    per_component_consumption = results['per_component_consumption']
+                    cpu_consumption = per_component_consumption['cpu']
                     time = results['end_time']
                     self.updateChecked(function_name, i)
-                    return consumption, time
+                    return cpu_consumption, time
                 time = results['begin_time']
-                return consumption, time
-        return consumption, time
+                return cpu_consumption, time
+        return cpu_consumption, time
 
     def updateChecked(self, function_name, position):
         self.trace[function_name][position].update(

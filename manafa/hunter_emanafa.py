@@ -82,10 +82,12 @@ class HunterEManafa(EManafa):
         self.hunter.parseFile(hunterfile, functions, to_instrument)
         hunter_trace = self.hunter.trace
         total_consumption = 0
+        total_cpu_consumption = 0
         if len(self.hunter.trace) == 0:
             return
         for i, function in enumerate(hunter_trace):
             func_consumption = 0
+            func_cpu_consumption = 0
             for j, times in enumerate(hunter_trace[function]):
                 time = hunter_trace[function][j]
                 begin = time['begin_time']
@@ -94,14 +96,17 @@ class HunterEManafa(EManafa):
                 else:
                     end = begin
                 consumption, per_component_consumption, m = self.getConsumptionInBetween(begin, end)
-                if consumption < 0:
+                if consumption < 0 or per_component_consumption['cpu'] < 0:
                     consumption = 0.0
+                    per_component_consumption.update({'cpu': 0.0})
                 self.hunter.addConsumption(function, j, consumption, per_component_consumption, m)
                 func_consumption += consumption
+                func_cpu_consumption += per_component_consumption['cpu']
             total_consumption += func_consumption
-            self.app_consumptions.write_consumptions(consumption_log, func_consumption, function)
+            total_cpu_consumption += func_cpu_consumption
+            self.app_consumptions.write_consumptions(consumption_log, func_cpu_consumption, function)
 
-        self.app_consumptions.write_consumptions(consumption_log, total_consumption)
+        self.app_consumptions.write_consumptions(consumption_log, total_cpu_consumption)
 
         hunter_edited = self.hunter.addConsumptionToTraceFile(self.hunter_out_file, functions, to_instrument)
         log("Hunter file:  %s" % hunter_edited)
