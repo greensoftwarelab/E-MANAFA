@@ -22,7 +22,7 @@ class HunterEManafa(EManafa):
                  instrument_file=None,
                  not_instrument_file=None):
         """Inits HunterEManafa"""
-        EManafa.__init__(self, power_profile=None, timezone=None, resources_dir=MANAFA_RESOURCES_DIR)
+        EManafa.__init__(self, power_profile=power_profile, timezone=timezone, resources_dir=resources_dir)
         self.app_consumptions = AppConsumptionsService()
         self.app_consumptions_log = None
         self.hunter = HunterService()
