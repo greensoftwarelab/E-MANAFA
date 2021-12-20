@@ -179,6 +179,7 @@ class EManafa(Service):
         if c_beg_bef == c_beg_aft or len(in_bt2) == 1:
             # batevents |--|--|--|
             # start-end             |--|
+            # or in btween two samples
             delta_time = abs(end_time - start_time)
             total, per_component_consumption = self.calculate_glob_and_component_consumption(last_event,per_component_consumption, delta_time, total)
             return total, per_component_consumption
@@ -346,6 +347,7 @@ if __name__ == '__main__':
     if not has_device_conn and invalid_file_args:
         log("Fatal error. No connected devices and result files submitted for analysis", LogSeverity.FATAL)
         exit(-1)
+
     manafa = EManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=MANAFA_RESOURCES_DIR)
     if has_device_conn and invalid_file_args:
         manafa.init()

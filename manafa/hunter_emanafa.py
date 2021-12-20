@@ -159,4 +159,3 @@ if __name__ == '__main__':
     print(p)
     print(c)
     print(z)
-    print("trace")
