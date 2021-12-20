@@ -121,6 +121,11 @@ class HunterEManafa(EManafa):
 
     def parseResults(self, bts_file=None, pf_file=None, htr_file=None):
         super().parseResults(bts_file, pf_file)
+        self.hunter_out_file = htr_file
+        self.calculate_function_consumption(
+            self.app_consumptions.stop(self.boot_time), htr_file, self.instrument_file, self.not_instrument_file
+        )
+
 
 
 if __name__ == '__main__':

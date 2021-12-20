@@ -19,13 +19,14 @@ class PerfettoService(Service):
 		Service.__init__(self, output_res_folder)
 		self.boot_time = boot_time
 		self.output_dir = default_out_dir
-		self.output_filename = os.path.join(self.output_dir,"trace")
+		self.output_filename = os.path.join(self.output_dir, "trace")
+		execute_shell_command("adb shell setprop persist.traced.enable 1")
 		execute_shell_command(f"adb shell mkdir -p {self.output_dir}")
 
 	def config(self, **kwargs):
 		pass
 
-	def init(self,boot_time=0, **kwargs):
+	def init(self, boot_time=0, **kwargs):
 		self.boot_time = boot_time
 		self.clean()
 

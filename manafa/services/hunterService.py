@@ -1,6 +1,5 @@
 import time
 
-from textops import cat
 
 from .service import Service
 
@@ -14,6 +13,7 @@ class HunterService(Service):
         Service.__init__(self, output_res_folder)
         self.trace = {}
         self.boot_time = boot_time
+        self.end_time = boot_time
 
     def config(self, **kwargs):
         pass
@@ -50,7 +50,7 @@ class HunterService(Service):
             if re.match(r"^>", line):
                 before_components = re.split('^>', line.replace(" ", ""))
                 components = re.split('[,=\[\]]', before_components[1])
-                function_name = components[0].replace("$", "_")
+                function_name = components[0].replace("$", ".")
                 add_function = self.verifyFunction(function_name, functions, instrument)
                 if add_function:
                     begin_time = components[6]
@@ -63,13 +63,13 @@ class HunterService(Service):
             elif re.match(r"^<", line):
                 before_components = re.split('^<', line.replace(" ", ""))
                 components = re.split('[,=\[\] ]', before_components[1])
-                function_name = components[0].replace("$", "_")
+                function_name = components[0].replace("$", ".")
                 add_function = self.verifyFunction(function_name, functions, instrument)
                 if add_function:
                     end_time = components[6]
                     self.updateTraceReturn(function_name, end_time)
             else:
-                log("invalid line")
+                log("invalid line" + line)
 
     def addConsumption(self, function_name, position, consumption, per_component_consumption, metrics):
         self.trace[function_name][position].update(
@@ -82,8 +82,8 @@ class HunterService(Service):
         )
 
     def addConsumptionToTraceFile(self, filename, functions, instrument=False):
+        print("filename " + filename)
         split_filename = re.split("/", filename)
-
         new_filename = "/".join(split_filename[0: len(split_filename) - 1])
         new_filename += '[edited]' + split_filename[len(split_filename) - 1]
 
@@ -94,11 +94,11 @@ class HunterService(Service):
                 if re.match(r"^>", line):
                     before_components = re.split('^>', line)
                     components = re.split('[,=\[\] ]', before_components[1])
-                    function_name = components[0].replace("$", "_")
+                    function_name = components[0].replace("$", ".")
                 elif re.match(r"^<", line):
                     before_components = re.split('^<', line)
                     components = re.split('[,=\[\] ]', before_components[1])
-                    function_name = components[0].replace("$", "_")
+                    function_name = components[0].replace("$", ".")
                     checked = True
                     function_begin = "<"
 
@@ -118,7 +118,7 @@ class HunterService(Service):
     def returnConsumptionAndTimeByFunction(self, function_name, checked):
         consumption = 0.0
         cpu_consumption = 0.0
-        time = 0.0
+        da_time = 0.0
         for i, times in enumerate(self.trace[function_name]):
             results = self.trace[function_name][i]
             if not results['checked']:
@@ -126,12 +126,14 @@ class HunterService(Service):
                     consumption = results['consumption']
                     per_component_consumption = results['per_component_consumption']
                     cpu_consumption = per_component_consumption['cpu']
-                    time = results['end_time']
+                    print(function_name)
+                    print(results)
+                    da_time = results['end_time'] if 'end_time' in results else self.end_time
                     self.updateChecked(function_name, i)
-                    return cpu_consumption, time
-                time = results['begin_time']
-                return cpu_consumption, time
-        return cpu_consumption, time
+                    return cpu_consumption, da_time
+                da_time = results['begin_time']
+                return cpu_consumption, da_time
+        return cpu_consumption, da_time
 
     def updateChecked(self, function_name, position):
         self.trace[function_name][position].update(
@@ -141,16 +143,20 @@ class HunterService(Service):
         )
 
     def updateTraceReturn(self, function_name, end_time):
-        i = len(self.trace[function_name]) - 1
+        i = len(self.trace[function_name]) - 1 if function_name in self.trace else -1
         while i >= 0:
             times = self.trace[function_name][i]
             if 'end_time' not in times:
-                times.update({'end_time': float(end_time) * (pow(10, -3))})
+                end = float(end_time) * (pow(10, -3))
+                times.update({'end_time': end})
+                if end > self.end_time:
+                    self.end_time = end
                 break
             i -= 1
 
     # Verify if it is to add the function to hunter_trace or get consumption
-    def verifyFunction(self, function_name, functions, add_function=False):
+    @staticmethod
+    def verifyFunction(function_name, functions, add_function=False):
         if len(functions) == 0:
             return True
         res = not add_function
@@ -158,5 +164,4 @@ class HunterService(Service):
             if function in function_name:
                 res = not res
                 break
-
         return res
