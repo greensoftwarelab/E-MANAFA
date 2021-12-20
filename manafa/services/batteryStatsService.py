@@ -22,9 +22,9 @@ class BatteryStatsService(Service):
 	def start(self):
 		execute_shell_command("adb shell dumpsys batterystats --reset")
 
-	def stop(self, run_id):
+	def stop(self, run_id=None):
 		if run_id is None:
-			uid_file = execute_shell_command("date +%s")[1].strip()
+			run_id = execute_shell_command("date +%s")[1].strip()
 		filename = self.results_dir + "/bstats-%s-%s.log" % (run_id, str(self.boot_time))
 		execute_shell_command("adb shell dumpsys batterystats --history > %s" % filename)
 		#print(colored("Output file  %s" % filename, "green"))

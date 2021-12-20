@@ -8,12 +8,12 @@ def convertToUnixTimestamp(batstattime):
 
 def convertBatStatTimeToTimeStamp(batstattime,timezone="EST"):
 	#secs=[86400,3600,60,1,0.001]
-	secs=[0.001,1,60,3600,86400]
-	val=0.0
-	ts = re.split(r'[a-z]+',batstattime.strip())
+	secs = [0.001, 1, 60, 3600, 86400]
+	val = 0.0
+	ts = re.split(r'[a-z]+', batstattime.strip())
 	ts.reverse()
-	ts = filter (lambda x:x!='', ts)
-	for i,x in enumerate(ts):
+	ts = filter(lambda x: x != '', ts)
+	for i, x in enumerate(ts):
 		#print(x)
 		val += float(x) * secs[i]
 		#print(val)

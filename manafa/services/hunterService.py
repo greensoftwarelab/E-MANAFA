@@ -25,11 +25,14 @@ class HunterService(Service):
     def start(self, run_id=None):
         self.clean()
 
-    def stop(self, run_id=None):
+    def get_results_filename(self, run_id):
         if run_id is None:
             run_id = execute_shell_command("date +%s")[1].strip()
+        return self.results_dir + "/hunter-%s-%s.log" % (run_id, str(self.boot_time))
+
+    def stop(self, run_id=None):
+        filename = self.get_results_filename(run_id)
         time.sleep(1)
-        filename = self.results_dir + "/hunter-%s-%s.log" % (run_id, str(self.boot_time))
         execute_shell_command("adb logcat -d | grep -io \"[<>].*m=example.*]\" > %s" % filename)
         return filename
 
@@ -82,7 +85,6 @@ class HunterService(Service):
         )
 
     def addConsumptionToTraceFile(self, filename, functions, instrument=False):
-        print("filename " + filename)
         split_filename = re.split("/", filename)
         new_filename = "/".join(split_filename[0: len(split_filename) - 1])
         new_filename += '[edited]' + split_filename[len(split_filename) - 1]
@@ -126,8 +128,7 @@ class HunterService(Service):
                     consumption = results['consumption']
                     per_component_consumption = results['per_component_consumption']
                     cpu_consumption = per_component_consumption['cpu']
-                    print(function_name)
-                    print(results)
+
                     da_time = results['end_time'] if 'end_time' in results else self.end_time
                     self.updateChecked(function_name, i)
                     return cpu_consumption, da_time

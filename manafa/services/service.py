@@ -23,3 +23,6 @@ class Service(ABC):
 
 	def clean(self):
 		execute_shell_command("find %s -type f | xargs rm " % self.results_dir)
+
+	def save_results(self, output_dir=""):
+		pass

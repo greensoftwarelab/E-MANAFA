@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import sys
 import time
 
@@ -49,13 +50,6 @@ class HunterEManafa(EManafa):
         self.pft_out_file = self.perfetto.stop(run_id)
         log("Perfetto file:  %s" % self.pft_out_file)
         self.parseResults(self.bts_out_file, self.pft_out_file)
-        if len(self.bat_events.events) > 0:
-            self.hunter_out_file = self.hunter.stop(run_id)
-            # get filename to write consumptions
-            self.app_consumptions_log = self.app_consumptions.stop(run_id)
-        self.hunter_out_file, self.app_consumptions_log = self.calculate_function_consumption(
-            self.app_consumptions_log, self.hunter_out_file, self.instrument_file, self.not_instrument_file
-        )
         if self.unplugged:
             self.plug_back()
         return self.bts_out_file, self.pft_out_file, self.hunter_out_file, self.app_consumptions_log
@@ -84,7 +78,7 @@ class HunterEManafa(EManafa):
         total_consumption = 0
         total_cpu_consumption = 0
         if len(self.hunter.trace) == 0:
-            return
+            return self.hunter_out_file, self.app_consumptions_log
         for i, function in enumerate(hunter_trace):
             func_consumption = 0
             func_cpu_consumption = 0
@@ -121,12 +115,24 @@ class HunterEManafa(EManafa):
 
     def parseResults(self, bts_file=None, pf_file=None, htr_file=None):
         super().parseResults(bts_file, pf_file)
-        self.hunter_out_file = htr_file
-        self.calculate_function_consumption(
-            self.app_consumptions.stop(self.boot_time), htr_file, self.instrument_file, self.not_instrument_file
-        )
+        run_id = self.perfetto.get_run_id_from_perfetto_file(self.pft_out_file)
+        if len(self.bat_events.events) > 0:
+            self.hunter_out_file = self.hunter.stop(run_id)
+            # get filename to write consumptions
+            self.app_consumptions_log = self.app_consumptions.stop(run_id)
+            self.hunter_out_file, self.app_consumptions_log = self.calculate_function_consumption(
+                self.app_consumptions_log, self.hunter_out_file, self.instrument_file, self.not_instrument_file
+            )
 
 
+
+    def save_results(self, out_res_dir=""):
+        begin = self.perf_events.events[0].time  # first collected sample from perfetto
+        end = self.perf_events.events[-1].time  # last collected sample from perfetto
+        p, c, z = self.getConsumptionInBetween(begin, end)
+        res_file = os.path.join(out_res_dir, f"function_{self.boot_time}_results.json")
+        with open(res_file, 'w') as out_file:
+            json.dump(self.hunter.trace, out_file, indent=1)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -157,10 +163,4 @@ if __name__ == '__main__':
         manafa.stop()
     else:
         manafa.parseResults(args.batstatsfile, args.perfettofile, args.hunterfile)
-    begin = manafa.perf_events.events[0].time  # first collected sample from perfetto
-    end = manafa.perf_events.events[-1].time  # last collected sample from perfetto
-    elapsed = end - begin
-    p, c, z = manafa.getConsumptionInBetween(begin, end)
-    print(p)
-    print(c)
-    print(z)
+    manafa.save_results()

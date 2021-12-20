@@ -30,7 +30,7 @@ def get_last_boot_time(bts_file=None):
     res, out, err = execute_shell_command(
         "adb shell cat /proc/stat | grep btime | awk '{print $2}'")  # executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
     if res != 0 or len(out) == 0:
-        log("no device connected. Assuming Boot time of battery stats file", LogSeverity.ERROR)
+        log("no device connected. Assuming Boot time of battery stats file", LogSeverity.WARNING)
         flds = bts_file.split("-") if bts_file is not None else []
         if len(flds) > 1:
             boot_time = flds[2].replace(".log", "")
@@ -329,6 +329,14 @@ class EManafa(Service):
         """plugs back the device"""
         res, o, e = execute_shell_command("adb shell dumpsys battery reset")
         self.unplugged = False
+
+    def save_results(self, out_res_dir=""):
+        begin = self.perf_events.events[0].time  # first collected sample from perfetto
+        end = self.perf_events.events[-1].time  # last collected sample from perfetto
+        p, c, z = self.getConsumptionInBetween(begin, end)
+        res_file = os.path.join(out_res_dir, f"function_{self.boot_time}_results.json")
+        with open(res_file, 'w') as out_file:
+            json.dump(self.hunter.trace, out_file, indent=1)
 
 def has_connected_devices():
     """checks if there are devices connected via adb"""

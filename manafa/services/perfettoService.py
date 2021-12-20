@@ -50,3 +50,7 @@ class PerfettoService(Service):
 
 	def clean(self):
 		execute_shell_command("find %s -type f  | xargs rm " % self.results_dir)
+
+	def get_run_id_from_perfetto_file(self, perfetto_filepath : str):
+		simple_name = perfetto_filepath.split("/")[-1]
+		return simple_name.split("-")[1]

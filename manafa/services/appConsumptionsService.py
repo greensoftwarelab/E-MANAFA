@@ -26,7 +26,6 @@ class AppConsumptionsService(Service):
     def stop(self, run_id=None):
         if run_id is None:
             run_id = execute_shell_command("date +%s")[1].strip()
-        time.sleep(1)
         filename = self.results_dir + "/consumptions-%s-%s.log" % (run_id, str(self.boot_time))
         return filename
 
