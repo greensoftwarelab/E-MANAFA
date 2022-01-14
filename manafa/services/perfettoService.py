@@ -12,11 +12,13 @@ from manafa.utils.Utils import execute_shell_command, get_resources_dir
 RESOURCES_DIR = get_resources_dir()
 
 DEFAULT_OUT_DIR = "/data/misc/perfetto-traces"
+CONFIG_FILE = "perfetto.config.bin"
 
 class PerfettoService(Service):
 	"""docstring for BatteryStatsService"""
-	def __init__(self, boot_time=0, output_res_folder="perfetto", default_out_dir=DEFAULT_OUT_DIR):
+	def __init__(self, boot_time=0, output_res_folder="perfetto", default_out_dir=DEFAULT_OUT_DIR, cfg_file=CONFIG_FILE):
 		Service.__init__(self, output_res_folder)
+		self.cfg_file = cfg_file
 		self.boot_time = boot_time
 		self.output_dir = default_out_dir
 		self.output_filename = os.path.join(self.output_dir, "trace")
@@ -31,7 +33,8 @@ class PerfettoService(Service):
 		self.clean()
 
 	def start(self):
-		execute_shell_command(f"adb shell perfetto -o {self.output_filename} freq  -t 1h --background ")
+		#execute_shell_command(f"adb shell perfetto -o {self.output_filename} freq  -t 1h --background ")´
+		execute_shell_command(f"adb shell 'cat {os.path.join(RESOURCES_DIR, self.cfg_file)} | perfetto -o {self.output_filename} -c -'")
 	
 	def stop(self, file_id):
 		if file_id is None:
