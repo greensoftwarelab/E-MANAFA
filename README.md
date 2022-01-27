@@ -111,4 +111,3 @@ This tool can be used with any Android device able to run Perfetto, available si
 
 # TODO
 - support for memory power calculator (MemoryPowerCalculator is a new addition in 8.0, mainly to count the power consumption on DDR memory . formula: MemoryPower = (mAatRail_1 * timeMs_1 + mAatRail_2 * timeMs_2 +… + mAatRail_n * timeMs_n) / (1000 * 60 * 60) (mAatRail_n: is the power at the read/write rate level, timeMs_n: is the time at the mAatRail_n level))
-- start perfetto with protobuf config file

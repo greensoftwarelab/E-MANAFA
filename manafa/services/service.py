@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+import os
 from manafa.utils.Utils import execute_shell_command, get_results_dir
 
 RESULTS_DIR= get_results_dir()
@@ -7,7 +7,7 @@ RESULTS_DIR= get_results_dir()
 class Service(ABC):
 	"""docstring for Service"""
 	def __init__(self, results_dir=""):
-		self.results_dir = RESULTS_DIR + "/" + results_dir+"/"
+		self.results_dir = os.path.join(RESULTS_DIR, results_dir)
 
 	@abstractmethod
 	def config(self, **kwargs):

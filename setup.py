@@ -5,7 +5,6 @@ from setuptools import setup
 with open("README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
-
 setup(
     name='manafa',
     description='E-MANAFA: Energy Monitor and ANAlyzer For Android',
@@ -24,11 +23,12 @@ setup(
         'python-dateutil==2.8.1',
         "setuptools>=42",
         "wheel",
-        "incremental"
+        #"incremental"
 
     ],
     setup_requires=['incremental'],
     include_package_data=True,
+    scripts=['bin/emanafa'],
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Intended Audience :: Science/Research',

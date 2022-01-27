@@ -1,4 +1,4 @@
-import time
+import time,sys, os
 
 
 from .service import Service
@@ -28,7 +28,7 @@ class HunterService(Service):
     def get_results_filename(self, run_id):
         if run_id is None:
             run_id = execute_shell_command("date +%s")[1].strip()
-        return self.results_dir + "/hunter-%s-%s.log" % (run_id, str(self.boot_time))
+        return os.path.join(self.results_dir, "hunter-%s-%s.log" % (run_id, str(self.boot_time)))
 
     def stop(self, run_id=None):
         filename = self.get_results_filename(run_id)
@@ -48,15 +48,16 @@ class HunterService(Service):
             lines = filehandle.read().splitlines()
             self.parseHistory(lines, functions, instrument)
 
-    def parseHistory(self, lines_list, functions, instrument=False):
+    def parseHistory(self, lines_list, functions, instrument=False, start_time=0, end_time=sys.maxsize):
         for i, line in enumerate(lines_list):
+            #print(line)
             if re.match(r"^>", line):
                 before_components = re.split('^>', line.replace(" ", ""))
                 components = re.split('[,=\[\]]', before_components[1])
                 function_name = components[0].replace("$", ".")
                 add_function = self.verifyFunction(function_name, functions, instrument)
-                if add_function:
-                    begin_time = components[6]
+                begin_time = components[6]
+                if add_function and float(begin_time) >= start_time:    
                     if function_name not in self.trace:
                         self.trace[function_name] = {}
                         self.trace[function_name][0] = {'begin_time': float(begin_time) * (pow(10, -3))}
@@ -68,11 +69,16 @@ class HunterService(Service):
                 components = re.split('[,=\[\] ]', before_components[1])
                 function_name = components[0].replace("$", ".")
                 add_function = self.verifyFunction(function_name, functions, instrument)
+                close_time = float(components[6])
+                if close_time > end_time:
+                    #remove func
+                    print("todo: remove function from obj")
                 if add_function:
-                    end_time = components[6]
-                    self.updateTraceReturn(function_name, end_time)
+                    close_time = components[6]
+                    self.updateTraceReturn(function_name, close_time)
             else:
-                log("invalid line" + line)
+                pass
+                #log("invalid line" + line)
 
     def addConsumption(self, function_name, position, consumption, per_component_consumption, metrics):
         self.trace[function_name][position].update(
@@ -85,12 +91,10 @@ class HunterService(Service):
         )
 
     def addConsumptionToTraceFile(self, filename, functions, instrument=False):
-        split_filename = re.split("/", filename)
-        new_filename = "/".join(split_filename[0: len(split_filename) - 1])
-        new_filename += '[edited]' + split_filename[len(split_filename) - 1]
-
+        new_filename = filename.replace(os.path.basename(filename), os.path.basename(filename).replace("hunter-", "truncated_hunter-"))
         with open(filename, 'r+') as fr, open(new_filename, 'w') as fw:
             for line in fr:
+                #print(line)
                 checked = False
                 function_begin = ">"
                 if re.match(r"^>", line):
@@ -111,7 +115,7 @@ class HunterService(Service):
                         consumption) + ', t = ' + str(time) + ']\n'
                     fw.write(new_line)
 
-        execute_shell_command("rm %s" % filename)
+        #execute_shell_command("rm %s" % filename)
         return new_filename
 
     '''

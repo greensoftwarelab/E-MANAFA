@@ -9,7 +9,7 @@ from ..utils.Utils import execute_shell_command
 class BatteryStatsService(Service):
 	"""docstring for BatteryStatsService"""
 	def __init__(self,boot_time=0, output_res_folder="batterystats"):
-		Service.__init__(self,output_res_folder)
+		Service.__init__(self, output_res_folder)
 		self.boot_time = boot_time
 
 	def config(self,**kwargs):
@@ -28,7 +28,7 @@ class BatteryStatsService(Service):
 		filename = self.results_dir + "/bstats-%s-%s.log" % (run_id, str(self.boot_time))
 		execute_shell_command("adb shell dumpsys batterystats --history > %s" % filename)
 		#print(colored("Output file  %s" % filename, "green"))
-		log("Output file  %s" % filename)
+		log("BatteryStats output file  %s" % filename)
 		return filename
 
 	def clean(self):

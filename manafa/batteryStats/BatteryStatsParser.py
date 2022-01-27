@@ -228,8 +228,11 @@ class BatteryStatsParser(object):
 		return lasti, lasti
 
 	def getEventsInBetween(self,start_time, end_time):
+		metrics = {}
+		if (end_time - start_time) <= 0:
+			return metrics
 		c_beg_bef, c_beg_aft = self.getClosestPair(start_time)
-		metrics = {}  # {'health: [(event_state,start,end, pctage_duration)], ..}
+		 # {'health: [(event_state,start,end, pctage_duration)], ..}
 		prev_time = self.events[c_beg_aft].time if len(self.events) > 0 else start_time
 		fst_time = prev_time
 		for ev in self.events[c_beg_aft:]:

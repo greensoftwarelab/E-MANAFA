@@ -1,8 +1,2 @@
 include manafa/batteryStats/BatteryStatus.json
-include manafa/resources/apktool_2.4.0.jar
-include manafa/resources/record_android_trace
-include manafa/resources/traceconv
-include manafa/resources/profiles/power_profile_mi9lite.xml
-include manafa/resources/profiles/power_profile_pixel3a.xml
-include manafa/resources/profiles/power_profile_pixel4a(5g).xml
-include manafa/resources/profiles/power_profile.xml
+graft manafa/resources

@@ -148,6 +148,7 @@ class EManafa(Service):
         total_cpu = self.calculateCPUEnergy(start_time, end_time)
         metrics = self.bat_events.getEventsInBetween(start_time, end_time)
         per_component['cpu'] += total_cpu
+        
         return total + total_cpu, per_component, metrics
 
 
@@ -294,7 +295,7 @@ class EManafa(Service):
             else:
                 # if power profile not present in profiles directory, extract from device
                 power_profile = self.__extractPowerProfile(model_profile_file)
-                print(power_profile)
+                #print(power_profile)
                 return power_profile
         else:
             return DEFAULT_PROFILE
@@ -329,47 +330,3 @@ class EManafa(Service):
         """plugs back the device"""
         res, o, e = execute_shell_command("adb shell dumpsys battery reset")
         self.unplugged = False
-
-    def save_results(self, out_res_dir=""):
-        begin = self.perf_events.events[0].time  # first collected sample from perfetto
-        end = self.perf_events.events[-1].time  # last collected sample from perfetto
-        p, c, z = self.getConsumptionInBetween(begin, end)
-        res_file = os.path.join(out_res_dir, f"function_{self.boot_time}_results.json")
-        with open(res_file, 'w') as out_file:
-            json.dump(self.hunter.trace, out_file, indent=1)
-
-def has_connected_devices():
-    """checks if there are devices connected via adb"""
-    res, o, e = execute_shell_command("adb devices -l | grep -v attached")
-    return res == 0 and len(o) > 2
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--profile", default=None, type=str)
-    parser.add_argument("-t", "--timezone", default=None, type=str)
-    parser.add_argument("-pft", "--perfettofile", default=None, type=str)
-    parser.add_argument("-bts", "--batstatsfile", default=None, type=str)
-    args = parser.parse_args()
-    has_device_conn = has_connected_devices()
-    invalid_file_args = (args.perfettofile is None or args.batstatsfile is None)
-    if not has_device_conn and invalid_file_args:
-        log("Fatal error. No connected devices and result files submitted for analysis", LogSeverity.FATAL)
-        exit(-1)
-
-    manafa = EManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=MANAFA_RESOURCES_DIR)
-    if has_device_conn and invalid_file_args:
-        manafa.init()
-        manafa.start()
-        print("start testing...")
-        time.sleep(7)  # do work
-        print("stop testing...")
-        manafa.stop()
-    else:
-        manafa.parseResults(args.batstatsfile, args.perfettofile)
-    begin = manafa.perf_events.events[0].time  # first collected sample from perfetto
-    end = manafa.perf_events.events[-1].time  # last collected sample from perfetto
-    p, c, z = manafa.getConsumptionInBetween(begin, end)
-    print("TOTAL: ")
-    print(p)
-    print(c)
-    print(z)
