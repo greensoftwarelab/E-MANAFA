@@ -1,7 +1,6 @@
 from manafa.emanafa import EManafa, MANAFA_RESOURCES_DIR
 from manafa.parsing.hunter.HunterParser import HunterParser
 from manafa.services.LogService import LogService
-from manafa.services.hunterService import HunterService
 from manafa.parsing.hunter.AppConsumptionStats import AppConsumptionStats
 from manafa.utils.Logger import log, LogSeverity
 from manafa.utils.Utils import execute_shell_command
