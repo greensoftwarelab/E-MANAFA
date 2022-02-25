@@ -52,7 +52,7 @@ def main():
     has_device_conn = has_connected_devices()
     invalid_file_args = (args.perfettofile is None or args.batstatsfile is None)
     if not has_device_conn and invalid_file_args:
-        log("Fatal error. No connected devices and result files submitted for analysis", LogSeverity.FATAL)
+        log("Fatal error. No connected devices or result files submitted for analysis", LogSeverity.FATAL)
         exit(-1)
     manafa = create_manafa(args)
     if has_device_conn and invalid_file_args:

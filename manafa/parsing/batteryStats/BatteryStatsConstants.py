@@ -1,9 +1,7 @@
-
-
 # Battery related : https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/os/BatteryManager.java
 
 # https://android.googlesource.com/platform/hardware/interfaces/+/oreo-m5-release/health/1.0/types.hal
-BATTERY_STATUS= {
+BATTERY_STATUS = {
  "unknown" :   1, # "BATTERY_STATUS_UNKNOWN",
  "charging":    2, #  "BATTERY_STATUS_CHARGING",
  "discharging":   3, #; "BATTERY_STATUS_DISCHARGING",

@@ -1,17 +1,12 @@
-import json
-import os
 import sys
 import time
-import pprint
 from manafa.services.batteryStatsService import BatteryStatsService
 from manafa.services.service import *
 from manafa.services.perfettoService import PerfettoService
-from manafa.perfetto.perfettoParser import PerfettoCPUfreqParser
-from manafa.batteryStats.BatteryStatsParser import BatteryStatsParser
-import argparse
+from manafa.parsing.perfetto.perfettoParser import PerfettoCPUfreqParser
+from manafa.parsing.batteryStats.BatteryStatsParser import BatteryStatsParser
 from manafa.utils.Logger import log, LogSeverity
 from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir, is_float
-from datetime import datetime, timezone
 
 MANAFA_RESOURCES_DIR = get_resources_dir()
 
@@ -46,7 +41,7 @@ def get_last_boot_time(bts_file=None):
 
 
 class EManafa(Service):
-    """Main class that abstracts all the steps of the profiling procedure
+    """Main class that abstracts all the modules and steps of the profiling procedure
 
     Attributes:
         resources_dir: directory where aux resources are contained
@@ -127,10 +122,9 @@ class EManafa(Service):
                 log_sev=LogSeverity.FATAL)
         self.boot_time = get_last_boot_time(bts_file)
         self.bat_events = BatteryStatsParser(self.power_profile, timezone=self.timezone)
-        self.bat_events.parseFile(bts_file)
+        self.bat_events.parse_file(bts_file)
         self.perf_events = PerfettoCPUfreqParser(self.power_profile, self.boot_time, timezone=self.timezone)
-        self.perf_events.parseFile(pf_file)
-
+        self.perf_events.parse_file(pf_file)
 
     # energy calc related stuff
     def getConsumptionInBetween(self, start_time=0, end_time=sys.maxsize):
@@ -146,20 +140,20 @@ class EManafa(Service):
         """
         total, per_component = self.calculateNonCpuEnergy(start_time, end_time)
         total_cpu = self.calculateCPUEnergy(start_time, end_time)
-        metrics = self.bat_events.getEventsInBetween(start_time, end_time)
+        metrics = self.bat_events.get_events_in_between(start_time, end_time)
         per_component['cpu'] += total_cpu
         
         return total + total_cpu, per_component, metrics
 
 
     def calculate_glob_and_component_consumption(self,last_event, per_component_consumption, delta_time, total):
-        tot_curr, comps_curr = last_event.getCurrentOfBatStatEvent()
-        total += tot_curr * (last_event.getVoltageValue()) * delta_time
+        tot_curr, comps_curr = last_event.get_current_of_batStatEvent()
+        total += tot_curr * (last_event.get_voltage_value()) * delta_time
         for comp, comp_curr in comps_curr.items():
             if comp not in per_component_consumption:
                 per_component_consumption[comp] = 0
             if is_float(comp_curr):
-                per_component_consumption[comp] += (comp_curr * last_event.getVoltageValue() * delta_time)
+                per_component_consumption[comp] += (comp_curr * last_event.get_voltage_value() * delta_time)
         return total, per_component_consumption
 
     def calculateNonCpuEnergy(self, start_time, end_time):
@@ -171,7 +165,10 @@ class EManafa(Service):
                 total: system-level energy consumption without cpu energy consumption
                 per_component: per-component energy consumption without cpu energy consumption
         """
-        c_beg_bef, c_beg_aft = self.bat_events.getClosestPair( start_time)
+        c_beg_bef, c_beg_aft = self.bat_events.get_closest_pair(start_time)
+        if len(self.bat_events.events) == 0:
+            raise Exception("Unable no find batterystats samples. Maybe the profiling session or warm-up time wasn't long "
+                            "enough")
         total = 0
         per_component_consumption = {}
         last_event = self.bat_events.events[c_beg_bef]
@@ -209,7 +206,10 @@ class EManafa(Service):
             Returns:
                 total: cpu energy consumption
         """
-        c_beg_bef, c_beg_aft = self.perf_events.getClosestPair(start_time)
+        if len(self.perf_events.events) == 0:
+            raise Exception("Unable no find perfetto samples. Maybe the profiling session or warm-up time wasn't long "
+                            "enough")
+        c_beg_bef, c_beg_aft = self.perf_events.get_closest_pair(start_time)
         total = 0
         last_event = self.perf_events.events[c_beg_bef]
         last_time = start_time
@@ -220,7 +220,7 @@ class EManafa(Service):
             # start-end             |--|
             # or in bt2 2 samples
             delta_time = abs(end_time - start_time)
-            l = self.bat_events.getCPUSamplesInBetween(last_time, end_time)
+            l = self.bat_events.get_CPU_samples_in_between(last_time, end_time)
             for sample in l:
                 delta, state, voltage = sample[0], sample[1], sample[2]
                 cpus_current = last_event.calculateCPUsCurrent(state, self.perf_events.power_profile)
@@ -231,7 +231,7 @@ class EManafa(Service):
         for i, x in enumerate(self.perf_events.events[c_beg_aft:]):
             if x.time > end_time:
                 break
-            l = self.bat_events.getCPUSamplesInBetween(last_time, x.time)
+            l = self.bat_events.get_CPU_samples_in_between(last_time, x.time)
             # TODO : test to assert if x.time - last_time  = sum( deltas_of_L )
             for sample in l:
                 delta, state, voltage = sample[0], sample[1], sample[2]
@@ -243,7 +243,7 @@ class EManafa(Service):
 
         # after calcs'''
         # TODO merge with cycle just like with non cpu
-        l = self.bat_events.getCPUSamplesInBetween(last_time, end_time)
+        l = self.bat_events.get_CPU_samples_in_between(last_time, end_time)
         for sample in l:
             delta, state, voltage = sample[0], sample[1], sample[2]
             cpus_current = last_event.calculateCPUsCurrent(state, self.perf_events.power_profile)

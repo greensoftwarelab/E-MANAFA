@@ -1,11 +1,8 @@
 from manafa.emanafa import EManafa, MANAFA_RESOURCES_DIR
-from manafa.parsing.hunter.HunterParser import HunterParser
-from manafa.services.LogService import LogService
 from manafa.services.hunterService import HunterService
 from manafa.parsing.hunter.AppConsumptionStats import AppConsumptionStats
 from manafa.utils.Logger import log, LogSeverity
 from manafa.utils.Utils import execute_shell_command
-
 
 class HunterEManafa(EManafa):
     """Inits HunterEManafa"""
@@ -19,20 +16,19 @@ class HunterEManafa(EManafa):
         EManafa.__init__(self, power_profile=power_profile, timezone=timezone, resources_dir=resources_dir)
         self.app_consumptions = AppConsumptionStats()
         self.app_consumptions_log = ""
-        self.log_service = LogService()
-        self.hunter_log_parser = HunterParser()
+        self.hunter = HunterService()
         self.hunter_out_file = None
         self.instrument_file = instrument_file
         self.not_instrument_file = not_instrument_file
 
     def init(self):
         super().init()
-        self.log_service.init(boot_time=self.boot_time)
+        self.hunter.init(boot_time=self.boot_time)
 
     def start(self):
         """starts inner services"""
         super().start()
-        self.log_service.start()
+        self.hunter.start()
 
     def stop(self, run_id=None):
         """starts inner services"""
@@ -40,7 +36,7 @@ class HunterEManafa(EManafa):
             run_id = execute_shell_command("date +%s")[1].strip()
         self.bts_out_file = self.batterystats.stop(run_id)
         self.pft_out_file = self.perfetto.stop(run_id)
-        self.hunter_out_file = self.log_service.stop(run_id)
+        self.hunter_out_file = self.hunter.stop(run_id)
         log("Perfetto file:  %s" % self.pft_out_file)
         self.parseResults(self.bts_out_file, self.pft_out_file)
         if self.unplugged:
@@ -60,11 +56,11 @@ class HunterEManafa(EManafa):
                 functions = not_to_instrument_handle.read().splitlines()
         else:
             to_instrument = True'''
-        self.hunter_log_parser.parse_file(self.hunter_out_file, functions, True)
-        hunter_trace = self.hunter_log_parser.trace
+        self.hunter.parse_file(self.hunter_out_file, functions, True)
+        hunter_trace = self.hunter.trace
         total_consumption = 0
         total_cpu_consumption = 0
-        if len(self.hunter_log_parser.trace) == 0:
+        if len(self.hunter.trace) == 0:
             log(f"No hunter traces found in {self.hunter_out_file}", log_sev=LogSeverity.ERROR)
             return self.hunter_out_file, self.app_consumptions_log
         for i, function in enumerate(hunter_trace):
@@ -81,7 +77,7 @@ class HunterEManafa(EManafa):
                 if consumption <= 0 or per_component_consumption['cpu'] <= 0:
                     consumption = 0.0
                     per_component_consumption.update({'cpu': 0.0})
-                self.hunter_log_parser.add_consumption(function, j, consumption, per_component_consumption, m)
+                self.hunter.add_consumption(function, j, consumption, per_component_consumption, m)
                 func_consumption += consumption
                 func_cpu_consumption += per_component_consumption['cpu']
             total_consumption += func_consumption
@@ -89,9 +85,9 @@ class HunterEManafa(EManafa):
             #self.app_consumptions.write_consumptions(consumption_log, func_cpu_consumption, function)
         #self.app_consumptions.write_consumptions(consumption_log, total_cpu_consumption)
 
-        hunter_edited = self.hunter_log_parser.add_consumption_to_trace_file(self.hunter_out_file, functions, True)
+        hunter_edited = self.hunter.add_consumption_to_trace_file(self.hunter_out_file, functions, True)
         log("Hunter file:  %s" % hunter_edited)
-        self.app_consumptions.app_traces = self.hunter_log_parser.trace
+        self.app_consumptions.app_traces = self.hunter.trace
         self.app_consumptions_log = self.app_consumptions.save_function_info(f"functions_{self.boot_time}_results.json", filter_zeros=True)
         log("Function Consumptions file:  %s" % self.app_consumptions_log )
         return hunter_edited, self.app_consumptions_log
@@ -99,7 +95,7 @@ class HunterEManafa(EManafa):
     def clean(self):
         """calls clean methods from inner services to clean previous result files"""
         super().clean()
-        self.log_service.clean()
+        self.hunter.clean()
         self.app_consumptions.clean()
         self.app_consumptions_log = ""
 
@@ -107,6 +103,6 @@ class HunterEManafa(EManafa):
         super().parseResults(bts_file, pf_file)
         #pf_file = pf_file if pf_file is not None else self.pft_out_file
         #run_id = self.perfetto.get_run_id_from_perfetto_file(pf_file)
-        if len(self.bat_events.events) > 0:          
+        if len(self.bat_events.events) > 0:
             self.hunter_out_file = self.hunter_out_file if htr_file is None else htr_file
             self.calculate_function_consumption()

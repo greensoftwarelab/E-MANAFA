@@ -3,7 +3,7 @@
 import re
 from enum import Enum
 
-from manafa.powerProfile.PowerProfile import PowerProfile
+from manafa.parsing.powerProfile.PowerProfile import PowerProfile
 
 x="""import time
 import subprocess
@@ -84,12 +84,12 @@ class PerfettoCPUEvent(object):
 		total=0
 		if state not in ["idle", "suspend"]:
 			for core_id, freq in enumerate(self.vals):
-				bf, aft = profile.getCPUCoreSpeedPair(core_id,freq)
+				bf, aft = profile.get_CPU_core_speed_pair(core_id, freq)
 				lin_inter_val = interpolate(bf[0], aft[0], bf[1], aft[1], freq)
 				total += lin_inter_val
 			total = total / len(self.vals)
 		else:
-			total = profile.getCPUStateCurrent(state)
+			total = profile.get_CPU_state_current(state)
 		return total / 1000
 
 
@@ -97,17 +97,17 @@ class PerfettoCPUfreqParser(object):
 	def __init__(self, power_profile=None, start_time=0.0, timezone="EST"):
 		self.events = []
 		self.start_time = start_time
-		self.power_profile = self.loadPowerProfile(power_profile) if power_profile is not None else {}
+		self.power_profile = self.load_power_profile(power_profile) if power_profile is not None else {}
 
-	def loadPowerProfile(self, xml_profile ):
+	def load_power_profile(self, xml_profile):
 		return PowerProfile(xml_profile)
 
-	def parseFile(self, filename):
+	def parse_file(self, filename):
 		with open(filename, 'r') as filehandle:
 			lines=filehandle.read().splitlines()
-			self.parseHistory(lines)
+			self.parse_history(lines)
 
-	def parseHistory(self, lines):
+	def parse_history(self, lines):
 		for line in lines:
 			if line.startswith("#"):
 				continue
@@ -115,15 +115,15 @@ class PerfettoCPUfreqParser(object):
 			if z is not None:
 				time = float(z.groups()[5])
 				time += self.start_time
-				ev_pair = self.parseEvent(z.groups()[6])
+				ev_pair = self.parse_event(z.groups()[6])
 				if ev_pair is not None:
 					cpu_id = ev_pair[0]
 					cpu_freq = ev_pair[1]
-					self.addEvent(time, cpu_id, cpu_freq)
+					self.add_event(time, cpu_id, cpu_freq)
 			else:
 				raise Exception("Error parsing file")
 
-	def addEvent(self, time, cpu_id, cpu_freq):
+	def add_event(self, time, cpu_id, cpu_freq):
 		if len(self.events) == 0:
 			z = PerfettoCPUEvent(time)
 			z.initAll(default_len=8, val=cpu_freq)
@@ -134,14 +134,14 @@ class PerfettoCPUfreqParser(object):
 			z.update(cpu_id,cpu_freq)
 			self.events.append(z)
 
-	def parseEvent(self, ev_str):
+	def parse_event(self, ev_str):
 		mat = re.match(r'cpu_frequency: state=(\d+) cpu_id=(\d+)', ev_str)
 		if mat:
 			cpu_id=int(mat.groups()[1])
 			cpu_freq=int(mat.groups()[0])
 			return cpu_id,cpu_freq
 
-	def getClosestPair(self, time):
+	def get_closest_pair(self, time):
 		lasti = 0
 		for i, x in enumerate(self.events):
 			if x.time > time:

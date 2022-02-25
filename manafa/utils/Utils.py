@@ -2,10 +2,12 @@ import os
 from subprocess import Popen, PIPE
 from textops import find
 
+
 def get_reference_dir(packname):
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         #base_dir = sysconfig.get_path("purelib")
         return os.path.join(base_dir, packname)
+
 
 def get_resources_dir(packname="manafa", default_res_dir="resources"):
     ref_dir = get_reference_dir(packname)
