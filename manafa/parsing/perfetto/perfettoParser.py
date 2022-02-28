@@ -26,7 +26,7 @@ def epochToDate(ts):
 ###"""
 
 def interpolate(x1: float, x2: float, y1: float, y2: float, x: float):
-	"""Perform linear interpolation for x between (x1,y1) and (x2,y2) """
+	"""Performs linear interpolation for x between (x1,y1) and (x2,y2) """
 	return ((y2 - y1) * x + x2 * y1 - x1 * y2) / (x2 - x1)  if (x2-x1)>0 else y1
 	#print(val)
 	#print("---")
@@ -40,11 +40,12 @@ class CPU_STATE(Enum):
 	ACTIVE = "active"
 
 class PerfettoCPUEvent(object):
-	"""Stores information regarding each cpu frequency in a given time
-		A perfetto  cpufreq event information, corresponding to a line in an results output file in systrace format
-		Attributes:
-		time: event_time
-		vals: frequency for each cpu of device
+	"""Stores information regarding each cpu frequency in a given time.
+
+	A perfetto  cpufreq event information, corresponding to a line in an results output file in systrace format.
+	Attributes:
+		time: event_time.
+		vals: frequency for each cpu of device.
 	"""
 	def __init__(self, time=0.0, values=[]):
 		self.time=time
@@ -53,13 +54,17 @@ class PerfettoCPUEvent(object):
 			self.vals.append(x)
 
 	def __str__(self):
-		return "time:%f vals =  %s , " % (self.time,str(self.vals))
+		return "time: %f vals =  %s , " % (self.time, str(self.vals))
 
 	def __repr__(self):
 		return str(self)
 
-	def initAll(self, default_len=8, val=0):
-		"""Inits vals for each cpu"""
+	def init_all(self, default_len=8, val=0):
+		"""inits values for each cpu.
+		Args:
+			default_len: number of cores.
+			val: default value.
+		"""
 		for x in range(0, default_len):
 			if len(self.vals) > x:
 				self.vals[x] = val
@@ -75,13 +80,13 @@ class PerfettoCPUEvent(object):
 				self.vals.append(cpu_freq)
 
 
-	def calculateCPUsCurrent(self,state, profile):
-		"""given a power profile and a cpu state, returns the instantaneous current being consumed by all cpu cores in that state
+	def calculate_CPUs_current(self, state, profile):
+		"""given a power profile and a cpu state, returns the instantaneous current being consumed by all cpu cores in that state.
 			Args:
 				state: cpu state in CPU_STATE values
 				profile: power profile class
 		"""
-		total=0
+		total = 0
 		if state not in ["idle", "suspend"]:
 			for core_id, freq in enumerate(self.vals):
 				bf, aft = profile.get_CPU_core_speed_pair(core_id, freq)
@@ -94,20 +99,39 @@ class PerfettoCPUEvent(object):
 
 
 class PerfettoCPUfreqParser(object):
+	"""Parses cpu frequency updates from a log file obtained with perfetto.
+	Attributes:
+		power_profile: current device power profile.
+		start_time: lower timestamp bound to consider.
+		timezone: device timezone.
+	"""
 	def __init__(self, power_profile=None, start_time=0.0, timezone="EST"):
 		self.events = []
 		self.start_time = start_time
 		self.power_profile = self.load_power_profile(power_profile) if power_profile is not None else {}
 
-	def load_power_profile(self, xml_profile):
+	@staticmethod
+	def load_power_profile(xml_profile):
+		"""Loads power profile from xml_profile filepath.
+		Returns:
+			object: power profile file. 
+		"""
 		return PowerProfile(xml_profile)
 
 	def parse_file(self, filename):
+		"""parses filename.
+		Args:
+			filename: path of log file resultant of a profiling session with perfetto.
+		"""
 		with open(filename, 'r') as filehandle:
-			lines=filehandle.read().splitlines()
+			lines = filehandle.read().splitlines()
 			self.parse_history(lines)
 
 	def parse_history(self, lines):
+		"""parses event from lines.
+		Args:
+			lines: list of lines from file.
+		"""
 		for line in lines:
 			if line.startswith("#"):
 				continue
@@ -123,10 +147,16 @@ class PerfettoCPUfreqParser(object):
 			else:
 				raise Exception("Error parsing file")
 
-	def add_event(self, time, cpu_id, cpu_freq):
+	def add_event(self, time: float, cpu_id: int, cpu_freq: int):
+		"""add or update cpu freq event based on values passed as argument.
+		Args:
+			time: timestamp of event.
+			cpu_id: id of cpu.
+			cpu_freq: frequency value.
+		"""
 		if len(self.events) == 0:
 			z = PerfettoCPUEvent(time)
-			z.initAll(default_len=8, val=cpu_freq)
+			z.init_all(default_len=8, val=cpu_freq)
 			self.events.append(z)
 		else:
 			last = self.events[-1]
@@ -135,13 +165,28 @@ class PerfettoCPUfreqParser(object):
 			self.events.append(z)
 
 	def parse_event(self, ev_str):
+		""" parse frequency and cpu id from string.
+		Args:
+			ev_str: string expecting to have the patttern.
+		Returns:
+			cpu_id(int): id of the cpu.
+			cpu_freq(int): frequency value.
+		"""
 		mat = re.match(r'cpu_frequency: state=(\d+) cpu_id=(\d+)', ev_str)
 		if mat:
-			cpu_id=int(mat.groups()[1])
-			cpu_freq=int(mat.groups()[0])
-			return cpu_id,cpu_freq
+			cpu_id = int(mat.groups()[1])
+			cpu_freq = int(mat.groups()[0])
+			return cpu_id, cpu_freq
+		return None
 
 	def get_closest_pair(self, time):
+		"""return the closest indexes of samples to time.
+		Args:
+			time: reference time.
+		Returns:
+			lasti(int): before index.
+			i(int): after index.
+		"""
 		lasti = 0
 		for i, x in enumerate(self.events):
 			if x.time > time:

@@ -7,7 +7,16 @@ from manafa.utils.Utils import execute_shell_command
 
 
 class HunterEManafa(EManafa):
-    """Inits HunterEManafa"""
+    """Class that extends default framework behaviour, allowing to parse app traces from logcat using LogService
+    and estimate battery consumption of app components. it is designed to consider method traces, but it can be used to
+     parse and estimate consumption of source code at other granularity levels.
+
+    Attributes:
+        resources_dir: directory where aux resources are contained.
+        power_profile: the power profile to be used in the profiling sessions.
+        timezone: device timezone.
+        unplugged: if the device is not charging.
+    """
     def __init__(self,
                  power_profile=None,
                  timezone=None,
@@ -25,28 +34,32 @@ class HunterEManafa(EManafa):
         self.not_instrument_file = not_instrument_file
 
     def init(self):
+        """inits inner services.
+        Calls init from super class and also from the log service.
+        """
         super().init()
         self.log_service.init(boot_time=self.boot_time)
 
     def start(self):
-        """starts inner services"""
+        """starts inner services."""
         super().start()
         self.log_service.start()
 
     def stop(self, run_id=None):
-        """starts inner services"""
+        """stops inner services."""
         if run_id is None:
             run_id = execute_shell_command("date +%s")[1].strip()
         self.bts_out_file = self.batterystats.stop(run_id)
         self.pft_out_file = self.perfetto.stop(run_id)
         self.hunter_out_file = self.log_service.stop(run_id)
         log("Perfetto file:  %s" % self.pft_out_file)
-        self.parseResults(self.bts_out_file, self.pft_out_file)
+        self.parse_results(self.bts_out_file, self.pft_out_file)
         if self.unplugged:
             self.plug_back()
         return self.bts_out_file, self.pft_out_file, self.hunter_out_file, self.app_consumptions_log
 
     def calculate_function_consumption(self): #, to_instrument_file, not_instrument_file):
+        """calculates consumption per function called during the profiling session."""
         functions = []
         '''
         with open(to_instrument_file, 'r') as to_instrument_handle:
@@ -76,7 +89,7 @@ class HunterEManafa(EManafa):
                     end = time['end_time']
                 else:
                     end = begin
-                consumption, per_component_consumption, m = self.getConsumptionInBetween(begin, end)
+                consumption, per_component_consumption, m = self.get_consumption_in_between(begin, end)
                 if consumption <= 0 or per_component_consumption['cpu'] <= 0:
                     consumption = 0.0
                     per_component_consumption.update({'cpu': 0.0})
@@ -88,7 +101,7 @@ class HunterEManafa(EManafa):
             #self.app_consumptions.write_consumptions(consumption_log, func_cpu_consumption, function)
         #self.app_consumptions.write_consumptions(consumption_log, total_cpu_consumption)
 
-        hunter_edited = self.hunter_log_parser.add_consumption_to_trace_file(self.hunter_out_file, functions, True)
+        hunter_edited = self.hunter_log_parser.add_cpu_consumption_to_trace_file(self.hunter_out_file, functions, True)
         log("Hunter file:  %s" % hunter_edited)
         self.app_consumptions.app_traces = self.hunter_log_parser.trace
         self.app_consumptions_log = self.app_consumptions.save_function_info(f"functions_{self.boot_time}_results.json", filter_zeros=True)
@@ -102,8 +115,9 @@ class HunterEManafa(EManafa):
         self.app_consumptions.clean()
         self.app_consumptions_log = ""
 
-    def parseResults(self, bts_file=None, pf_file=None, htr_file=None):
-        super().parseResults(bts_file, pf_file)
+    def parse_results(self, bts_file=None, pf_file=None, htr_file=None):
+        """Given the output files from a previous session, it parses and generates results from that session."""
+        super().parse_results(bts_file, pf_file)
         #pf_file = pf_file if pf_file is not None else self.pft_out_file
         #run_id = self.perfetto.get_run_id_from_perfetto_file(pf_file)
         if len(self.bat_events.events) > 0:          

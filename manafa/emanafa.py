@@ -15,12 +15,15 @@ DEFAULT_TIMEZONE = "GMT"
 
 
 def get_last_boot_time(bts_file=None):
-    """Retrieves timestamp of device last boot, either from the batterystats output filename that contains that info or the device itself
-        Args:
-          bts_file:
+    """Retrieves timestamp of device last boot, either from the batterystats output filename that contains that info or
+    the device itself.
 
-        Returns:
-          timestamp as float: secs.ms
+    Args:
+      bts_file(str): filename or filename, whose filename contains the boot time of the respective session where it was
+      recorded.
+
+    Returns:
+      timestamp(float): secs.ms.
     """
     res, out, err = execute_shell_command(
         "adb shell cat /proc/stat | grep btime | awk '{print $2}'")  # executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
@@ -55,18 +58,16 @@ class EManafa(Service):
         pft_out_file: perfetto service output file
         bts_out_file: batterystats output file
     """
-
     def __init__(self, power_profile=None, timezone=None, resources_dir=MANAFA_RESOURCES_DIR):
-        """Inits EManafa"""
         Service.__init__(self)
         self.resources_dir = resources_dir
-        self.power_profile = power_profile if power_profile is not None else self.inferPowerProfile()
+        self.power_profile = power_profile if power_profile is not None else self.infer_power_profile()
         self.boot_time = 0
         log("Power profile file: " + self.power_profile, LogSeverity.INFO)
         self.batterystats = BatteryStatsService()
         self.perf_events = None
         self.perfetto = PerfettoService()
-        self.timezone = timezone if timezone is not None else self.__inferTimezone()
+        self.timezone = timezone if timezone is not None else self.__infer_timezone()
         self.unplugged = False
         self.bat_events = None
         self.pft_out_file = None
@@ -84,34 +85,39 @@ class EManafa(Service):
 
 
     def start(self):
-        """starts inner services"""
+        """starts inner services."""
         self.batterystats.start()
         self.perfetto.start()
 
 
     def stop(self, run_id=None):
-        """starts inner services"""
+        """stops inner services.
+
+        Returns:
+            bts_file(str): path to the resultant batterystats log file.
+            pf_out_file(str): path to the resultant perfetto log file.
+        """
         if run_id is None:
             run_id = execute_shell_command("date +%s")[1].strip()
         self.bts_out_file = self.batterystats.stop(run_id)
         self.pft_out_file = self.perfetto.stop(run_id)
         log("Perfetto file:  %s" % self.pft_out_file)
-        self.parseResults(self.bts_out_file, self.pft_out_file)
+        self.parse_results(self.bts_out_file, self.pft_out_file)
         if self.unplugged:
             self.plug_back()
         return self.bts_out_file, self.pft_out_file
 
 
     def clean(self):
-        """calls clean methods from inner services to clean previous result files"""
+        """calls clean methods from inner services to clean previous result files."""
         self.batterystats.clean()
         self.perfetto.clean()
 
-    def parseResults(self, bts_file=None, pf_file=None):
-        """parses results from output results files of perfetto and batterystats
-            Args:
-                bts_file: batterystats output file. if none, uses self.bts_out_file
-                pf_file: perfetto output file. if none, uses self.pft_out_file
+    def parse_results(self, bts_file=None, pf_file=None):
+        """parses results from output results files of perfetto and batterystats services.
+        Args:
+            bts_file: batterystats output file. if none, uses self.bts_out_file
+            pf_file: perfetto output file. if none, uses self.pft_out_file
         """
         if bts_file is None:
             bts_file = self.bts_out_file
@@ -126,27 +132,36 @@ class EManafa(Service):
         self.perf_events = PerfettoCPUfreqParser(self.power_profile, self.boot_time, timezone=self.timezone)
         self.perf_events.parse_file(pf_file)
 
-    # energy calc related stuff
-    def getConsumptionInBetween(self, start_time=0, end_time=sys.maxsize):
-        """retrieves energy consumption and device events between a timestamp interval
-            Args:
-                start_time: begin timestamp
-                end_time: end timestamp
-            Returns:
-                total: system-level energy consumption
-                per_component: per-component energy consumption
-                metrics: batterystats info containing events occurred during the interval. for each type of event, it
-                presents
+    def get_consumption_in_between(self, start_time=0, end_time=sys.maxsize):
+        """retrieves energy consumption and device events between a timestamp interval.
+
+        Args:
+            start_time: begin timestamp.
+            end_time: end timestamp.
+        Returns:
+            total(float): system-level energy consumption.
+            per_component(dict): per-component energy consumption.
+            metrics(dict): batterystats info containing events occurred during the interval. for each type of event, it
+            presents.
         """
-        total, per_component = self.calculateNonCpuEnergy(start_time, end_time)
-        total_cpu = self.calculateCPUEnergy(start_time, end_time)
+        total, per_component = self.calculate_non_cpu_energy(start_time, end_time)
+        total_cpu = self.calculate_cpu_energy(start_time, end_time)
         metrics = self.bat_events.get_events_in_between(start_time, end_time)
         per_component['cpu'] += total_cpu
-        
         return total + total_cpu, per_component, metrics
 
+    def calculate_glob_and_component_consumption(self, last_event, per_component_consumption, delta_time, total):
+        """ retrieves the global and per-component consumption of a state that lasts delta_time.
+        Args:
+            last_event: the event containing the last state.
+            per_component_consumption: per_component consumption so far.
+            delta_time: duration of the state.
+            total: total consumption so far.
 
-    def calculate_glob_and_component_consumption(self,last_event, per_component_consumption, delta_time, total):
+        Returns:
+            total(float): total consumed (at device level).
+            per_component_consumption(dict): consumption per device component.
+        """
         tot_curr, comps_curr = last_event.get_current_of_batStatEvent()
         total += tot_curr * (last_event.get_voltage_value()) * delta_time
         for comp, comp_curr in comps_curr.items():
@@ -156,14 +171,17 @@ class EManafa(Service):
                 per_component_consumption[comp] += (comp_curr * last_event.get_voltage_value() * delta_time)
         return total, per_component_consumption
 
-    def calculateNonCpuEnergy(self, start_time, end_time):
-        """Obtains energy consumption of device between a timestamp interval for every component except cpu. for cpu retrieves only the state recorded in battarystats
-            Args:
-                start_time: begin timestamp
-                end_time: end timestamp
-            Returns:
-                total: system-level energy consumption without cpu energy consumption
-                per_component: per-component energy consumption without cpu energy consumption
+    def calculate_non_cpu_energy(self, start_time, end_time):
+        """Obtains energy consumption of device between a timestamp interval for every component except cpu. for cpu component,
+        it stores only the state recorded in battarystats.
+        Args:
+            start_time: begin timestamp.
+            end_time: end timestamp.
+
+        Returns:
+            total: system-level energy consumption without cpu energy consumption.
+            per_component: per-component energy consumption without cpu energy consumption.
+
         """
         c_beg_bef, c_beg_aft = self.bat_events.get_closest_pair(start_time)
         if len(self.bat_events.events) == 0:
@@ -198,13 +216,13 @@ class EManafa(Service):
         total, per_component_consumption = self.calculate_glob_and_component_consumption(last_event, per_component_consumption,delta_time, total)
         return total, per_component_consumption
 
-    def calculateCPUEnergy(self, start_time, end_time):
+    def calculate_cpu_energy(self, start_time, end_time):
         """calculates cpu energy consumption of device between a timestamp interval
-            Args:
-                start_time: begin timestamp
-                end_time: end timestamp
-            Returns:
-                total: cpu energy consumption
+        Args:
+            start_time: begin timestamp
+            end_time: end timestamp
+        Returns:
+            total: cpu energy consumption
         """
         if len(self.perf_events.events) == 0:
             raise Exception("Unable no find perfetto samples. Maybe the profiling session or warm-up time wasn't long "
@@ -223,7 +241,7 @@ class EManafa(Service):
             l = self.bat_events.get_CPU_samples_in_between(last_time, end_time)
             for sample in l:
                 delta, state, voltage = sample[0], sample[1], sample[2]
-                cpus_current = last_event.calculateCPUsCurrent(state, self.perf_events.power_profile)
+                cpus_current = last_event.calculate_CPUs_current(state, self.perf_events.power_profile)
                 tot_time += delta
                 total += (cpus_current) * delta * voltage
             return total
@@ -235,7 +253,7 @@ class EManafa(Service):
             # TODO : test to assert if x.time - last_time  = sum( deltas_of_L )
             for sample in l:
                 delta, state, voltage = sample[0], sample[1], sample[2]
-                cpus_current = last_event.calculateCPUsCurrent(state, self.perf_events.power_profile)
+                cpus_current = last_event.calculate_CPUs_current(state, self.perf_events.power_profile)
                 tot_time += delta
                 total += (cpus_current) * delta * voltage
             last_event = x
@@ -246,7 +264,7 @@ class EManafa(Service):
         l = self.bat_events.get_CPU_samples_in_between(last_time, end_time)
         for sample in l:
             delta, state, voltage = sample[0], sample[1], sample[2]
-            cpus_current = last_event.calculateCPUsCurrent(state, self.perf_events.power_profile)
+            cpus_current = last_event.calculate_CPUs_current(state, self.perf_events.power_profile)
             tot_time += delta
             total += (cpus_current) * delta * voltage
         # TODO just like non cpu
@@ -255,13 +273,13 @@ class EManafa(Service):
 
 
 
-    def __extractPowerProfile(self, filename):
-        """ Extracts power_profile.xml file from the device, by pulling framework-res.apk and using apktool to unzip the apk
-            If the process fails, retrieves DEFAULT_PROFILE filepath
-            Args:
-                filename: the target name of the file
-            Returns:
-                filename: the name of the extracted xml file
+    def __extract_power_profile(self, filename):
+        """ Extracts power_profile.xml file from the device, by pulling framework-res.apk and using apktool to unzip the apk.
+        If the process fails, retrieves DEFAULT_PROFILE filepath
+        Args:
+            filename: the target name of the file
+        Returns:
+            filename: the name of the extracted xml file
         """
         # extracting power_profile.xml from device
         res, suc, v = execute_shell_command("adb pull /system/framework/framework-res.apk %s" % self.resources_dir)
@@ -280,11 +298,15 @@ class EManafa(Service):
 
         return DEFAULT_PROFILE
 
-    def inferPowerProfile(self):
-        """picks the most appropriate power profile file. power profile files present in self.resources_dir contains a device model id in the filename, which is determinated by ro.product.model property. if there is an adequate file locally, it retrieves such filename. Otherwise, it extracts the profile from the device using __extractPowerProfile
-            Returns:
-               filename: the name of the  xml file
-       """
+    def infer_power_profile(self):
+        """picks the most appropriate power profile file. power profile files present in self.resources_dir contains a
+        device model id in the filename, which is determinated by ro.product.model property. if there is an adequate
+        file locally, it retrieves such filename. Otherwise, it extracts the profile from the device
+        using __extractPowerProfile.
+
+        Returns:
+            filename: the name of the  xml file.
+        """
         res, device_model, _ = execute_shell_command("adb shell getprop ro.product.model")
         if res == 0 and device_model != "":
             model_profile_file = """power_profile_{device_model}.xml""".format(
@@ -294,16 +316,17 @@ class EManafa(Service):
                 return matching_profiles[0]
             else:
                 # if power profile not present in profiles directory, extract from device
-                power_profile = self.__extractPowerProfile(model_profile_file)
+                power_profile = self.__extract_power_profile(model_profile_file)
                 #print(power_profile)
                 return power_profile
         else:
             return DEFAULT_PROFILE
 
-    def __inferTimezone(self):
-        """ Obtains device timezone. if there is no device connected, returns DEFAULT_TIMEZONE
-            Returns:
-                tz: device timezone
+    @staticmethod
+    def __infer_timezone():
+        """ Obtains device timezone. if there is no device connected, returns DEFAULT_TIMEZONE.
+        Returns:
+            tz(str): device timezone
         """
         res, out, err = execute_shell_command("adb shell date")
         default_tz = DEFAULT_TIMEZONE
@@ -313,8 +336,7 @@ class EManafa(Service):
         return "WET" if default_tz == "WEST" else default_tz
 
     def unplug_if_fully_charged(self):
-        """ virtually unplugs device charger, by calling dumpsys battery unplug
-        """
+        """ virtually unplugs device charger, by calling dumpsys battery unplug."""
         # battery stats file comes empty when battery level == 100
         # using adb to trick device to think it is not charging th battery
         res, o, e = execute_shell_command("adb shell dumpsys battery | grep level | grep 100")

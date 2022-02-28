@@ -27,7 +27,8 @@ def create_manafa(args):
 
 
 def parse_results(args, manafa):
-    manafa.parseResults(args.batstatsfile, args.perfettofile)
+    manafa.parse_results(args.batstatsfile, args.perfettofile)
+
 
 def print_profiled_stats(total_consumption, per_comp_consumption, event_timeline):
     print(f"Total energy consumed: {total_consumption} Joules")
@@ -70,7 +71,7 @@ def main():
     begin = manafa.perf_events.events[0].time  # first sample from perfetto
     
     end = manafa.perf_events.events[-1].time  # last sample from perfetto
-    total, per_c, timeline = manafa.getConsumptionInBetween(begin, end)
+    total, per_c, timeline = manafa.get_consumption_in_between(begin, end)
     print_profiled_stats(total, per_c, timeline)
 
 if __name__ == '__main__':
