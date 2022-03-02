@@ -9,7 +9,7 @@ from manafa.utils.Utils import execute_shell_command
 class HunterEManafa(EManafa):
     """Class that extends default framework behaviour, allowing to parse app traces from logcat using LogService
     and estimate battery consumption of app components. it is designed to consider method traces, but it can be used to
-     parse and estimate consumption of source code at other granularity levels.
+    parse and estimate consumption of source code at other granularity levels.
 
     Attributes:
         resources_dir: directory where aux resources are contained.

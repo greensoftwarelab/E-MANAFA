@@ -22,7 +22,7 @@ copyright = '2021, Rui Rua'
 author = 'Rui Rua'
 
 # The full version, including alpha/beta/rc tags
-release = "1.0.0" # todo
+release = "0.3.5" # todo
 
 
 # -- General configuration ---------------------------------------------------
@@ -32,8 +32,10 @@ release = "1.0.0" # todo
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'recommonmark'
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

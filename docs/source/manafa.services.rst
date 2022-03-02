@@ -4,18 +4,18 @@ manafa.services package
 Submodules
 ----------
 
-manafa.services.batteryStatsService module
-------------------------------------------
+manafa.services.LogService module
+---------------------------------
 
-.. automodule:: manafa.services.batteryStatsService
+.. automodule:: manafa.services.LogService
    :members:
    :undoc-members:
    :show-inheritance:
 
-manafa.services.hunterService module
-------------------------------------
+manafa.services.batteryStatsService module
+------------------------------------------
 
-.. automodule:: manafa.services.hunterService
+.. automodule:: manafa.services.batteryStatsService
    :members:
    :undoc-members:
    :show-inheritance:
