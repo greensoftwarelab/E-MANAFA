@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>manafa.utils.dateUtils &mdash; e-manafa 0.3.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> e-manafa
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">E-MANAFA: Energy Monitor and ANAlyzer For Android</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html#setup">SETUP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html#supported-devices">Supported devices:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html#todo">TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">manafa</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">e-manafa</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>manafa.utils.dateUtils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for manafa.utils.dateUtils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">datetime</span><span class="o">,</span> <span class="nn">pytz</span><span class="o">,</span><span class="nn">time</span>
+
+
+
+<div class="viewcode-block" id="convertToUnixTimestamp"><a class="viewcode-back" href="../../../manafa.utils.html#manafa.utils.dateUtils.convertToUnixTimestamp">[docs]</a><span class="k">def</span> <span class="nf">convertToUnixTimestamp</span><span class="p">(</span><span class="n">batstattime</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">batstattime</span>	</div>
+
+<div class="viewcode-block" id="convertBatStatTimeToTimeStamp"><a class="viewcode-back" href="../../../manafa.utils.html#manafa.utils.dateUtils.convertBatStatTimeToTimeStamp">[docs]</a><span class="k">def</span> <span class="nf">convertBatStatTimeToTimeStamp</span><span class="p">(</span><span class="n">batstattime</span><span class="p">,</span><span class="n">timezone</span><span class="o">=</span><span class="s2">&quot;EST&quot;</span><span class="p">):</span>
+	<span class="c1">#secs=[86400,3600,60,1,0.001]</span>
+	<span class="n">secs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">3600</span><span class="p">,</span> <span class="mi">86400</span><span class="p">]</span>
+	<span class="n">val</span> <span class="o">=</span> <span class="mf">0.0</span>
+	<span class="n">ts</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[a-z]+&#39;</span><span class="p">,</span> <span class="n">batstattime</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+	<span class="n">ts</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+	<span class="n">ts</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+		<span class="c1">#print(x)</span>
+		<span class="n">val</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">secs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="c1">#print(val)</span>
+	<span class="k">return</span> <span class="n">val</span></div>
+	<span class="c1">#d1 =datetime.datetime.strptime(batstattime, &#39;%Y-%m-%d-%H-%M-%S&#39;)</span>
+	<span class="c1">#pst = pytz.timezone(timezone)</span>
+	<span class="c1">#d= pst.localize(d1)</span>
+	<span class="c1">#return time.mktime(d.timetuple())</span>
+
+<div class="viewcode-block" id="batStatResetTimeToTimeStamp"><a class="viewcode-back" href="../../../manafa.utils.html#manafa.utils.dateUtils.batStatResetTimeToTimeStamp">[docs]</a><span class="k">def</span> <span class="nf">batStatResetTimeToTimeStamp</span><span class="p">(</span><span class="n">matime</span><span class="p">,</span> <span class="n">timezone</span><span class="o">=</span><span class="s2">&quot;UTC&quot;</span><span class="p">):</span>
+	<span class="n">d1</span> <span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">matime</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">-%H-%M-%S&#39;</span><span class="p">)</span>
+	<span class="n">pst</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span>
+	<span class="n">d</span><span class="o">=</span> <span class="n">pst</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">d1</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="convertDateToTimeStamp"><a class="viewcode-back" href="../../../manafa.utils.html#manafa.utils.dateUtils.convertDateToTimeStamp">[docs]</a><span class="k">def</span> <span class="nf">convertDateToTimeStamp</span><span class="p">(</span><span class="n">date</span><span class="p">,</span><span class="n">timezone</span><span class="o">=</span><span class="s2">&quot;EST&quot;</span><span class="p">):</span>
+	<span class="n">local</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span>
+	<span class="c1">#time = time.mktime(datetime.datetime.strptime(s, &quot;%d/%m/%Y&quot;).timetuple())</span>
+	<span class="k">return</span> <span class="n">time</span></div>
+	<span class="c1">#return None</span>
+
+<div class="viewcode-block" id="epochToDate"><a class="viewcode-back" href="../../../manafa.utils.html#manafa.utils.dateUtils.epochToDate">[docs]</a><span class="k">def</span> <span class="nf">epochToDate</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span></div>
+
+<span class="c1">#x=&quot;2020-11-17-12-06-18&quot;</span>
+<span class="c1">#z = batStatResetTimeToTimeStamp(x)</span>
+<span class="c1">#print(z)</span>
+<span class="c1">#t2 = &quot;1s394ms&quot;</span>
+<span class="c1">#t2 = &quot;3d23h23m38s126ms&quot;</span>
+<span class="c1">#zz = convertBatStatTimeToTimeStamp(t2)</span>
+<span class="c1">#print(zz)</span>
+<span class="c1">#z = z+zz</span>
+<span class="c1">#print(z)</span>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Rui Rua.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

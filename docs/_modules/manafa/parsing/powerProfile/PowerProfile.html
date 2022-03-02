@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>manafa.parsing.powerProfile.PowerProfile &mdash; e-manafa 0.3.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> e-manafa
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../README.html">E-MANAFA: Energy Monitor and ANAlyzer For Android</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../README.html#setup">SETUP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../README.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../README.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../README.html#supported-devices">Supported devices:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../README.html#todo">TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">manafa</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">e-manafa</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>manafa.parsing.powerProfile.PowerProfile</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for manafa.parsing.powerProfile.PowerProfile</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+
+
+<div class="viewcode-block" id="PowerProfile"><a class="viewcode-back" href="../../../../manafa.parsing.powerProfile.html#manafa.parsing.powerProfile.PowerProfile.PowerProfile">[docs]</a><span class="k">class</span> <span class="nc">PowerProfile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Stores information regarding devices&#39; power profile xml file.</span>
+
+<span class="sd">	Stores information about the file and each  pair component, current contained in the file.</span>
+<span class="sd">	Attributes:</span>
+<span class="sd">		filename(str): path of power profile file.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__read_power_profile</span><span class="p">()</span>
+		<span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PowerProfile.add_component"><a class="viewcode-back" href="../../../../manafa.parsing.powerProfile.html#manafa.parsing.powerProfile.PowerProfile.PowerProfile.add_component">[docs]</a>	<span class="k">def</span> <span class="nf">add_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;adds component to current state.</span>
+<span class="sd">		Args:</span>
+<span class="sd">			component (dict): component info.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="n">component</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">component</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_two_dicts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">component</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">states</span> <span class="p">,</span> <span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">states</span><span class="p">))</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">component</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">component</span></div>
+
+<div class="viewcode-block" id="PowerProfile.merge_two_dicts"><a class="viewcode-back" href="../../../../manafa.parsing.powerProfile.html#manafa.parsing.powerProfile.PowerProfile.PowerProfile.merge_two_dicts">[docs]</a>	<span class="nd">@staticmethod</span>
+	<span class="k">def</span> <span class="nf">merge_two_dicts</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+		<span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="n">z</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">z</span></div>
+
+	<span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+		<span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+		<span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>				
+
+	<span class="k">def</span> <span class="nf">__read_power_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;parses power profile xml file.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+			<span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exception: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+			<span class="k">return</span> <span class="kc">None</span>
+		
+		<span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;item&quot;</span><span class="p">:</span>
+				<span class="n">ll</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+				<span class="n">begin_d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span>
+				<span class="k">for</span> <span class="n">at</span> <span class="ow">in</span> <span class="n">ll</span><span class="p">:</span>
+					<span class="n">begin_d</span><span class="p">[</span><span class="n">at</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">at</span> <span class="ow">in</span> <span class="n">begin_d</span> <span class="k">else</span> <span class="n">begin_d</span><span class="p">[</span><span class="n">at</span><span class="p">]</span>
+					<span class="n">last_b</span> <span class="o">=</span> <span class="n">begin_d</span>
+					<span class="n">begin_d</span> <span class="o">=</span> <span class="n">begin_d</span><span class="p">[</span><span class="n">at</span><span class="p">]</span>
+				<span class="n">last_b</span><span class="p">[</span><span class="n">at</span><span class="p">]</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+			<span class="k">elif</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;array&quot;</span><span class="p">:</span>
+				<span class="n">ll</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+				<span class="n">begin_d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span>
+				<span class="k">for</span> <span class="n">at</span> <span class="ow">in</span> <span class="n">ll</span><span class="p">:</span>
+					<span class="n">begin_d</span><span class="p">[</span><span class="n">at</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span> <span class="k">if</span> <span class="n">at</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">begin_d</span> <span class="k">else</span> <span class="n">begin_d</span><span class="p">[</span><span class="n">at</span><span class="p">]</span>
+					<span class="n">last_b</span> <span class="o">=</span> <span class="n">begin_d</span>
+					<span class="n">begin_d</span> <span class="o">=</span> <span class="n">begin_d</span><span class="p">[</span><span class="n">at</span><span class="p">]</span>
+				<span class="n">last_b</span><span class="p">[</span><span class="n">at</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="nb">map</span><span class="p">(</span> <span class="k">lambda</span> <span class="n">xxz</span> <span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">xxz</span><span class="o">.</span><span class="n">text</span><span class="p">),</span>  <span class="nb">list</span><span class="p">(</span><span class="n">child</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="PowerProfile.get_CPU_state_current"><a class="viewcode-back" href="../../../../manafa.parsing.powerProfile.html#manafa.parsing.powerProfile.PowerProfile.PowerProfile.get_CPU_state_current">[docs]</a>	<span class="k">def</span> <span class="nf">get_CPU_state_current</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;retrieves the current consumed by cpu at a given state.</span>
+<span class="sd">		Args:</span>
+<span class="sd">			state: given state.</span>
+
+<span class="sd">		Returns:</span>
+<span class="sd">			current: the current being consumed.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">][</span><span class="n">state</span><span class="p">]</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">][</span><span class="s2">&quot;active&quot;</span><span class="p">]</span></div>
+
+	<span class="c1"># returns pair with closest_val_before_freq,closest_val_after_freq</span>
+<div class="viewcode-block" id="PowerProfile.get_CPU_core_speed_pair"><a class="viewcode-back" href="../../../../manafa.parsing.powerProfile.html#manafa.parsing.powerProfile.PowerProfile.PowerProfile.get_CPU_core_speed_pair">[docs]</a>	<span class="k">def</span> <span class="nf">get_CPU_core_speed_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">core_id</span><span class="p">,</span> <span class="n">core_freq</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;retrieves a pair with the before and after closest frequency values for a core identified by core_id at a given frequency.</span>
+
+<span class="sd">		Power profile file stores current values measured at specific fixed frequencies. Many times, a given core is running at a frequency</span>
+<span class="sd">		different from the ones recorded in file. In order to estimate the current consumption at core_freq, there is need to  interpolate</span>
+<span class="sd">		the closest recorded values.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			core_id: core id.</span>
+<span class="sd">			core_freq: core frequency.</span>
+
+<span class="sd">		Returns:</span>
+<span class="sd">			fst_pair: before value.</span>
+<span class="sd">			snd_pair: after value.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">profile_speeds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">][</span><span class="s2">&quot;speeds&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;speeds&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">]</span><span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">][</span><span class="s2">&quot;core_speeds&quot;</span><span class="p">]</span>
+		<span class="n">profile_currents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">][</span><span class="s2">&quot;active&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;speeds&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">][</span><span class="s2">&quot;active&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">))</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">][</span><span class="s2">&quot;core_power&quot;</span><span class="p">]</span>
+
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">profile_speeds</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+			<span class="c1"># select respective cluster of core_id	</span>
+			<span class="n">core_r</span> <span class="o">=</span> <span class="n">core_id</span> <span class="o">+</span> <span class="mi">1</span>
+			<span class="n">cluster_cores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">][</span><span class="s2">&quot;clusters&quot;</span><span class="p">][</span><span class="s2">&quot;cores&quot;</span><span class="p">]</span>
+			<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ncores</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cluster_cores</span><span class="p">):</span>
+				<span class="k">if</span> <span class="n">core_r</span> <span class="o">&gt;</span> <span class="n">ncores</span><span class="p">:</span>
+					<span class="n">core_r</span> <span class="o">=</span> <span class="n">core_r</span> <span class="o">-</span> <span class="n">ncores</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">profile_speeds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">][</span><span class="s2">&quot;core_speeds&quot;</span><span class="p">][</span><span class="s2">&quot;cluster</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span>
+					<span class="n">profile_currents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">][</span><span class="s2">&quot;core_power&quot;</span><span class="p">][</span><span class="s2">&quot;cluster</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span>
+					<span class="k">break</span>
+		<span class="n">mini_fr</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="n">freq</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="c1"># find adequate freq</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">profile_speeds</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">f</span> <span class="o">&gt;=</span> <span class="n">core_freq</span><span class="p">:</span>
+				<span class="n">freq</span> <span class="o">=</span> <span class="n">i</span>
+				<span class="k">break</span>
+			<span class="n">mini_fr</span> <span class="o">=</span> <span class="n">i</span>
+		<span class="n">fst_pair</span> <span class="o">=</span> <span class="p">(</span><span class="n">profile_speeds</span><span class="p">[</span><span class="n">mini_fr</span><span class="p">],</span> <span class="n">profile_currents</span><span class="p">[</span><span class="n">mini_fr</span><span class="p">])</span>
+		<span class="n">snd_pair</span> <span class="o">=</span> <span class="p">(</span><span class="n">profile_speeds</span><span class="p">[</span><span class="n">freq</span><span class="p">],</span> <span class="n">profile_currents</span><span class="p">[</span><span class="n">freq</span><span class="p">])</span>
+		<span class="k">return</span> <span class="n">fst_pair</span><span class="p">,</span> <span class="n">snd_pair</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="n">power_profile</span> <span class="o">=</span> <span class="n">PowerProfile</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+		<span class="nb">print</span><span class="p">(</span><span class="n">power_profile</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Rui Rua.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
