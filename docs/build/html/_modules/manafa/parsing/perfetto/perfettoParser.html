@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>manafa.parsing.perfetto.perfettoParser &mdash; e-manafa 0.3.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> e-manafa
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">e-manafa</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>manafa.parsing.perfetto.perfettoParser</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for manafa.parsing.perfetto.perfettoParser</h1><div class="highlight"><pre>
+<span></span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">from</span> <span class="nn">manafa.parsing.powerProfile.PowerProfile</span> <span class="kn">import</span> <span class="n">PowerProfile</span>
+
+<span class="n">x</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;import time</span>
+<span class="s2">import subprocess</span>
+<span class="s2">def executeShCommand(command):</span>
+
+<span class="s2">    pipes = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)</span>
+<span class="s2">    std_out, std_err = pipes.communicate()</span>
+<span class="s2">    output = std_out.decode(&quot;utf-8&quot;).lower()</span>
+<span class="s2">    if pipes.returncode != 0:</span>
+<span class="s2">        err_msg = &quot;</span><span class="si">%s</span><span class="s2">. Code: </span><span class="si">%s</span><span class="s2">&quot; % (std_err.decode(&#39;utf-8&#39;).strip(), pipes.returncode)</span>
+<span class="s2">        print(&quot;error executing command </span><span class="si">%s</span><span class="s2">&quot; </span><span class="si">% c</span><span class="s2">ommand)</span>
+<span class="s2">        print(err_msg)</span>
+<span class="s2">        return -1    </span>
+<span class="s2">    elif len(std_err)==0:</span>
+<span class="s2">        return output</span>
+
+
+<span class="s2">def epochToDate(ts):</span>
+<span class="s2">	return time.ctime(ts)</span>
+<span class="s2">###&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="interpolate"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.interpolate">[docs]</a><span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="n">x1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">y2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Performs linear interpolation for x between (x1,y1) and (x2,y2) &quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="p">((</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">x2</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">x1</span> <span class="o">*</span> <span class="n">y2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span>  <span class="k">if</span> <span class="p">(</span><span class="n">x2</span><span class="o">-</span><span class="n">x1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="n">y1</span></div>
+	<span class="c1">#print(val)</span>
+	<span class="c1">#print(&quot;---&quot;)</span>
+	<span class="c1">#return val</span>
+
+
+<div class="viewcode-block" id="CPU_STATE"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.CPU_STATE">[docs]</a><span class="k">class</span> <span class="nc">CPU_STATE</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+	<span class="n">SUSPEND</span> <span class="o">=</span> <span class="s2">&quot;suspend&quot;</span>
+	<span class="n">IDLE</span> <span class="o">=</span> <span class="s2">&quot;idle&quot;</span>
+	<span class="n">AWAKE</span> <span class="o">=</span> <span class="s2">&quot;awake&quot;</span>
+	<span class="n">ACTIVE</span> <span class="o">=</span> <span class="s2">&quot;active&quot;</span></div>
+
+<div class="viewcode-block" id="PerfettoCPUEvent"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent">[docs]</a><span class="k">class</span> <span class="nc">PerfettoCPUEvent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Stores information regarding each cpu frequency in a given time.</span>
+
+<span class="sd">	A perfetto  cpufreq event information, corresponding to a line in an results output file in systrace format.</span>
+<span class="sd">	Attributes:</span>
+<span class="sd">		time: event_time.</span>
+<span class="sd">		vals: frequency for each cpu of device.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">[]):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">=</span><span class="n">time</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="o">=</span><span class="p">[]</span>
+		<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="s2">&quot;time: </span><span class="si">%f</span><span class="s2"> vals =  </span><span class="si">%s</span><span class="s2"> , &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="p">))</span>
+
+	<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PerfettoCPUEvent.init_all"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.init_all">[docs]</a>	<span class="k">def</span> <span class="nf">init_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_len</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;inits values for each cpu.</span>
+<span class="sd">		Args:</span>
+<span class="sd">			default_len: number of cores.</span>
+<span class="sd">			val: default value.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">default_len</span><span class="p">):</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PerfettoCPUEvent.update"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.update">[docs]</a>	<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpu_id</span><span class="p">,</span><span class="n">cpu_freq</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;update/insert cpufreq val for each cpu id&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">cpu_id</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="p">[</span><span class="n">cpu_id</span><span class="p">]</span><span class="o">=</span><span class="n">cpu_freq</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">cpu_id</span><span class="p">):</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpu_freq</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PerfettoCPUEvent.calculate_CPUs_current"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.calculate_CPUs_current">[docs]</a>	<span class="k">def</span> <span class="nf">calculate_CPUs_current</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">profile</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;given a power profile and a cpu state, returns the instantaneous current being consumed by all cpu cores in that state.</span>
+<span class="sd">			Args:</span>
+<span class="sd">				state: cpu state in CPU_STATE values</span>
+<span class="sd">				profile: power profile class</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">if</span> <span class="n">state</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;idle&quot;</span><span class="p">,</span> <span class="s2">&quot;suspend&quot;</span><span class="p">]:</span>
+			<span class="k">for</span> <span class="n">core_id</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="p">):</span>
+				<span class="n">bf</span><span class="p">,</span> <span class="n">aft</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_CPU_core_speed_pair</span><span class="p">(</span><span class="n">core_id</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span>
+				<span class="n">lin_inter_val</span> <span class="o">=</span> <span class="n">interpolate</span><span class="p">(</span><span class="n">bf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">aft</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">aft</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">freq</span><span class="p">)</span>
+				<span class="n">total</span> <span class="o">+=</span> <span class="n">lin_inter_val</span>
+			<span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vals</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">total</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get_CPU_state_current</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">total</span> <span class="o">/</span> <span class="mi">1000</span></div></div>
+
+
+<div class="viewcode-block" id="PerfettoCPUfreqParser"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser">[docs]</a><span class="k">class</span> <span class="nc">PerfettoCPUfreqParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Parses cpu frequency updates from a log file obtained with perfetto.</span>
+<span class="sd">	Attributes:</span>
+<span class="sd">		power_profile: current device power profile.</span>
+<span class="sd">		start_time: lower timestamp bound to consider.</span>
+<span class="sd">		timezone: device timezone.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power_profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">timezone</span><span class="o">=</span><span class="s2">&quot;EST&quot;</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">start_time</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">power_profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_power_profile</span><span class="p">(</span><span class="n">power_profile</span><span class="p">)</span> <span class="k">if</span> <span class="n">power_profile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="PerfettoCPUfreqParser.load_power_profile"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.load_power_profile">[docs]</a>	<span class="nd">@staticmethod</span>
+	<span class="k">def</span> <span class="nf">load_power_profile</span><span class="p">(</span><span class="n">xml_profile</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Loads power profile from xml_profile filepath.</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			object: power profile file. </span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="n">PowerProfile</span><span class="p">(</span><span class="n">xml_profile</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PerfettoCPUfreqParser.parse_file"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.parse_file">[docs]</a>	<span class="k">def</span> <span class="nf">parse_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;parses filename.</span>
+<span class="sd">		Args:</span>
+<span class="sd">			filename: path of log file resultant of a profiling session with perfetto.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">filehandle</span><span class="p">:</span>
+			<span class="n">lines</span> <span class="o">=</span> <span class="n">filehandle</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">parse_history</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PerfettoCPUfreqParser.parse_history"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.parse_history">[docs]</a>	<span class="k">def</span> <span class="nf">parse_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;parses event from lines.</span>
+<span class="sd">		Args:</span>
+<span class="sd">			lines: list of lines from file.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
+				<span class="k">continue</span>
+			<span class="n">z</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*([^\s]+)\-(\d+)\s*\(\s*(\d+|\-+)\) \[(\d+)\] (\d+|\.+) ([0-9]*\.[0-9]+|[0-9]+)\: (.*)?$&quot;</span><span class="p">,</span><span class="n">line</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+				<span class="n">time</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">5</span><span class="p">])</span>
+				<span class="n">time</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
+				<span class="n">ev_pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_event</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">6</span><span class="p">])</span>
+				<span class="k">if</span> <span class="n">ev_pair</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+					<span class="n">cpu_id</span> <span class="o">=</span> <span class="n">ev_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+					<span class="n">cpu_freq</span> <span class="o">=</span> <span class="n">ev_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">cpu_id</span><span class="p">,</span> <span class="n">cpu_freq</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error parsing file&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PerfettoCPUfreqParser.add_event"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.add_event">[docs]</a>	<span class="k">def</span> <span class="nf">add_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cpu_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cpu_freq</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;add or update cpu freq event based on values passed as argument.</span>
+<span class="sd">		Args:</span>
+<span class="sd">			time: timestamp of event.</span>
+<span class="sd">			cpu_id: id of cpu.</span>
+<span class="sd">			cpu_freq: frequency value.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">z</span> <span class="o">=</span> <span class="n">PerfettoCPUEvent</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+			<span class="n">z</span><span class="o">.</span><span class="n">init_all</span><span class="p">(</span><span class="n">default_len</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">cpu_freq</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+			<span class="n">z</span> <span class="o">=</span> <span class="n">PerfettoCPUEvent</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">last</span><span class="o">.</span><span class="n">vals</span><span class="p">)</span>
+			<span class="n">z</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cpu_id</span><span class="p">,</span><span class="n">cpu_freq</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PerfettoCPUfreqParser.parse_event"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.parse_event">[docs]</a>	<span class="k">def</span> <span class="nf">parse_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev_str</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; parse frequency and cpu id from string.</span>
+<span class="sd">		Args:</span>
+<span class="sd">			ev_str: string expecting to have the patttern.</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			cpu_id(int): id of the cpu.</span>
+<span class="sd">			cpu_freq(int): frequency value.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">mat</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;cpu_frequency: state=(\d+) cpu_id=(\d+)&#39;</span><span class="p">,</span> <span class="n">ev_str</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">mat</span><span class="p">:</span>
+			<span class="n">cpu_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mat</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+			<span class="n">cpu_freq</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mat</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+			<span class="k">return</span> <span class="n">cpu_id</span><span class="p">,</span> <span class="n">cpu_freq</span>
+		<span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="PerfettoCPUfreqParser.get_closest_pair"><a class="viewcode-back" href="../../../../manafa.parsing.perfetto.html#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.get_closest_pair">[docs]</a>	<span class="k">def</span> <span class="nf">get_closest_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;return the closest indexes of samples to time.</span>
+<span class="sd">		Args:</span>
+<span class="sd">			time: reference time.</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			lasti(int): before index.</span>
+<span class="sd">			i(int): after index.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">lasti</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;</span> <span class="n">time</span><span class="p">:</span>
+				<span class="k">return</span> <span class="n">lasti</span><span class="p">,</span> <span class="n">i</span>
+			<span class="n">lasti</span> <span class="o">=</span> <span class="n">i</span>
+		<span class="k">return</span> <span class="n">lasti</span><span class="p">,</span> <span class="n">lasti</span></div></div>
+
+<span class="c1">#bootTime = float ( executeShCommand (&quot;adb shell cat /proc/stat | grep btime | awk &#39;{print $2}&#39;&quot;).strip() )</span>
+<span class="c1">#print(bootTime)</span>
+<span class="c1">#print(epochToDate(bootTime))</span>
+<span class="c1">#x = PerfettoCPUfreqParser(bootTime)</span>
+<span class="c1">#x.parseFile(&quot;/Users/ruirua/repos/petra_like/results/perfetto/trace-1605638909.systrace&quot;)</span>
+<span class="c1">#print(x.events)</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Rui Rua.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,557 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>manafa.services package &mdash; e-manafa 0.3.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="manafa.tests package" href="manafa.tests.html" />
+    <link rel="prev" title="manafa.resources.profiles package" href="manafa.resources.profiles.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> e-manafa
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">manafa</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="manafa.html">manafa package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="manafa.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="manafa.parsing.html">manafa.parsing package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="manafa.resources.html">manafa.resources package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">manafa.services package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="manafa.tests.html">manafa.tests package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="manafa.utils.html">manafa.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="manafa.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manafa.html#module-manafa.emanafa">manafa.emanafa module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manafa.html#module-manafa.hunter_emanafa">manafa.hunter_emanafa module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manafa.html#module-manafa.main">manafa.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manafa.html#module-manafa">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">e-manafa</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">manafa</a> &raquo;</li>
+        
+          <li><a href="manafa.html">manafa package</a> &raquo;</li>
+        
+      <li>manafa.services package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/manafa.services.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="manafa-services-package">
+<h1>manafa.services package<a class="headerlink" href="#manafa-services-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-manafa.services.LogService">
+<span id="manafa-services-logservice-module"></span><h2>manafa.services.LogService module<a class="headerlink" href="#module-manafa.services.LogService" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="manafa.services.LogService.LogService">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">manafa.services.LogService.</span></span><span class="sig-name descname"><span class="pre">LogService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boot_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_res_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hunter'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/LogService.html#LogService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.LogService.LogService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#manafa.services.service.Service" title="manafa.services.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">manafa.services.service.Service</span></code></a></p>
+<p>Class that manages the device’s log.</p>
+<dl class="simple">
+<dt>This class is responsible by cleaning the log before each execution of the framework, as well as dump the log</dt><dd><p>right after each execution.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.services.LogService.LogService.boot_time">
+<span class="sig-name descname"><span class="pre">boot_time</span></span><a class="headerlink" href="#manafa.services.LogService.LogService.boot_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>timestamp of the device’s last boot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.services.LogService.LogService.output_res_folder">
+<span class="sig-name descname"><span class="pre">output_res_folder</span></span><a class="headerlink" href="#manafa.services.LogService.LogService.output_res_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>folder where the logs will be stored after each profiling session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.LogService.LogService.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/LogService.html#LogService.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.LogService.LogService.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>cleans device log state and removes files from previous runs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.LogService.LogService.config">
+<span class="sig-name descname"><span class="pre">config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/LogService.html#LogService.config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.LogService.LogService.config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.LogService.LogService.get_results_filename">
+<span class="sig-name descname"><span class="pre">get_results_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/LogService.html#LogService.get_results_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.LogService.LogService.get_results_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the name of the output file.
+:returns: the name of the output file.
+:rtype: output_name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.LogService.LogService.init">
+<span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boot_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/LogService.html#LogService.init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.LogService.LogService.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>inits the class.
+:param boot_time: device boot timestamp.
+:param **kwargs:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.LogService.LogService.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/LogService.html#LogService.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.LogService.LogService.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>starts the profiling session.</p>
+<p>Calls clean() to discard logs prior to the start of the session.
+:param run_id: current session/run id.  Considered only for API compat purposes.
+:type run_id: str</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.LogService.LogService.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/LogService.html#LogService.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.LogService.LogService.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>stops the profiling session.</p>
+<p>Dump the logs in output file.
+:returns: the name of the output file.
+:rtype: filename</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-manafa.services.batteryStatsService">
+<span id="manafa-services-batterystatsservice-module"></span><h2>manafa.services.batteryStatsService module<a class="headerlink" href="#module-manafa.services.batteryStatsService" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="manafa.services.batteryStatsService.BatteryStatsService">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">manafa.services.batteryStatsService.</span></span><span class="sig-name descname"><span class="pre">BatteryStatsService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boot_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_res_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'batterystats'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/batteryStatsService.html#BatteryStatsService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.batteryStatsService.BatteryStatsService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#manafa.services.service.Service" title="manafa.services.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">manafa.services.service.Service</span></code></a></p>
+<p>Class that manages the battery stats service state.</p>
+<p>This class is responsible by cleaning the service state before each execution of the framework, as well as record
+its state right after each execution.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.services.batteryStatsService.BatteryStatsService.boot_time">
+<span class="sig-name descname"><span class="pre">boot_time</span></span><a class="headerlink" href="#manafa.services.batteryStatsService.BatteryStatsService.boot_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>timestamp of the device’s last boot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.services.batteryStatsService.BatteryStatsService.output_res_folder">
+<span class="sig-name descname"><span class="pre">output_res_folder</span></span><a class="headerlink" href="#manafa.services.batteryStatsService.BatteryStatsService.output_res_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>folder where the logs will be stored after each profiling session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.batteryStatsService.BatteryStatsService.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/batteryStatsService.html#BatteryStatsService.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.batteryStatsService.BatteryStatsService.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>cleans data from previous run(s).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.batteryStatsService.BatteryStatsService.config">
+<span class="sig-name descname"><span class="pre">config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/batteryStatsService.html#BatteryStatsService.config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.batteryStatsService.BatteryStatsService.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the same as Zaidu when Conceicao asks him to cross.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.batteryStatsService.BatteryStatsService.init">
+<span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boot_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/batteryStatsService.html#BatteryStatsService.init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.batteryStatsService.BatteryStatsService.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>inits the service.
+:param boot_time:
+:param **kwargs:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.batteryStatsService.BatteryStatsService.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/batteryStatsService.html#BatteryStatsService.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.batteryStatsService.BatteryStatsService.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>starts the service.</p>
+<p>Resets the service state in order to forget previous recorded information. this helps to save storage and time by
+discarding events prior to the start of the profiling session.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.batteryStatsService.BatteryStatsService.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/batteryStatsService.html#BatteryStatsService.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.batteryStatsService.BatteryStatsService.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>stops the service.</p>
+<p>To be called when the profiling session is over. Saves the recorded events in results_dir folder.
+:param run_id: current session id.
+:type run_id: str</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-manafa.services.perfettoService">
+<span id="manafa-services-perfettoservice-module"></span><h2>manafa.services.perfettoService module<a class="headerlink" href="#module-manafa.services.perfettoService" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">manafa.services.perfettoService.</span></span><span class="sig-name descname"><span class="pre">PerfettoService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boot_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_res_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'perfetto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_out_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/data/misc/perfetto-traces'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'perfetto.config.bin'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/perfettoService.html#PerfettoService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#manafa.services.service.Service" title="manafa.services.service.Service"><code class="xref py py-class docutils literal notranslate"><span class="pre">manafa.services.service.Service</span></code></a></p>
+<p>Class that manages the perfetto service.</p>
+<p>This class is responsible by starting and stopping the perfetto service at the start and stop of the profiiling session.
+.. attribute:: boot_time</p>
+<blockquote>
+<div><p>timestamp of the device’s last boot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService.output_res_folder">
+<span class="sig-name descname"><span class="pre">output_res_folder</span></span><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService.output_res_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>folder where the logs will be stored after each profiling session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService.default_out_dir">
+<span class="sig-name descname"><span class="pre">default_out_dir</span></span><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService.default_out_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>device default results dir.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService.cfg_file">
+<span class="sig-name descname"><span class="pre">cfg_file</span></span><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService.cfg_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>devi</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/perfettoService.html#PerfettoService.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>wipes results from previous runs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService.config">
+<span class="sig-name descname"><span class="pre">config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/perfettoService.html#PerfettoService.config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService.config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/perfettoService.html#PerfettoService.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports results from previous runs.
+last_exported: path of last exported file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService.get_run_id_from_perfetto_file">
+<span class="sig-name descname"><span class="pre">get_run_id_from_perfetto_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">perfetto_filepath</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/perfettoService.html#PerfettoService.get_run_id_from_perfetto_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService.get_run_id_from_perfetto_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns profiling session id given its filepath</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService.init">
+<span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boot_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/perfettoService.html#PerfettoService.init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>inits the service.
+Resets boot time and cleans files from previous runs.
+:param boot_time: timestamp of the device’s last boot.
+:param **kwargs:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/perfettoService.html#PerfettoService.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>start profiling session.</p>
+<p>Starts perfetto service, using the config file cfg_file as input.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.perfettoService.PerfettoService.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/perfettoService.html#PerfettoService.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.perfettoService.PerfettoService.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the profiling session and exports results.</p>
+<p>Stops the perfetto service and pulls the results from device. Afterwards, it exports the pulled results using
+traceconv, returning the path to the last exported file as result.
+:param file_id: run id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>path of last exported file.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>last_exported</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-manafa.services.service">
+<span id="manafa-services-service-module"></span><h2>manafa.services.service module<a class="headerlink" href="#module-manafa.services.service" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="manafa.services.service.Service">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">manafa.services.service.</span></span><span class="sig-name descname"><span class="pre">Service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/service.html#Service"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.service.Service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Reference class for managing the lifecycle of a task need during the profiling session.</p>
+<blockquote>
+<div><p>This class is responsible by starting and stopping the perfetto service at the start and stop of the profiiling session.</p>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.services.service.Service.results_dir">
+<span class="sig-name descname"><span class="pre">results_dir</span></span><a class="headerlink" href="#manafa.services.service.Service.results_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>folder where the logs will be stored after each profiling session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.service.Service.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/service.html#Service.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.service.Service.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>wipes results from previous runs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.service.Service.config">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/service.html#Service.config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.service.Service.config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.service.Service.save_results">
+<span class="sig-name descname"><span class="pre">save_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/service.html#Service.save_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.service.Service.save_results" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.service.Service.start">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/service.html#Service.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.service.Service.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.services.service.Service.stop">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/services/service.html#Service.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.services.service.Service.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-manafa.services">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-manafa.services" title="Permalink to this headline">¶</a></h2>
+<p>A one line summary of the module or program, terminated by a period.</p>
+<p>Leave one blank line.  The rest of this docstring should contain an
+overall description of the module or program.  Optionally, it may also
+contain a brief description of exported classes and functions and/or usage
+examples.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="manafa.tests.html" class="btn btn-neutral float-right" title="manafa.tests package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="manafa.resources.profiles.html" class="btn btn-neutral float-left" title="manafa.resources.profiles package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Rui Rua.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

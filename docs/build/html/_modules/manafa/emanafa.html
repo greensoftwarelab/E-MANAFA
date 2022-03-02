@@ -1,0 +1,553 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>manafa.emanafa &mdash; e-manafa 0.3.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> e-manafa
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">e-manafa</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>manafa.emanafa</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for manafa.emanafa</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">manafa.services.batteryStatsService</span> <span class="kn">import</span> <span class="n">BatteryStatsService</span>
+<span class="kn">from</span> <span class="nn">manafa.services.service</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">manafa.services.perfettoService</span> <span class="kn">import</span> <span class="n">PerfettoService</span>
+<span class="kn">from</span> <span class="nn">manafa.parsing.perfetto.perfettoParser</span> <span class="kn">import</span> <span class="n">PerfettoCPUfreqParser</span>
+<span class="kn">from</span> <span class="nn">manafa.parsing.batteryStats.BatteryStatsParser</span> <span class="kn">import</span> <span class="n">BatteryStatsParser</span>
+<span class="kn">from</span> <span class="nn">manafa.utils.Logger</span> <span class="kn">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">LogSeverity</span>
+<span class="kn">from</span> <span class="nn">manafa.utils.Utils</span> <span class="kn">import</span> <span class="n">execute_shell_command</span><span class="p">,</span> <span class="n">mega_find</span><span class="p">,</span> <span class="n">get_resources_dir</span><span class="p">,</span> <span class="n">is_float</span>
+
+<span class="n">MANAFA_RESOURCES_DIR</span> <span class="o">=</span> <span class="n">get_resources_dir</span><span class="p">()</span>
+
+<span class="n">DEFAULT_PROFILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">MANAFA_RESOURCES_DIR</span><span class="p">,</span> <span class="s2">&quot;profiles&quot;</span><span class="p">,</span> <span class="s2">&quot;power_profile.xml&quot;</span><span class="p">)</span>
+<span class="n">DEFAULT_TIMEZONE</span> <span class="o">=</span> <span class="s2">&quot;GMT&quot;</span>
+
+
+<div class="viewcode-block" id="get_last_boot_time"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.get_last_boot_time">[docs]</a><span class="k">def</span> <span class="nf">get_last_boot_time</span><span class="p">(</span><span class="n">bts_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Retrieves timestamp of device last boot, either from the batterystats output filename that contains that info or</span>
+<span class="sd">    the device itself.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      bts_file(str): filename or filename, whose filename contains the boot time of the respective session where it was</span>
+<span class="sd">      recorded.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      timestamp(float): secs.ms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">execute_shell_command</span><span class="p">(</span>
+        <span class="s2">&quot;adb shell cat /proc/stat | grep btime | awk &#39;{print $2}&#39;&quot;</span><span class="p">)</span>  <span class="c1"># executeShCommand(&quot;adb shell cat /proc/stat | grep btime | awk &#39;{print $2}&#39;&quot;)</span>
+    <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;no device connected. Assuming Boot time of battery stats file&quot;</span><span class="p">,</span> <span class="n">LogSeverity</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+        <span class="n">flds</span> <span class="o">=</span> <span class="n">bts_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">bts_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">flds</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">boot_time</span> <span class="o">=</span> <span class="n">flds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.log&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;Boot time: &quot;</span> <span class="o">+</span> <span class="n">boot_time</span><span class="p">,</span> <span class="n">LogSeverity</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">boot_time</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;no device connected. Assuming Boot time 0&quot;</span><span class="p">,</span> <span class="n">LogSeverity</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="c1"># raise Exception(&quot;Invalid boot time &quot;)</span>
+    <span class="c1"># print(&quot;[Warning]: no device connected. Assuming Boot time %d&quot; % boot_time)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="EManafa"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa">[docs]</a><span class="k">class</span> <span class="nc">EManafa</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Main class that abstracts all the modules and steps of the profiling procedure</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        resources_dir: directory where aux resources are contained</span>
+<span class="sd">        power_profile: the power profile to be used in the profiling sessions</span>
+<span class="sd">        boot_time: device&#39;s last boot timestamp</span>
+<span class="sd">        batterystats: batterystats service</span>
+<span class="sd">        perfetto: perfetto service</span>
+<span class="sd">        timezone: device timezone</span>
+<span class="sd">        unplugged: if the device is not charging</span>
+<span class="sd">        bat_events: Batterystats parser</span>
+<span class="sd">        pft_out_file: perfetto service output file</span>
+<span class="sd">        bts_out_file: batterystats output file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power_profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timezone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resources_dir</span><span class="o">=</span><span class="n">MANAFA_RESOURCES_DIR</span><span class="p">):</span>
+        <span class="n">Service</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources_dir</span> <span class="o">=</span> <span class="n">resources_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_profile</span> <span class="o">=</span> <span class="n">power_profile</span> <span class="k">if</span> <span class="n">power_profile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">infer_power_profile</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;Power profile file: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">power_profile</span><span class="p">,</span> <span class="n">LogSeverity</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batterystats</span> <span class="o">=</span> <span class="n">BatteryStatsService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perfetto</span> <span class="o">=</span> <span class="n">PerfettoService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timezone</span> <span class="o">=</span> <span class="n">timezone</span> <span class="k">if</span> <span class="n">timezone</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__infer_timezone</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unplugged</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pft_out_file</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bts_out_file</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="EManafa.config"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.config">[docs]</a>    <span class="k">def</span> <span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="EManafa.init"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;inits inner services and virtually unplugs device if it is fully charged&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_time</span> <span class="o">=</span> <span class="n">get_last_boot_time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batterystats</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">boot_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">boot_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perfetto</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">boot_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">boot_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unplug_if_fully_charged</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EManafa.start"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;starts inner services.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batterystats</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perfetto</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EManafa.stop"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;stops inner services.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bts_file(str): path to the resultant batterystats log file.</span>
+<span class="sd">            pf_out_file(str): path to the resultant perfetto log file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">run_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">run_id</span> <span class="o">=</span> <span class="n">execute_shell_command</span><span class="p">(</span><span class="s2">&quot;date +</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bts_out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batterystats</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pft_out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfetto</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;Perfetto file:  </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">pft_out_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bts_out_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pft_out_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unplugged</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plug_back</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bts_out_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pft_out_file</span></div>
+
+
+<div class="viewcode-block" id="EManafa.clean"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;calls clean methods from inner services to clean previous result files.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batterystats</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perfetto</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EManafa.parse_results"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.parse_results">[docs]</a>    <span class="k">def</span> <span class="nf">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bts_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pf_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;parses results from output results files of perfetto and batterystats services.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            bts_file: batterystats output file. if none, uses self.bts_out_file</span>
+<span class="sd">            pf_file: perfetto output file. if none, uses self.pft_out_file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">bts_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bts_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bts_out_file</span>
+        <span class="k">if</span> <span class="n">pf_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pf_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pft_out_file</span>
+        <span class="k">if</span> <span class="n">bts_file</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">pf_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;Empty result files&quot;</span><span class="p">,</span>
+                <span class="n">log_sev</span><span class="o">=</span><span class="n">LogSeverity</span><span class="o">.</span><span class="n">FATAL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_time</span> <span class="o">=</span> <span class="n">get_last_boot_time</span><span class="p">(</span><span class="n">bts_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span> <span class="o">=</span> <span class="n">BatteryStatsParser</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">power_profile</span><span class="p">,</span> <span class="n">timezone</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timezone</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="n">bts_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span> <span class="o">=</span> <span class="n">PerfettoCPUfreqParser</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">power_profile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">boot_time</span><span class="p">,</span> <span class="n">timezone</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timezone</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="n">pf_file</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EManafa.get_consumption_in_between"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.get_consumption_in_between">[docs]</a>    <span class="k">def</span> <span class="nf">get_consumption_in_between</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;retrieves energy consumption and device events between a timestamp interval.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_time: begin timestamp.</span>
+<span class="sd">            end_time: end timestamp.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            total(float): system-level energy consumption.</span>
+<span class="sd">            per_component(dict): per-component energy consumption.</span>
+<span class="sd">            metrics(dict): batterystats info containing events occurred during the interval. for each type of event, it</span>
+<span class="sd">            presents.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">total</span><span class="p">,</span> <span class="n">per_component</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_non_cpu_energy</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+        <span class="n">total_cpu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_cpu_energy</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+        <span class="n">metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span><span class="o">.</span><span class="n">get_events_in_between</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+        <span class="n">per_component</span><span class="p">[</span><span class="s1">&#39;cpu&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_cpu</span>
+        <span class="k">return</span> <span class="n">total</span> <span class="o">+</span> <span class="n">total_cpu</span><span class="p">,</span> <span class="n">per_component</span><span class="p">,</span> <span class="n">metrics</span></div>
+
+<div class="viewcode-block" id="EManafa.calculate_glob_and_component_consumption"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.calculate_glob_and_component_consumption">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_glob_and_component_consumption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_event</span><span class="p">,</span> <span class="n">per_component_consumption</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; retrieves the global and per-component consumption of a state that lasts delta_time.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            last_event: the event containing the last state.</span>
+<span class="sd">            per_component_consumption: per_component consumption so far.</span>
+<span class="sd">            delta_time: duration of the state.</span>
+<span class="sd">            total: total consumption so far.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            total(float): total consumed (at device level).</span>
+<span class="sd">            per_component_consumption(dict): consumption per device component.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tot_curr</span><span class="p">,</span> <span class="n">comps_curr</span> <span class="o">=</span> <span class="n">last_event</span><span class="o">.</span><span class="n">get_current_of_batStatEvent</span><span class="p">()</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">tot_curr</span> <span class="o">*</span> <span class="p">(</span><span class="n">last_event</span><span class="o">.</span><span class="n">get_voltage_value</span><span class="p">())</span> <span class="o">*</span> <span class="n">delta_time</span>
+        <span class="k">for</span> <span class="n">comp</span><span class="p">,</span> <span class="n">comp_curr</span> <span class="ow">in</span> <span class="n">comps_curr</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">comp</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">per_component_consumption</span><span class="p">:</span>
+                <span class="n">per_component_consumption</span><span class="p">[</span><span class="n">comp</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">is_float</span><span class="p">(</span><span class="n">comp_curr</span><span class="p">):</span>
+                <span class="n">per_component_consumption</span><span class="p">[</span><span class="n">comp</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">comp_curr</span> <span class="o">*</span> <span class="n">last_event</span><span class="o">.</span><span class="n">get_voltage_value</span><span class="p">()</span> <span class="o">*</span> <span class="n">delta_time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">total</span><span class="p">,</span> <span class="n">per_component_consumption</span></div>
+
+<div class="viewcode-block" id="EManafa.calculate_non_cpu_energy"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.calculate_non_cpu_energy">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_non_cpu_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Obtains energy consumption of device between a timestamp interval for every component except cpu. for cpu component,</span>
+<span class="sd">        it stores only the state recorded in battarystats.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            start_time: begin timestamp.</span>
+<span class="sd">            end_time: end timestamp.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            total: system-level energy consumption without cpu energy consumption.</span>
+<span class="sd">            per_component: per-component energy consumption without cpu energy consumption.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c_beg_bef</span><span class="p">,</span> <span class="n">c_beg_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span><span class="o">.</span><span class="n">get_closest_pair</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span><span class="o">.</span><span class="n">events</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unable no find batterystats samples. Maybe the profiling session or warm-up time wasn&#39;t long &quot;</span>
+                            <span class="s2">&quot;enough&quot;</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">per_component_consumption</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">last_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">c_beg_bef</span><span class="p">]</span>
+        <span class="n">last_time</span> <span class="o">=</span> <span class="n">start_time</span>  <span class="c1"># self.bat_events.events[c_beg_bef].time if c_beg_bef &gt;= 0 else start_time</span>
+        <span class="n">in_bt2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;=</span> <span class="n">start_time</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;=</span> <span class="n">end_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span><span class="o">.</span><span class="n">events</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">c_beg_bef</span> <span class="o">==</span> <span class="n">c_beg_aft</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_bt2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># batevents |--|--|--|</span>
+            <span class="c1"># start-end             |--|</span>
+            <span class="c1"># or in btween two samples</span>
+            <span class="n">delta_time</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+            <span class="n">total</span><span class="p">,</span> <span class="n">per_component_consumption</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_glob_and_component_consumption</span><span class="p">(</span><span class="n">last_event</span><span class="p">,</span><span class="n">per_component_consumption</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">total</span><span class="p">,</span> <span class="n">per_component_consumption</span>
+        <span class="c1">#</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">c_beg_aft</span><span class="p">:]):</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;</span> <span class="n">end_time</span><span class="p">:</span>
+                <span class="c1">#delta_time = end_time - last_time</span>
+                <span class="k">break</span>
+            <span class="n">delta_time</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">time</span> <span class="o">-</span> <span class="n">last_time</span><span class="p">)</span>
+
+            <span class="n">total</span><span class="p">,</span> <span class="n">per_component_consumption</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_glob_and_component_consumption</span><span class="p">(</span><span class="n">last_event</span><span class="p">,</span> <span class="n">per_component_consumption</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+            <span class="n">last_event</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">last_time</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span>
+
+        <span class="n">delta_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">last_time</span>
+        <span class="k">if</span> <span class="n">delta_time</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Error calculating delta (&lt;0) &quot;</span><span class="p">,</span> <span class="n">log_sev</span><span class="o">=</span><span class="n">LogSeverity</span><span class="o">.</span><span class="n">FATAL</span><span class="p">)</span>
+        <span class="n">total</span><span class="p">,</span> <span class="n">per_component_consumption</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_glob_and_component_consumption</span><span class="p">(</span><span class="n">last_event</span><span class="p">,</span> <span class="n">per_component_consumption</span><span class="p">,</span><span class="n">delta_time</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">total</span><span class="p">,</span> <span class="n">per_component_consumption</span></div>
+
+<div class="viewcode-block" id="EManafa.calculate_cpu_energy"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.calculate_cpu_energy">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_cpu_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;calculates cpu energy consumption of device between a timestamp interval</span>
+<span class="sd">        Args:</span>
+<span class="sd">            start_time: begin timestamp</span>
+<span class="sd">            end_time: end timestamp</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            total: cpu energy consumption</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span><span class="o">.</span><span class="n">events</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unable no find perfetto samples. Maybe the profiling session or warm-up time wasn&#39;t long &quot;</span>
+                            <span class="s2">&quot;enough&quot;</span><span class="p">)</span>
+        <span class="n">c_beg_bef</span><span class="p">,</span> <span class="n">c_beg_aft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span><span class="o">.</span><span class="n">get_closest_pair</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">last_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">c_beg_bef</span><span class="p">]</span>
+        <span class="n">last_time</span> <span class="o">=</span> <span class="n">start_time</span>
+        <span class="n">tot_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">in_bt2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;=</span> <span class="n">start_time</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;=</span> <span class="n">end_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span><span class="o">.</span><span class="n">events</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">c_beg_bef</span> <span class="o">==</span> <span class="n">c_beg_aft</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_bt2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># perfevent |--|--|--|</span>
+            <span class="c1"># start-end             |--|</span>
+            <span class="c1"># or in bt2 2 samples</span>
+            <span class="n">delta_time</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span><span class="o">.</span><span class="n">get_CPU_samples_in_between</span><span class="p">(</span><span class="n">last_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
+                <span class="n">delta</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">voltage</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sample</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sample</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">cpus_current</span> <span class="o">=</span> <span class="n">last_event</span><span class="o">.</span><span class="n">calculate_CPUs_current</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span><span class="o">.</span><span class="n">power_profile</span><span class="p">)</span>
+                <span class="n">tot_time</span> <span class="o">+=</span> <span class="n">delta</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="p">(</span><span class="n">cpus_current</span><span class="p">)</span> <span class="o">*</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">voltage</span>
+            <span class="k">return</span> <span class="n">total</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">c_beg_aft</span><span class="p">:]):</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;</span> <span class="n">end_time</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span><span class="o">.</span><span class="n">get_CPU_samples_in_between</span><span class="p">(</span><span class="n">last_time</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+            <span class="c1"># TODO : test to assert if x.time - last_time  = sum( deltas_of_L )</span>
+            <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
+                <span class="n">delta</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">voltage</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sample</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sample</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">cpus_current</span> <span class="o">=</span> <span class="n">last_event</span><span class="o">.</span><span class="n">calculate_CPUs_current</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span><span class="o">.</span><span class="n">power_profile</span><span class="p">)</span>
+                <span class="n">tot_time</span> <span class="o">+=</span> <span class="n">delta</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="p">(</span><span class="n">cpus_current</span><span class="p">)</span> <span class="o">*</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">voltage</span>
+            <span class="n">last_event</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">last_time</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span>
+
+        <span class="c1"># after calcs&#39;&#39;&#39;</span>
+        <span class="c1"># TODO merge with cycle just like with non cpu</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bat_events</span><span class="o">.</span><span class="n">get_CPU_samples_in_between</span><span class="p">(</span><span class="n">last_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
+            <span class="n">delta</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">voltage</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sample</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sample</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">cpus_current</span> <span class="o">=</span> <span class="n">last_event</span><span class="o">.</span><span class="n">calculate_CPUs_current</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">perf_events</span><span class="o">.</span><span class="n">power_profile</span><span class="p">)</span>
+            <span class="n">tot_time</span> <span class="o">+=</span> <span class="n">delta</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="p">(</span><span class="n">cpus_current</span><span class="p">)</span> <span class="o">*</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">voltage</span>
+        <span class="c1"># TODO just like non cpu</span>
+        <span class="c1"># print(tot_time)</span>
+        <span class="k">return</span> <span class="n">total</span></div>
+
+
+
+    <span class="k">def</span> <span class="nf">__extract_power_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Extracts power_profile.xml file from the device, by pulling framework-res.apk and using apktool to unzip the apk.</span>
+<span class="sd">        If the process fails, retrieves DEFAULT_PROFILE filepath</span>
+<span class="sd">        Args:</span>
+<span class="sd">            filename: the target name of the file</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            filename: the name of the extracted xml file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># extracting power_profile.xml from device</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">suc</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">execute_shell_command</span><span class="p">(</span><span class="s2">&quot;adb pull /system/framework/framework-res.apk </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources_dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;java -jar </span><span class="si">{res_dir}</span><span class="s2">/apktool_2.4.0.jar d -s </span><span class="si">{res_dir}</span><span class="s2">/framework-res.apk -f -o </span><span class="si">{res_dir}</span><span class="s2">/out_jar_dir/&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">res_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resources_dir</span><span class="p">)</span>
+            <span class="n">res</span><span class="p">,</span> <span class="n">suc</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">execute_shell_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">pp_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources_dir</span> <span class="o">+</span> <span class="s2">&quot;/out_jar_dir/res/xml/power_profile.xml&quot;</span>
+            <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># cp to profiles, remove out_jar_dir and framework-res.apk</span>
+                <span class="n">res</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">execute_shell_command</span><span class="p">(</span>
+                    <span class="s2">&quot;cp </span><span class="si">{extracted_file}</span><span class="s2"> </span><span class="se">\&quot;</span><span class="si">{res_dir}</span><span class="s2">/profiles/</span><span class="si">{new_file}</span><span class="se">\&quot;</span><span class="s2"> ; rm -rf </span><span class="si">{res_dir}</span><span class="s2">/out_jar_dir </span><span class="si">{res_dir}</span><span class="s2">/framework-res.apk&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">extracted_file</span><span class="o">=</span><span class="n">pp_file</span><span class="p">,</span> <span class="n">new_file</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">res_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resources_dir</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">filename</span>
+
+        <span class="k">return</span> <span class="n">DEFAULT_PROFILE</span>
+
+<div class="viewcode-block" id="EManafa.infer_power_profile"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.infer_power_profile">[docs]</a>    <span class="k">def</span> <span class="nf">infer_power_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;picks the most appropriate power profile file. power profile files present in self.resources_dir contains a</span>
+<span class="sd">        device model id in the filename, which is determinated by ro.product.model property. if there is an adequate</span>
+<span class="sd">        file locally, it retrieves such filename. Otherwise, it extracts the profile from the device</span>
+<span class="sd">        using __extractPowerProfile.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            filename: the name of the  xml file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">device_model</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">execute_shell_command</span><span class="p">(</span><span class="s2">&quot;adb shell getprop ro.product.model&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">device_model</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">model_profile_file</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;power_profile_</span><span class="si">{device_model}</span><span class="s2">.xml&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device_model</span><span class="o">=</span><span class="n">device_model</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+            <span class="n">matching_profiles</span> <span class="o">=</span> <span class="n">mega_find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources_dir</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">model_profile_file</span><span class="p">,</span> <span class="n">maxdepth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matching_profiles</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">matching_profiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># if power profile not present in profiles directory, extract from device</span>
+                <span class="n">power_profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__extract_power_profile</span><span class="p">(</span><span class="n">model_profile_file</span><span class="p">)</span>
+                <span class="c1">#print(power_profile)</span>
+                <span class="k">return</span> <span class="n">power_profile</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">DEFAULT_PROFILE</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__infer_timezone</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot; Obtains device timezone. if there is no device connected, returns DEFAULT_TIMEZONE.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tz(str): device timezone</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">execute_shell_command</span><span class="p">(</span><span class="s2">&quot;adb shell date&quot;</span><span class="p">)</span>
+        <span class="n">default_tz</span> <span class="o">=</span> <span class="n">DEFAULT_TIMEZONE</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">default_tz</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;Using timezone: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">default_tz</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;WET&quot;</span> <span class="k">if</span> <span class="n">default_tz</span> <span class="o">==</span> <span class="s2">&quot;WEST&quot;</span> <span class="k">else</span> <span class="n">default_tz</span>
+
+<div class="viewcode-block" id="EManafa.unplug_if_fully_charged"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.unplug_if_fully_charged">[docs]</a>    <span class="k">def</span> <span class="nf">unplug_if_fully_charged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; virtually unplugs device charger, by calling dumpsys battery unplug.&quot;&quot;&quot;</span>
+        <span class="c1"># battery stats file comes empty when battery level == 100</span>
+        <span class="c1"># using adb to trick device to think it is not charging th battery</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">execute_shell_command</span><span class="p">(</span><span class="s2">&quot;adb shell dumpsys battery | grep level | grep 100&quot;</span><span class="p">)</span>
+        <span class="n">has_full_charge</span> <span class="o">=</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="s2">&quot;100&quot;</span> <span class="ow">in</span> <span class="n">o</span>
+        <span class="k">if</span> <span class="n">has_full_charge</span><span class="p">:</span>
+            <span class="c1"># mock unplug</span>
+            <span class="n">res</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">execute_shell_command</span><span class="p">(</span><span class="s2">&quot;adb shell dumpsys battery unplug&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">unplugged</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">log</span><span class="p">(</span><span class="s2">&quot;virtually unplugging battery charger while running (battery == 100)&quot;</span><span class="p">,</span> <span class="n">LogSeverity</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EManafa.plug_back"><a class="viewcode-back" href="../../manafa.html#manafa.emanafa.EManafa.plug_back">[docs]</a>    <span class="k">def</span> <span class="nf">plug_back</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;plugs back the device&quot;&quot;&quot;</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">execute_shell_command</span><span class="p">(</span><span class="s2">&quot;adb shell dumpsys battery reset&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unplugged</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Rui Rua.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

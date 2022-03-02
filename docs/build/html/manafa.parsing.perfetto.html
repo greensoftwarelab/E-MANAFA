@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>manafa.parsing.perfetto package &mdash; e-manafa 0.3.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="manafa.parsing.powerProfile package" href="manafa.parsing.powerProfile.html" />
+    <link rel="prev" title="manafa.parsing.hunter package" href="manafa.parsing.hunter.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> e-manafa
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">manafa</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="manafa.html">manafa package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="manafa.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="manafa.parsing.html">manafa.parsing package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="manafa.resources.html">manafa.resources package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="manafa.services.html">manafa.services package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="manafa.tests.html">manafa.tests package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="manafa.utils.html">manafa.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="manafa.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manafa.html#module-manafa.emanafa">manafa.emanafa module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manafa.html#module-manafa.hunter_emanafa">manafa.hunter_emanafa module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manafa.html#module-manafa.main">manafa.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manafa.html#module-manafa">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">e-manafa</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">manafa</a> &raquo;</li>
+        
+          <li><a href="manafa.html">manafa package</a> &raquo;</li>
+        
+          <li><a href="manafa.parsing.html">manafa.parsing package</a> &raquo;</li>
+        
+      <li>manafa.parsing.perfetto package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/manafa.parsing.perfetto.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="manafa-parsing-perfetto-package">
+<h1>manafa.parsing.perfetto package<a class="headerlink" href="#manafa-parsing-perfetto-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-manafa.parsing.perfetto.perfettoParser">
+<span id="manafa-parsing-perfetto-perfettoparser-module"></span><h2>manafa.parsing.perfetto.perfettoParser module<a class="headerlink" href="#module-manafa.parsing.perfetto.perfettoParser" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.CPU_STATE">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">manafa.parsing.perfetto.perfettoParser.</span></span><span class="sig-name descname"><span class="pre">CPU_STATE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#CPU_STATE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.CPU_STATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.CPU_STATE.ACTIVE">
+<span class="sig-name descname"><span class="pre">ACTIVE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'active'</span></em><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.CPU_STATE.ACTIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.CPU_STATE.AWAKE">
+<span class="sig-name descname"><span class="pre">AWAKE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'awake'</span></em><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.CPU_STATE.AWAKE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.CPU_STATE.IDLE">
+<span class="sig-name descname"><span class="pre">IDLE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'idle'</span></em><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.CPU_STATE.IDLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.CPU_STATE.SUSPEND">
+<span class="sig-name descname"><span class="pre">SUSPEND</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'suspend'</span></em><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.CPU_STATE.SUSPEND" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">manafa.parsing.perfetto.perfettoParser.</span></span><span class="sig-name descname"><span class="pre">PerfettoCPUEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Stores information regarding each cpu frequency in a given time.</p>
+<p>A perfetto  cpufreq event information, corresponding to a line in an results output file in systrace format.
+.. attribute:: time</p>
+<blockquote>
+<div><p>event_time.</p>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.vals">
+<span class="sig-name descname"><span class="pre">vals</span></span><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.vals" title="Permalink to this definition">¶</a></dt>
+<dd><p>frequency for each cpu of device.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.calculate_CPUs_current">
+<span class="sig-name descname"><span class="pre">calculate_CPUs_current</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUEvent.calculate_CPUs_current"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.calculate_CPUs_current" title="Permalink to this definition">¶</a></dt>
+<dd><p>given a power profile and a cpu state, returns the instantaneous current being consumed by all cpu cores in that state.
+:param state: cpu state in CPU_STATE values
+:param profile: power profile class</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.init_all">
+<span class="sig-name descname"><span class="pre">init_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUEvent.init_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.init_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>inits values for each cpu.
+:param default_len: number of cores.
+:param val: default value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpu_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpu_freq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUEvent.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUEvent.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update/insert cpufreq val for each cpu id</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">manafa.parsing.perfetto.perfettoParser.</span></span><span class="sig-name descname"><span class="pre">PerfettoCPUfreqParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">power_profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EST'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUfreqParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parses cpu frequency updates from a log file obtained with perfetto.
+.. attribute:: power_profile</p>
+<blockquote>
+<div><p>current device power profile.</p>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.start_time">
+<span class="sig-name descname"><span class="pre">start_time</span></span><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.start_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>lower timestamp bound to consider.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.timezone">
+<span class="sig-name descname"><span class="pre">timezone</span></span><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.timezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>device timezone.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.add_event">
+<span class="sig-name descname"><span class="pre">add_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpu_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpu_freq</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUfreqParser.add_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.add_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>add or update cpu freq event based on values passed as argument.
+:param time: timestamp of event.
+:param cpu_id: id of cpu.
+:param cpu_freq: frequency value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.get_closest_pair">
+<span class="sig-name descname"><span class="pre">get_closest_pair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUfreqParser.get_closest_pair"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.get_closest_pair" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the closest indexes of samples to time.
+:param time: reference time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>before index.
+i(int): after index.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>lasti(int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.load_power_profile">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">load_power_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml_profile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUfreqParser.load_power_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.load_power_profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads power profile from xml_profile filepath.
+:returns: power profile file.
+:rtype: object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.parse_event">
+<span class="sig-name descname"><span class="pre">parse_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ev_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUfreqParser.parse_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.parse_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>parse frequency and cpu id from string.
+:param ev_str: string expecting to have the patttern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>id of the cpu.
+cpu_freq(int): frequency value.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>cpu_id(int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.parse_file">
+<span class="sig-name descname"><span class="pre">parse_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUfreqParser.parse_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.parse_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>parses filename.
+:param filename: path of log file resultant of a profiling session with perfetto.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.parse_history">
+<span class="sig-name descname"><span class="pre">parse_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#PerfettoCPUfreqParser.parse_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.PerfettoCPUfreqParser.parse_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>parses event from lines.
+:param lines: list of lines from file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="manafa.parsing.perfetto.perfettoParser.interpolate">
+<span class="sig-prename descclassname"><span class="pre">manafa.parsing.perfetto.perfettoParser.</span></span><span class="sig-name descname"><span class="pre">interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/manafa/parsing/perfetto/perfettoParser.html#interpolate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#manafa.parsing.perfetto.perfettoParser.interpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs linear interpolation for x between (x1,y1) and (x2,y2)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-manafa.parsing.perfetto">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-manafa.parsing.perfetto" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="manafa.parsing.powerProfile.html" class="btn btn-neutral float-right" title="manafa.parsing.powerProfile package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="manafa.parsing.hunter.html" class="btn btn-neutral float-left" title="manafa.parsing.hunter package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Rui Rua.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
