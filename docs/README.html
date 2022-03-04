@@ -110,6 +110,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#command-line">Command line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-project-s-root">From project’s root</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#source">Source</a></li>
 </ul>
 </li>
@@ -195,7 +196,7 @@
 <ul class="simple">
 <li><p>power_profile.xml: Device-specific file provided by manufacturers containing current consumption per component state;</p></li>
 <li><p>batterystats: Tool from Android framework that logs each power-related event that occurs between device charges;</p></li>
-<li><p>Perfetto: System-wide profiling for Linux and Android, that profiles high-frequency data, such as CPU frequency.</p></li>
+<li><p>Perfetto: System-wide profiling for Linux nd Android, that profiles high-frequency data, such as CPU frequency.</p></li>
 </ul>
 <p>Note: Manufacturers not always supply information about the current consumed by an individual component in the power profile file. Use this information if it accurately represents the current drawn from the device battery in practice. The file can also be derived using external apparatus such as Monsoon. Google provides a set of guidelines to estimating the current of each component (https://source.android.com/devices/tech/power/component)</p>
 <div class="section" id="documentation">
@@ -275,10 +276,19 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="command-line">
 <h3>Command line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ emanafa.py [-p|--profile &lt;prof&gt;] 
-            [-t|--timezone &lt;tz&gt;] 
-            [-pft|--perfettofile &lt;pf&gt;] 
-            [-bts|--batstatsfile &lt;bf&gt;] 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ emanafa [-p|--profile &lt;prof&gt;] 
+          [-t|--timezone &lt;tz&gt;] 
+          [-pft|--perfettofile &lt;pf&gt;] 
+          [-bts|--batstatsfile &lt;bf&gt;] 
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-project-s-root">
+<h3>From project’s root<a class="headerlink" href="#from-project-s-root" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 emanafa.py [-p|--profile &lt;prof&gt;] 
+                     [-t|--timezone &lt;tz&gt;] 
+                     [-pft|--perfettofile &lt;pf&gt;] 
+                     [-bts|--batstatsfile &lt;bf&gt;] 
 </pre></div>
 </div>
 </div>

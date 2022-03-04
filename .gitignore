@@ -257,5 +257,6 @@ manafa/results
 
 # others
 .idea/*
+venv/pyvenv.cfg
 
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,python

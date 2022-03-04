@@ -85,10 +85,19 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 ### Command line
 
 ```
-$ emanafa.py [-p|--profile <prof>] 
-            [-t|--timezone <tz>] 
-            [-pft|--perfettofile <pf>] 
-            [-bts|--batstatsfile <bf>] 
+$ emanafa [-p|--profile <prof>] 
+          [-t|--timezone <tz>] 
+          [-pft|--perfettofile <pf>] 
+          [-bts|--batstatsfile <bf>] 
+```
+
+### From project's root
+
+```
+$ python3 emanafa.py [-p|--profile <prof>] 
+                     [-t|--timezone <tz>] 
+                     [-pft|--perfettofile <pf>] 
+                     [-bts|--batstatsfile <bf>] 
 ```
 
 ### Source

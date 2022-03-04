@@ -9,7 +9,7 @@ E-MANAFA is a plug-and-play software model-based tool for performing fine-graine
 
 - power_profile.xml: Device-specific file provided by manufacturers containing current consumption per component state;
 - batterystats: Tool from Android framework that logs each power-related event that occurs between device charges;
-- Perfetto: System-wide profiling for Linux and Android, that profiles high-frequency data, such as CPU frequency.
+- Perfetto: System-wide profiling for Linux nd Android, that profiles high-frequency data, such as CPU frequency.
 
 Note: Manufacturers not always supply information about the current consumed by an individual component in the power profile file. Use this information if it accurately represents the current drawn from the device battery in practice. The file can also be derived using external apparatus such as Monsoon. Google provides a set of guidelines to estimating the current of each component (https://source.android.com/devices/tech/power/component)
 
@@ -85,10 +85,19 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 ### Command line
 
 ```
-$ emanafa.py [-p|--profile <prof>] 
-            [-t|--timezone <tz>] 
-            [-pft|--perfettofile <pf>] 
-            [-bts|--batstatsfile <bf>] 
+$ emanafa [-p|--profile <prof>] 
+          [-t|--timezone <tz>] 
+          [-pft|--perfettofile <pf>] 
+          [-bts|--batstatsfile <bf>] 
+```
+
+### From project's root
+
+```
+$ python3 emanafa.py [-p|--profile <prof>] 
+                     [-t|--timezone <tz>] 
+                     [-pft|--perfettofile <pf>] 
+                     [-bts|--batstatsfile <bf>] 
 ```
 
 ### Source
