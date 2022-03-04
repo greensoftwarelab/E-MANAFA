@@ -22,7 +22,7 @@ class PerfettoService(Service):
         boot_time (float): timestamp of the device's last boot.
         output_res_folder (str): folder where the logs will be stored after each profiling session.
         default_out_dir(str): device default results dir.
-        cfg_file(str): devi
+        cfg_file(str): perfetto config file.
     """
     def __init__(self, boot_time=0, output_res_folder="perfetto", default_out_dir=DEFAULT_OUT_DIR,
                  cfg_file=CONFIG_FILE):

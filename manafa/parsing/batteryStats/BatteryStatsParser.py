@@ -238,7 +238,7 @@ class BatteryStatsParser(object):
 
         Parses history events and stores them in  the respective attribute fields.
         Args:
-            lines_list(:obj:`list` of :obj:`str`):
+            lines_list(:obj:`list` of :obj:`str`): list of lines.
         """
         for i, line in enumerate(lines_list):
             if re.match(r"^Battery History \([0-9]", line):

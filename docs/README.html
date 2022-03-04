@@ -89,31 +89,33 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">E-MANAFA: Energy Monitor and ANAlyzer For Android</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#setup">SETUP</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#installation">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#via-python-pip">1. Via python-pip</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#define-environment-variables">1.1 define environment variables</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">E-MANAFA: Energy Monitor and ANAlyzer For Android</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup">SETUP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#via-python-pip">1. Via python-pip</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#define-environment-variables">1.1 define environment variables</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#from-sources">2. From sources</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#clone-repo">2.1 Clone repo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#replicate-the-environment">2.2 Replicate the environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#replicate-locally-the-dev-virtualenv">2.3 Replicate locally the dev virtualenv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#activate-the-virtual-environment">2.4 Activate the virtual environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-required-packages">2.6 Install required packages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">2.6 define environment variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-sources">2. From sources</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#clone-repo">2.1 Clone repo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replicate-the-environment">2.2 Replicate the environment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replicate-locally-the-dev-virtualenv">2.3 Replicate locally the dev virtualenv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#activate-the-virtual-environment">2.4 Activate the virtual environment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#install-required-packages">2.5 Install required packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">2.6 define environment variables</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#usage">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#command-line">Command line</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#source">Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#command-line">Command line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source">Source</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#supported-devices">Supported devices:</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#todo">TODO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-devices">Supported devices</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">manafa</a></li>
 </ul>
 
@@ -196,9 +198,12 @@
 <li><p>Perfetto: System-wide profiling for Linux and Android, that profiles high-frequency data, such as CPU frequency.</p></li>
 </ul>
 <p>Note: Manufacturers not always supply information about the current consumed by an individual component in the power profile file. Use this information if it accurately represents the current drawn from the device battery in practice. The file can also be derived using external apparatus such as Monsoon. Google provides a set of guidelines to estimating the current of each component (https://source.android.com/devices/tech/power/component)</p>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>https://greensoftwarelab.github.io/E-MANAFA/modules.html</p>
 </div>
 <div class="section" id="setup">
-<h1>SETUP<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h1>
+<h2>SETUP<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
 <p>In order to run this tool, the following resources are required:</p>
 <ul class="simple">
 <li><p>rooted Android device (running Android 9 or above);</p></li>
@@ -208,14 +213,14 @@
 </ul>
 </div>
 <div class="section" id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="via-python-pip">
-<h2>1. Via python-pip<a class="headerlink" href="#via-python-pip" title="Permalink to this headline">¶</a></h2>
+<h3>1. Via python-pip<a class="headerlink" href="#via-python-pip" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">manafa</span>
 </pre></div>
 </div>
 <div class="section" id="define-environment-variables">
-<h3>1.1 define environment variables<a class="headerlink" href="#define-environment-variables" title="Permalink to this headline">¶</a></h3>
+<h4>1.1 define environment variables<a class="headerlink" href="#define-environment-variables" title="Permalink to this headline">¶</a></h4>
 <p>In order to run this tool, there are at least 2 env. variables that need to be defined in the shell startup script (e.g .bashrc or .bash_profile file)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export ANDROID_HOME=$HOME/&lt;your-android-instalation-folder&gt;/ 
 export PATH=$ANDROID_HOME/platform-tools:$PATH
@@ -224,40 +229,40 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 </div>
 </div>
 <div class="section" id="from-sources">
-<h2>2. From sources<a class="headerlink" href="#from-sources" title="Permalink to this headline">¶</a></h2>
+<h3>2. From sources<a class="headerlink" href="#from-sources" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="clone-repo">
-<h3>2.1 Clone repo<a class="headerlink" href="#clone-repo" title="Permalink to this headline">¶</a></h3>
+<h4>2.1 Clone repo<a class="headerlink" href="#clone-repo" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/RRua/e-manafa.git
 </pre></div>
 </div>
 </div>
 <div class="section" id="replicate-the-environment">
-<h3>2.2 Replicate the environment<a class="headerlink" href="#replicate-the-environment" title="Permalink to this headline">¶</a></h3>
+<h4>2.2 Replicate the environment<a class="headerlink" href="#replicate-the-environment" title="Permalink to this headline">¶</a></h4>
 <p>Install virtual virtualenv enviroment  (via python-pip):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python -m pip install --user virtualenv
 </pre></div>
 </div>
 </div>
 <div class="section" id="replicate-locally-the-dev-virtualenv">
-<h3>2.3 Replicate locally the dev virtualenv<a class="headerlink" href="#replicate-locally-the-dev-virtualenv" title="Permalink to this headline">¶</a></h3>
+<h4>2.3 Replicate locally the dev virtualenv<a class="headerlink" href="#replicate-locally-the-dev-virtualenv" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ virtualenv env/
 </pre></div>
 </div>
 </div>
 <div class="section" id="activate-the-virtual-environment">
-<h3>2.4 Activate the virtual environment<a class="headerlink" href="#activate-the-virtual-environment" title="Permalink to this headline">¶</a></h3>
+<h4>2.4 Activate the virtual environment<a class="headerlink" href="#activate-the-virtual-environment" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source env/bin/activate
 </pre></div>
 </div>
 </div>
 <div class="section" id="install-required-packages">
-<h3>2.6 Install required packages<a class="headerlink" href="#install-required-packages" title="Permalink to this headline">¶</a></h3>
+<h4>2.5 Install required packages<a class="headerlink" href="#install-required-packages" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install -r requirements.txt
 </pre></div>
 </div>
 </div>
 <div class="section" id="id1">
-<h3>2.6 define environment variables<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h4>2.6 define environment variables<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
 <p>In order to run this tool, there are at least 2 env. variables that need to be defined in the shell startup script (e.g .bashrc or .bash_profile file)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export ANDROID_HOME=$HOME/&lt;your-android-instalation-folder&gt;/ 
 export PATH=$ANDROID_HOME/platform-tools:$PATH
@@ -267,10 +272,10 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 </div>
 </div>
 <div class="section" id="usage">
-<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="command-line">
-<h2>Command line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python emanafa.py [-p|--profile &lt;prof&gt;] 
+<h3>Command line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ emanafa.py [-p|--profile &lt;prof&gt;] 
             [-t|--timezone &lt;tz&gt;] 
             [-pft|--perfettofile &lt;pf&gt;] 
             [-bts|--batstatsfile &lt;bf&gt;] 
@@ -278,7 +283,7 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 </div>
 </div>
 <div class="section" id="source">
-<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<h3>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example </span>
 <span class="n">em</span> <span class="o">=</span> <span class="n">EManafa</span><span class="p">()</span>
 <span class="n">em</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
@@ -295,7 +300,7 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 </div>
 </div>
 <div class="section" id="supported-devices">
-<h1>Supported devices:<a class="headerlink" href="#supported-devices" title="Permalink to this headline">¶</a></h1>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this headline">¶</a></h2>
 <p>This tool can be used with any Android device able to run Perfetto, available since Android 9 (P). The tool so far was successfuly executed on the following devices:</p>
 <ul class="simple">
 <li><p>Pixel 3a</p></li>
@@ -303,11 +308,6 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 <li><p>Xiaomi Mi 9 Lite</p></li>
 </ul>
 </div>
-<div class="section" id="todo">
-<h1>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p>support for memory power calculator (MemoryPowerCalculator is a new addition in 8.0, mainly to count the power consumption on DDR memory . formula: MemoryPower = (mAatRail_1 * timeMs_1 + mAatRail_2 * timeMs_2 +… + mAatRail_n * timeMs_n) / (1000 * 60 * 60) (mAatRail_n: is the power at the read/write rate level, timeMs_n: is the time at the mAatRail_n level))</p></li>
-</ul>
 </div>
 
 
