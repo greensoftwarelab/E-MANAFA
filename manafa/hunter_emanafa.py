@@ -23,8 +23,7 @@ class HunterEManafa(EManafa):
                  resources_dir=MANAFA_RESOURCES_DIR,
                  instrument_file=None,
                  not_instrument_file=None):
-
-        EManafa.__init__(self, power_profile=power_profile, timezone=timezone, resources_dir=resources_dir)
+        super(HunterEManafa, self).__init__(power_profile=power_profile, timezone=timezone, resources_dir=resources_dir)
         self.app_consumptions = AppConsumptionStats()
         self.app_consumptions_log = ""
         self.log_service = LogService()
