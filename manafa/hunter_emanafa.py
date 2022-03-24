@@ -99,12 +99,12 @@ class HunterEManafa(EManafa):
             total_cpu_consumption += func_cpu_consumption
             #self.app_consumptions.write_consumptions(consumption_log, func_cpu_consumption, function)
         #self.app_consumptions.write_consumptions(consumption_log, total_cpu_consumption)
-
         hunter_edited = self.hunter_log_parser.add_cpu_consumption_to_trace_file(self.hunter_out_file, functions, True)
         log("Hunter file:  %s" % hunter_edited)
         self.app_consumptions.app_traces = self.hunter_log_parser.trace
         self.app_consumptions_log = self.app_consumptions.save_function_info(f"functions_{self.boot_time}_results.json", filter_zeros=True)
         log("Function Consumptions file:  %s" % self.app_consumptions_log )
+        print(total_consumption)
         return hunter_edited, self.app_consumptions_log
 
     def clean(self):

@@ -13,7 +13,7 @@ from manafa.utils.dateUtils import convertBatStatTimeToTimeStamp, batStatResetTi
 import copy
 from manafa.utils.Logger import log, LogSeverity
 
-DEFAULT_JSON_PATH = os.path.join(get_resources_dir(), "batteryStats", "BatteryStatus.json")
+DEFAULT_JSON_PATH = os.path.join(get_resources_dir(), "batterystats", "BatteryStatus.json")
 
 
 

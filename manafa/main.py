@@ -37,7 +37,7 @@ def print_profiled_stats(total_consumption, per_comp_consumption, event_timeline
     print("Per-component consumption")
     print(json.dumps(per_comp_consumption, indent=1))
     print("--------------------------------------")
-    #print(json.dumps(event_timeline, indent=1))
+    print(json.dumps(event_timeline, indent=1))
 
 
 def main():
