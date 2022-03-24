@@ -59,7 +59,7 @@ class EManafa(Service):
         bts_out_file: batterystats output file
     """
     def __init__(self, power_profile=None, timezone=None, resources_dir=MANAFA_RESOURCES_DIR):
-        Service.__init__(self)
+        super(EManafa, self).__init__()
         self.resources_dir = resources_dir
         self.power_profile = power_profile if power_profile is not None else self.infer_power_profile()
         self.boot_time = 0
