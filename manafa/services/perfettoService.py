@@ -2,6 +2,8 @@ from __future__ import absolute_import
 
 import re
 
+from textops import cat
+
 from .service import Service
 import time
 import os
@@ -79,15 +81,15 @@ class PerfettoService(Service):
             last_exported: path of last exported file.
         """
         last_exported = ""
-        tc_path = os.path.join(self.results_dir, 'traceconv')
+        tc_path = os.path.join(RESOURCES_DIR, 'traceconv')
         for f in filter(lambda x: re.match(r'trace-*', x) is not None, os.listdir(self.results_dir)):
-            f_file = os.path.join(self.results_dir, f,)
-            res, o, e = execute_shell_command(f"chmod +x {tc_path}; {tc_path} systrace {f_file} {f_file}.systrace")
-            last_exported = os.path.join(self.results_dir, "%s.systrace" % f)
+            f_file = os.path.join(self.results_dir, f)
+            last_exported = os.path.join(self.results_dir, f"{f}.systrace")
+            res, o, e = execute_shell_command(f"chmod +x {tc_path}; {tc_path} systrace {f_file} {last_exported}")
         return last_exported
 
     def clean(self):
-        """wipes results from previous runs.
+        """wipe results from previous runs.
         """
         execute_shell_command(f"find {self.results_dir} -type f  | xargs rm ")
 

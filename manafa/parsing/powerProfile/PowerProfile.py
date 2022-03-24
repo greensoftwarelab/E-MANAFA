@@ -15,7 +15,7 @@ class PowerProfile(object):
 		self.filename = filename
 		self.components = {}
 		self.__read_power_profile()
-		print(self.components)
+		#print(self.components)
 
 	def add_component(self, component):
 		"""adds component to current state.

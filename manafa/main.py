@@ -31,12 +31,13 @@ def parse_results(args, manafa):
 
 
 def print_profiled_stats(total_consumption, per_comp_consumption, event_timeline):
+    print("--------------------------------------")
     print(f"Total energy consumed: {total_consumption} Joules")
     print("--------------------------------------")
-    print("per component consumption")
+    print("Per-component consumption")
     print(json.dumps(per_comp_consumption, indent=1))
     print("--------------------------------------")
-    print(json.dumps(event_timeline, indent=1))
+    #print(json.dumps(event_timeline, indent=1))
 
 
 def main():
@@ -48,7 +49,7 @@ def main():
     parser.add_argument("-bts", "--batstatsfile", help="batterystats file", default=None, type=str)
     parser.add_argument("-htf", "--hunterfile", help="hunter file", default=None, type=str)
     parser.add_argument("-o", "--output_dir", help="output directory", default="", type=str)
-    parser.add_argument("-s", "--time_in_secs", help="time to profile", default=7, type=int)
+    parser.add_argument("-s", "--time_in_secs", help="time to profile", default=10, type=int)
     args = parser.parse_args()
     has_device_conn = has_connected_devices()
     invalid_file_args = (args.perfettofile is None or args.batstatsfile is None)
@@ -65,14 +66,13 @@ def main():
         log("stopping profiler...")
         manafa.stop()
     else:
-       
         parse_results(args, manafa)
         #manafa.parseResults(args.batstatsfile, args.perfettofile)
     begin = manafa.perf_events.events[0].time  # first sample from perfetto
-    
     end = manafa.perf_events.events[-1].time  # last sample from perfetto
     total, per_c, timeline = manafa.get_consumption_in_between(begin, end)
     print_profiled_stats(total, per_c, timeline)
+
 
 if __name__ == '__main__':
     main()
