@@ -24,6 +24,8 @@ class AppConsumptionStats(object):
         """
     def __init__(self, results_dir=os.path.join(RESULTS_DIR, "consumptions")):
         self.results_dir = results_dir
+        if not os.path.exists(self.results_dir):
+            os.mkdir(self.results_dir)
         self.app_traces = {}
         
     def clean(self):
