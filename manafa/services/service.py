@@ -14,8 +14,10 @@ class Service(ABC):
         results_dir (str): folder where the logs will be stored after each profiling session.
     """
 
-    def __init__(self, results_dir=""):
-        self.results_dir = os.path.join(RESULTS_DIR, results_dir)
+    def __init__(self, results_dir=None):
+        self.results_dir = os.path.join(RESULTS_DIR, results_dir) if results_dir is not None else self.results_dir
+        if not os.path.exists(self.results_dir):
+            os.mkdir(self.results_dir)
 
     @abstractmethod
     def config(self, **kwargs):
