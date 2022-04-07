@@ -22,7 +22,7 @@ class HunterEManafa(EManafa):
                  timezone=None,
                  resources_dir=MANAFA_RESOURCES_DIR,
                  instrument_file=None,
-                 not_instrument_file=None):
+                 not_instrument_file=None,):
         super(HunterEManafa, self).__init__(power_profile=power_profile, timezone=timezone, resources_dir=resources_dir)
         self.app_consumptions = AppConsumptionStats()
         self.app_consumptions_log = ""
@@ -71,6 +71,7 @@ class HunterEManafa(EManafa):
                 functions = not_to_instrument_handle.read().splitlines()
         else:
             to_instrument = True'''
+
         self.hunter_log_parser.parse_file(self.hunter_out_file, functions, True)
         hunter_trace = self.hunter_log_parser.trace
         total_consumption = 0
@@ -104,7 +105,6 @@ class HunterEManafa(EManafa):
         self.app_consumptions.app_traces = self.hunter_log_parser.trace
         self.app_consumptions_log = self.app_consumptions.save_function_info(f"functions_{self.boot_time}_results.json", filter_zeros=True)
         log("Function Consumptions file:  %s" % self.app_consumptions_log )
-        print(total_consumption)
         return hunter_edited, self.app_consumptions_log
 
     def clean(self):

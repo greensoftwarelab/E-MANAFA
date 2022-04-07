@@ -29,7 +29,7 @@ def get_last_boot_time(bts_file=None):
         "adb shell cat /proc/stat | grep btime | awk '{print $2}'")  # executeShCommand("adb shell cat /proc/stat | grep btime | awk '{print $2}'")
     if res != 0 or len(out) == 0:
         log("no device connected. Assuming Boot time of battery stats file", LogSeverity.WARNING)
-        flds = bts_file.split("-") if bts_file is not None else []
+        flds = os.path.basename(bts_file).split("-") if bts_file is not None else []
         if len(flds) > 1:
             boot_time = flds[2].replace(".log", "")
             log("Boot time: " + boot_time, LogSeverity.WARNING)

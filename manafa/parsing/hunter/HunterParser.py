@@ -36,8 +36,12 @@ class HunterParser(object):
             start_time: lower timestamp bound.
             end_time: upper timestmp bound.
         """
+
         for i, line in enumerate(lines_list):
-            #print(line)
+            if ": " in line:
+                line = line.split(": ")[-1]
+                if ">>" in line:
+                    continue
             if re.match(r"^>", line):
                 before_components = re.split('^>', line.replace(" ", ""))
                 components = re.split('[,=\[\]]', before_components[1])
@@ -87,6 +91,8 @@ class HunterParser(object):
 
     def add_cpu_consumption_to_trace_file(self, filename, functions, instrument=False):
         new_filename = filename.replace(os.path.basename(filename), os.path.basename(filename).replace("hunter-", "truncated_hunter-"))
+        if new_filename == filename:
+            new_filename = new_filename +".withcpu"
         with open(filename, 'r+') as fr, open(new_filename, 'w') as fw:
             for line in fr:
                 #print(line)
@@ -102,7 +108,6 @@ class HunterParser(object):
                     function_name = components[0].replace("$", ".")
                     checked = True
                     function_begin = "<"
-
                 add_function = self.verify_function(function_name, functions, instrument)
                 if add_function:
                     consumption, time = self.return_cpu_consumption_and_time_by_function(function_name, checked)
