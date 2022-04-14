@@ -16,7 +16,7 @@ class HunterParser(object):
         self.boot_time = boot_time
         self.end_time = boot_time
 
-    def parse_file(self, filepath, functions, instrument=False):
+    def parse_file(self, filepath, functions=[], instrument=False):
         """function to parse traces from filepath file.
         Args:
             filepath: logfile with app traces.
@@ -27,16 +27,16 @@ class HunterParser(object):
             lines = filehandle.read().splitlines()
             self.parse_history(lines, functions, instrument)
 
-    def parse_history(self, lines_list, functions, instrument=False, start_time=0, end_time=sys.maxsize):
-        """function to parse app traces from a list of lines (lines_list).
-        Args:
-            lines_list: list of lines from log file.
-            functions: list of function names to filter.
-            instrument: optional paramm to enable or disable function filtering.
-            start_time: lower timestamp bound.
-            end_time: upper timestmp bound.
-        """
 
+    def parse_history_old_format(self, lines_list, functions, instrument=False, start_time=0, end_time=sys.maxsize):
+        """function to parse app traces from a list of lines (lines_list).
+                Args:
+                    lines_list: list of lines from log file.
+                    functions: list of function names to filter.
+                    instrument: optional paramm to enable or disable function filtering.
+                    start_time: lower timestamp bound.
+                    end_time: upper timestmp bound.
+                """
         for i, line in enumerate(lines_list):
             if ": " in line:
                 line = line.split(": ")[-1]
@@ -62,10 +62,56 @@ class HunterParser(object):
                 add_function = self.verify_function(function_name, functions, instrument)
                 close_time = float(components[6])
                 if close_time > end_time:
-                    #remove func
+                    # remove func
                     print("todo: remove function from obj")
                 if add_function:
                     close_time = components[6]
+                    self.update_trace_return(function_name, close_time)
+            else:
+                pass
+                # log("invalid line" + line)
+    def parse_history(self, lines_list, functions, instrument=False, start_time=0, end_time=sys.maxsize):
+        """function to parse app traces from a list of lines (lines_list).
+        Args:
+            lines_list: list of lines from log file.
+            functions: list of function names to filter.
+            instrument: optional paramm to enable or disable function filtering.
+            start_time: lower timestamp bound.
+            end_time: upper timestmp bound.
+        """
+
+        for i, line in enumerate(lines_list):
+            if ": " in line:
+                line = line.split(": ")[-1]
+                if ">>" in line:
+                    continue
+            if re.match(r"^>", line) and line.strip().endswith("]"):
+                self.parse_history_old_format(lines_list[:], functions, instrument=instrument, start_time=0, end_time=end_time)
+                return
+            elif re.match(r"^>", line):
+                before_components = re.split('^>', line)
+                components = re.split('[,=\[\]]', before_components[1])
+                function_name = components[0].replace("$", ".")
+                add_function = self.verify_function(function_name, functions, instrument)
+                begin_time = components[1]
+                if add_function and float(begin_time) >= start_time:
+                    if function_name not in self.trace:
+                        self.trace[function_name] = {}
+                        self.trace[function_name][0] = {'begin_time': float(begin_time) * (pow(10, -3))}
+                    else:
+                        self.trace[function_name][len(self.trace[function_name])] = {
+                            'begin_time': float(begin_time) * (pow(10, -3))}
+            elif re.match(r"^<", line):
+                before_components = re.split('^<', line)
+                components = re.split('[,=\[\] ]', before_components[1])
+                function_name = components[0].replace("$", ".")
+                add_function = self.verify_function(function_name, functions, instrument)
+                close_time = float(components[1])
+                if close_time > end_time:
+                    #remove func
+                    print("todo: remove function from obj")
+                if add_function:
+                    close_time = components[1]
                     self.update_trace_return(function_name, close_time)
             else:
                 pass

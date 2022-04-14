@@ -14,6 +14,11 @@ def get_resources_dir(packname="manafa", default_res_dir="resources"):
     return os.path.join(ref_dir, default_res_dir)
 
 
+def get_test_resources_dir(packname="manafa", default_res_dir="resources"):
+    ref_dir = get_reference_dir(packname)
+    return os.path.join(ref_dir, 'tests', default_res_dir)
+
+
 def get_pack_dir(packname="manafa"):
     return get_reference_dir(packname)
 
