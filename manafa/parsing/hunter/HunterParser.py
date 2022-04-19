@@ -27,7 +27,6 @@ class HunterParser(object):
             lines = filehandle.read().splitlines()
             self.parse_history(lines, functions, instrument)
 
-
     def parse_history_old_format(self, lines_list, functions, instrument=False, start_time=0, end_time=sys.maxsize):
         """function to parse app traces from a list of lines (lines_list).
                 Args:
@@ -70,6 +69,7 @@ class HunterParser(object):
             else:
                 pass
                 # log("invalid line" + line)
+
     def parse_history(self, lines_list, functions, instrument=False, start_time=0, end_time=sys.maxsize):
         """function to parse app traces from a list of lines (lines_list).
         Args:

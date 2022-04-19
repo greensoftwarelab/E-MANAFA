@@ -63,7 +63,8 @@ class LogService(Service):
         """
         filename = self.get_results_filename(run_id)
         time.sleep(1)
-        execute_shell_command("adb logcat -d | grep -io \"[<>].*m=example.*]\" > %s" % filename)
+        execute_shell_command("adb logcat -d | grep -E '(<|>).*_.*\[[0-9]+' | cut -f4 -d\: | tr -d ' ' > %s" % filename)
+        #execute_shell_command("adb logcat -d | grep -io \"[<>].*m=example.*]\" > %s" % filename)
         return filename
 
     def clean(self):
