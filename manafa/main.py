@@ -9,7 +9,7 @@ MANAFA_RESOURCES_DIR = get_resources_dir()
 MAX_SIZE = sys.maxsize
 TO_INSTRUMENT_FILE = os.path.join(MANAFA_RESOURCES_DIR, 'to_instrument_file.txt')
 NOT_INSTRUMENT_FILE = os.path.join(MANAFA_RESOURCES_DIR, 'not_instrument_file.txt')
-
+MANAFA_INSPECTOR_URL = "https://greensoftwarelab.github.io/manafa-inspector/"
 
 def has_connected_devices():
     """checks if there are devices connected via adb"""
@@ -53,7 +53,7 @@ def main():
     parser.add_argument("-pft", "--perfettofile", help="perfetto file", default=None, type=str)
     parser.add_argument("-bts", "--batstatsfile", help="batterystats file", default=None, type=str)
     parser.add_argument("-htf", "--hunterfile", help="hunter file", default=None, type=str)
-    parser.add_argument("-o", "--output_dir", help="output directory", default="", type=str)
+    parser.add_argument("-o", "--output_file", help="output directory", default=None, type=str)
     parser.add_argument("-s", "--time_in_secs", help="time to profile", default=10, type=int)
     args = parser.parse_args()
     has_device_conn = has_connected_devices()
@@ -67,7 +67,7 @@ def main():
         manafa.init()
         manafa.start()
         log("profiling...")
-        time.sleep(7)  # do work
+        time.sleep(args.time_in_secs)  # do work
         log("stopping profiler...")
         manafa.stop()
     else:
@@ -76,8 +76,9 @@ def main():
     begin = manafa.perf_events.events[0].time  # first sample from perfetto
     end = manafa.perf_events.events[-1].time  # last sample from perfetto
     total, per_c, timeline = manafa.get_consumption_in_between(begin, end)
-    print_profiled_stats(end-begin, total, per_c, timeline)
-
+    #print_profiled_stats(end-begin, total, per_c, timeline)
+    out_file = manafa.save_final_report(begin, output_filepath=args.output_file)
+    log(f"Output file: {out_file}. You can inspect it with E-MANAFA Inspector in {MANAFA_INSPECTOR_URL}", log_sev=LogSeverity.SUCCESS)
 
 if __name__ == '__main__':
     main()

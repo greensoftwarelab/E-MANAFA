@@ -71,3 +71,26 @@ class AppConsumptionStats(object):
         with open(filepath, 'w') as jj:
             json.dump(self.app_traces, jj, indent=1)
         return filepath
+
+    def get_elaborate_stats(self):
+        res = {}
+        for m, v in self.app_traces.items():
+            new_m = {}
+            for _id, invocation in v.items():
+                new_i = {}
+                new_i.update(invocation)
+                new_i.update(invocation['per_component_consumption'])
+                new_i.pop("per_component_consumption")
+                new_i['method'] = m.split("_")[1]
+                new_i['class'] = m.split("_")[0]
+                if 'checked' in invocation and invocation['checked']:
+                    new_i.pop('checked')
+                new_m[_id] = new_i
+            res[m] = new_m
+        return res
+
+    def get_diff_methods(self):
+        return len(self.app_traces)
+
+    def get_total_methods(self):
+        return sum([len(x) for x in self.app_traces.values()])

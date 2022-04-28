@@ -1,3 +1,5 @@
+import json
+
 from manafa.emanafa import EManafa, MANAFA_RESOURCES_DIR
 from manafa.parsing.hunter.HunterParser import HunterParser
 from manafa.services.LogService import LogService
@@ -122,3 +124,27 @@ class HunterEManafa(EManafa):
         if len(self.bat_events.events) > 0:          
             self.hunter_out_file = self.hunter_out_file if htr_file is None else htr_file
             self.calculate_function_consumption()
+
+    def gen_final_report(self, start_time=None, end_time=None):
+        begin = self.perf_events.events[0].time if start_time is None else start_time
+        end = self.perf_events.events[-1].time if end_time is None else end_time
+        total, per_c, timeline = self.get_consumption_in_between(begin, end)
+        res = {
+            'total_energy:': total,
+            'elapsed_time': end - begin,
+            'per_component_consumption': per_c,
+            'stats': timeline,
+            'method_invocations': self.app_consumptions.get_total_methods(),
+            'diff_methods': self.app_consumptions.get_diff_methods()
+        }
+        return {
+            'global': res,
+            'invoked_methods': self.app_consumptions.get_elaborate_stats()
+        }
+
+    def save_final_report(self, run_id=None, output_filepath=None):
+        if output_filepath is None:
+            output_filepath = "manafa_resume_%s.json" % (run_id if run_id is not None else 0)
+        with open(output_filepath, 'w') as j:
+            json.dump(self.gen_final_report(), j)
+        return output_filepath

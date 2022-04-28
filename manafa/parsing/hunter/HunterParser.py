@@ -218,6 +218,7 @@ class HunterParser(object):
                 times.update({'end_time': end})
                 if end > self.end_time:
                     self.end_time = end
+                times['elapsed_time'] = times['end_time'] - times['begin_time']
                 break
             i -= 1
 
