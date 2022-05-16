@@ -1,4 +1,5 @@
 import json
+import os
 
 from manafa.emanafa import EManafa, MANAFA_RESOURCES_DIR
 from manafa.parsing.hunter.HunterParser import HunterParser
@@ -59,7 +60,7 @@ class HunterEManafa(EManafa):
             self.plug_back()
         return self.bts_out_file, self.pft_out_file, self.hunter_out_file, self.app_consumptions_log
 
-    def calculate_function_consumption(self): #, to_instrument_file, not_instrument_file):
+    def calculate_function_consumption(self, run_id=None): #, to_instrument_file, not_instrument_file):
         """calculates consumption per function called during the profiling session."""
         functions = []
         '''
@@ -75,6 +76,7 @@ class HunterEManafa(EManafa):
             to_instrument = True'''
 
         self.hunter_log_parser.parse_file(self.hunter_out_file, functions, True)
+        run_id = os.path.basename(self.hunter_out_file).split("-")[1] if run_id is None else run_id
         hunter_trace = self.hunter_log_parser.trace
         total_consumption = 0
         total_cpu_consumption = 0
@@ -105,8 +107,8 @@ class HunterEManafa(EManafa):
         hunter_edited = self.hunter_log_parser.add_cpu_consumption_to_trace_file(self.hunter_out_file, functions, True)
         log("Hunter file:  %s" % hunter_edited)
         self.app_consumptions.app_traces = self.hunter_log_parser.trace
-        self.app_consumptions_log = self.app_consumptions.save_function_info(f"functions_{self.boot_time}_results.json", filter_zeros=True)
-        log("Function Consumptions file:  %s" % self.app_consumptions_log )
+        self.app_consumptions_log = self.app_consumptions.save_function_info(f"functions_{run_id}_results.json", filter_zeros=True)
+        log("Function Consumptions file:  %s" % self.app_consumptions_log)
         return hunter_edited, self.app_consumptions_log
 
     def clean(self):
@@ -121,9 +123,11 @@ class HunterEManafa(EManafa):
         super().parse_results(bts_file, pf_file)
         #pf_file = pf_file if pf_file is not None else self.pft_out_file
         #run_id = self.perfetto.get_run_id_from_perfetto_file(pf_file)
-        if len(self.bat_events.events) > 0:          
+        a, b = None, None
+        if len(self.bat_events.events) > 0:
             self.hunter_out_file = self.hunter_out_file if htr_file is None else htr_file
-            self.calculate_function_consumption()
+            a, b = self.calculate_function_consumption()
+        return a, b
 
     def gen_final_report(self, start_time=None, end_time=None):
         begin = self.perf_events.events[0].time if start_time is None else start_time
