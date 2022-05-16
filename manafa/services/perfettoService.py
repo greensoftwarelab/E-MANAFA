@@ -92,6 +92,7 @@ class PerfettoService(Service):
         """wipe results from previous runs.
         """
         execute_shell_command(f"find {self.results_dir} -type f  | xargs rm ")
+        execute_shell_command("adb shell killall perfetto")
 
     def get_run_id_from_perfetto_file(self, perfetto_filepath: str):
         """returns profiling session id given its filepath"""
