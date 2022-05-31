@@ -98,6 +98,10 @@ class BatteryEvent(object):
                 continue
         return total / 1000, currs
 
+    def get_cpu_value(self):
+        return self.currents['cpu'] if 'cpu' in self.currents else 'active'
+
+
     def get_voltage_value(self):
         """gets current voltage value (last value recorded in history lines).
 
@@ -291,7 +295,7 @@ class BatteryStatsParser(object):
     def estimate_current_consumption(self, bt_event):
         """estimates current power being consumed by event.
         Args:
-            bt_event(str): key of the event.
+            bt_event(BatteryEvent): key of the event.
         """
         power = {}
         for p, v in self.powerProfile.components.items():
@@ -392,7 +396,7 @@ class BatteryStatsParser(object):
         for x in self.events:
             if x.time > start_time and x.time < end_time:
                 delta = x.time - last_time
-                state = last_ev.currents["cpu"]
+                state = last_ev.get_cpu_value()
                 voltage = last_ev.get_voltage_value()  # float(last_ev.updates["volt"])
                 pair = (delta, state, voltage)
                 l.append(pair)
@@ -463,14 +467,15 @@ class BatteryStatsParser(object):
             current += audio_curr
 
         # wifi
-        elif comp_name == "wifi" and "wifi_running" in bt_event.updates:
+        elif comp_name == "wifi" and "wifi" in bt_event.updates:
+            old_current = current
             on_current = possible_states["on"] if "on" in possible_states else 0
             on_current += possible_states["controller"]["idle"] if (
                         "controller" in possible_states and "idle" in possible_states["controller"]) else 0
             current += on_current
             if "wifi_scan" in bt_event.updates:
                 if "scan" in possible_states:
-                    current += possible_states["scan"]
+                    current = old_current + possible_states["scan"]
                 if "controller" in possible_states:
                     curravg = 0
                     avg_ct = 0
@@ -482,7 +487,6 @@ class BatteryStatsParser(object):
                         avg_ct += 1
                     current += safe_division(curravg, avg_ct)
             elif "wifi_radio" in bt_event.updates:
-                current += possible_states["active"] if "active" in possible_states else 0
                 if "controller" in possible_states:
                     curravg = 0
                     avg_ct = 0
@@ -493,6 +497,8 @@ class BatteryStatsParser(object):
                         curravg += possible_states["controller"]["rx"]
                         avg_ct += 1
                     current += safe_division(curravg, avg_ct)
+                else:
+                    current = old_current + possible_states["active"] if "active" in possible_states else 0
 
         # gps
         elif comp_name == "gps":

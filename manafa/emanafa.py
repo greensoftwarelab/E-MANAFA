@@ -283,19 +283,31 @@ class EManafa(Service):
             filename: the name of the extracted xml file
         """
         # extracting power_profile.xml from device
+        print("o resdir é " + self.resources_dir)
         res, suc, v = execute_shell_command("adb pull /system/framework/framework-res.apk %s" % self.resources_dir)
         if res == 0:
-            cmd = """java -jar {res_dir}/apktool_2.4.0.jar d -s {res_dir}/framework-res.apk -f -o {res_dir}/out_jar_dir/""".format(
-                res_dir=self.resources_dir)
+            cmd = """java -jar {apktooldir} d {fmres} -f -o {outjardir}""".format(
+                res_dir=self.resources_dir, apktooldir=os.path.join(self.resources_dir, "apktool-2.6.2-7e71ad-SNAPSHOT-small.jar"),
+                fmres=os.path.join(self.resources_dir, "framework-res.apk"), outjardir=os.path.join(self.resources_dir,
+                                                                                                    "out_jar_dir"))
             res, suc, v = execute_shell_command(cmd)
-            pp_file = self.resources_dir + "/out_jar_dir/res/xml/power_profile.xml"
-            if res == 0:
+            pp_file = os.path.join(self.resources_dir, "out_jar_dir", "res", "xml", "power_profile.xml")
+            if res == 0 and os.path.exists(pp_file):
                 # cp to profiles, remove out_jar_dir and framework-res.apk
-                res, _, _ = execute_shell_command(
-                    "cp {extracted_file} \"{res_dir}/profiles/{new_file}\" ; rm -rf {res_dir}/out_jar_dir {res_dir}/framework-res.apk".format(
-                        extracted_file=pp_file, new_file=filename, res_dir=self.resources_dir))
+                print("exists")
+                res, o, u = execute_shell_command(
+                    "cp {extracted_file} \"{profiles_dir}\" ; rm -rf {outjardir} {fmres}".format(
+                        extracted_file=pp_file, new_file=filename, res_dir=self.resources_dir,
+                        profiles_dir=os.path.join(self.resources_dir, "profiles", filename),
+                        fmres=os.path.join(self.resources_dir, "framework-res.apk"),
+                        outjardir=os.path.join(self.resources_dir,
+                                               "out_jar_dir")
+                    ))
                 if res == 0:
                     return filename
+            else:
+                log("ERROR while decompiling framework-res.apk to extract power profile. Using default power profile "
+                    "instead.", log_sev=LogSeverity.ERROR)
 
         return DEFAULT_PROFILE
 
@@ -317,8 +329,9 @@ class EManafa(Service):
                 return matching_profiles[0]
             else:
                 # if power profile not present in profiles directory, extract from device
+                print("bou extrair")
                 power_profile = self.__extract_power_profile(model_profile_file)
-                #print(power_profile)
+                print(power_profile)
                 return power_profile
         else:
             return DEFAULT_PROFILE

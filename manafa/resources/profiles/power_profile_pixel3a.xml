@@ -148,5 +148,7 @@
     <item name="wifi.controller.tx">396</item>
     <!-- Operating volatage for wifi radio in mV.-->
     <item name="wifi.controller.voltage">3700</item>
+    <item name="bluetooth.active">51.55</item>
+    <item name="bluetooth.on">0.79</item>
 
 </device>
