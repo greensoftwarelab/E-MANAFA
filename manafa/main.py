@@ -1,7 +1,7 @@
 import shutil
 import sys, os, time, json
 import argparse
-from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir, is_float
+from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir
 from manafa.emanafa import EManafa
 from manafa.hunter_emanafa import HunterEManafa
 from manafa.utils.Logger import log, LogSeverity

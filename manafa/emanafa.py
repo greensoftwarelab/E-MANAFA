@@ -283,7 +283,6 @@ class EManafa(Service):
             filename: the name of the extracted xml file
         """
         # extracting power_profile.xml from device
-        print("o resdir é " + self.resources_dir)
         res, suc, v = execute_shell_command("adb pull /system/framework/framework-res.apk %s" % self.resources_dir)
         if res == 0:
             cmd = """java -jar {apktooldir} d {fmres} -f -o {outjardir}""".format(
@@ -294,7 +293,6 @@ class EManafa(Service):
             pp_file = os.path.join(self.resources_dir, "out_jar_dir", "res", "xml", "power_profile.xml")
             if res == 0 and os.path.exists(pp_file):
                 # cp to profiles, remove out_jar_dir and framework-res.apk
-                print("exists")
                 res, o, u = execute_shell_command(
                     "cp {extracted_file} \"{profiles_dir}\" ; rm -rf {outjardir} {fmres}".format(
                         extracted_file=pp_file, new_file=filename, res_dir=self.resources_dir,
@@ -329,9 +327,7 @@ class EManafa(Service):
                 return matching_profiles[0]
             else:
                 # if power profile not present in profiles directory, extract from device
-                print("bou extrair")
                 power_profile = self.__extract_power_profile(model_profile_file)
-                print(power_profile)
                 return power_profile
         else:
             return DEFAULT_PROFILE

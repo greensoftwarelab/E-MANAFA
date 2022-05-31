@@ -55,8 +55,8 @@ class PerfettoService(Service):
         Starts perfetto service, using the config file cfg_file as input.
         """
         # execute_shell_command(f"adb shell perfetto -o {self.output_filename} freq  -t 1h --background ")´
-        execute_shell_command(
-            f"cat {os.path.join(RESOURCES_DIR, self.cfg_file)} | adb shell perfetto -d -o {self.output_filename} -c -")
+        cmd = f"cat {os.path.join(RESOURCES_DIR, self.cfg_file)} | adb shell perfetto -d -o {self.output_filename} -c -"
+        execute_shell_command(cmd=cmd)
 
     def stop(self, file_id):
         """Stops the profiling session and exports results.

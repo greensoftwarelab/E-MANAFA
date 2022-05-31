@@ -499,7 +499,6 @@ class BatteryStatsParser(object):
                     current += safe_division(curravg, avg_ct)
                 else:
                     current = old_current + possible_states["active"] if "active" in possible_states else 0
-
         # gps
         elif comp_name == "gps":
             if "signalqualitybased" in possible_states:  # and "gps_signal_quality" in bt_event.updates:
