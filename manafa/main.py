@@ -1,5 +1,7 @@
 import shutil
 import sys, os, time, json
+from subprocess import call, check_output, Popen, PIPE
+from multiprocessing import Process
 import argparse
 from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir
 from manafa.emanafa import EManafa
@@ -88,12 +90,16 @@ def main():
         exit(-1)
     manafa = create_manafa(args)
     if has_device_conn and invalid_file_args:
-        log(f"No perfetto and batstats files as input. profiling for ~{args.time_in_secs} seconds", LogSeverity.WARNING)
         manafa.init()
         manafa.start()
         log("profiling...")
-        time.sleep(args.time_in_secs)  # do work
-        log("stopping profiler...")
+        if not args.time_in_lsecs:
+            # creates killable process that runs record_events function, since there isnt an easy way to kill threads in python
+            input("press any key to stop monitoring")
+        else:
+            log(f"No perfetto and batstats files as input. profiling for ~{args.time_in_secs} seconds", LogSeverity.WARNING)
+            time.sleep(args.time_in_secs)  # do work
+            log("stopping profiler...")
         manafa.stop()
         begin = manafa.perf_events.events[0].time  # first sample from perfetto
         end = manafa.perf_events.events[-1].time  # last sample from perfetto
