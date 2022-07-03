@@ -143,6 +143,7 @@ class HunterParser(object):
             for line in fr:
                 #print(line)
                 checked = False
+                function_name = None
                 function_begin = ">"
                 if re.match(r"^>", line):
                     before_components = re.split('^>', line)
@@ -154,7 +155,7 @@ class HunterParser(object):
                     function_name = components[0].replace("$", ".")
                     checked = True
                     function_begin = "<"
-                add_function = self.verify_function(function_name, functions, instrument)
+                add_function = self.verify_function(function_name, functions, instrument) if function_name else None
                 if add_function:
                     consumption, time = self.return_cpu_consumption_and_time_by_function(function_name, checked)
                     new_line = function_begin + function_name + " [m=example, " + 'cpu = ' + str(

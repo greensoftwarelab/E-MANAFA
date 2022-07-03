@@ -56,9 +56,10 @@ class PerfettoService(Service):
         """
         # execute_shell_command(f"adb shell perfetto -o {self.output_filename} freq  -t 1h --background ")´
         cmd = f"cat {os.path.join(RESOURCES_DIR, self.cfg_file)} | adb shell perfetto -d -o {self.output_filename} -c -"
-        execute_shell_command(cmd=cmd)
+        res, o, e = execute_shell_command(cmd=cmd)
+        return res == 0 and e.strip() == ""
 
-    def stop(self, file_id):
+    def stop(self, file_id=None):
         """Stops the profiling session and exports results.
 
         Stops the perfetto service and pulls the results from device. Afterwards, it exports the pulled results using
@@ -70,10 +71,14 @@ class PerfettoService(Service):
         """
         if file_id is None:
             file_id = execute_shell_command("date +%s")[1].strip()
-        execute_shell_command("adb shell killall perfetto")
+        res, o, e = execute_shell_command("adb shell killall perfetto")
+        if res != 0:
+            raise Exception("unable to kill perfetto process")
         time.sleep(1)
         filename = os.path.join(self.results_dir, f'trace-{file_id}-{self.boot_time}')
-        execute_shell_command(f"adb pull {self.output_filename} {filename}")
+        res, o, e = execute_shell_command(f"adb pull {self.output_filename} {filename}")
+        if res != 0:
+            raise Exception(f"unable to pull trace file. Attempted to copy {self.output_filename} to {filename}")
         return self.export()
 
     def export(self):
@@ -86,6 +91,8 @@ class PerfettoService(Service):
             f_file = os.path.join(self.results_dir, f)
             last_exported = os.path.join(self.results_dir, f"{f}.systrace")
             res, o, e = execute_shell_command(f"chmod +x {tc_path}; {tc_path} systrace {f_file} {last_exported}")
+            if res != 0:
+                raise Exception("unable to run traceconv")
         return last_exported
 
     def clean(self):

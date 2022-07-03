@@ -81,7 +81,7 @@ def main():
     parser.add_argument("-htf", "--hunterfile", help="hunter file", default=None, type=str)
     parser.add_argument("-d", "--directory", help="results file directory", default=None, type=str)
     parser.add_argument("-o", "--output_file", help="output file", default=None, type=str)
-    parser.add_argument("-s", "--time_in_secs", help="time to profile", default=10, type=int)
+    parser.add_argument("-s", "--time_in_secs", help="time to profile", default=0, type=int)
     args = parser.parse_args()
     has_device_conn = has_connected_devices()
     invalid_file_args = (args.perfettofile is None or args.batstatsfile is None) and args.directory is None
@@ -93,7 +93,7 @@ def main():
         manafa.init()
         manafa.start()
         log("profiling...")
-        if not args.time_in_lsecs:
+        if args.time_in_secs == 0:
             # creates killable process that runs record_events function, since there isnt an easy way to kill threads in python
             input("press any key to stop monitoring")
         else:
