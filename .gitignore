@@ -255,6 +255,8 @@ Thumbs.db #thumbnail cache on Windows
 results/*
 manafa/results
 
+manafa/resources/out_jar_dir
+
 # others
 .idea/*
 venv/pyvenv.cfg
