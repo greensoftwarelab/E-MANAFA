@@ -1,7 +1,5 @@
 import shutil
 import sys, os, time, json
-from subprocess import call, check_output, Popen, PIPE
-from multiprocessing import Process
 import argparse
 from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir
 from manafa.emanafa import EManafa

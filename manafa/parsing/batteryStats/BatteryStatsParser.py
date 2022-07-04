@@ -16,7 +16,6 @@ from manafa.utils.Logger import log, LogSeverity
 DEFAULT_JSON_PATH = os.path.join(get_resources_dir(), "batterystats", "BatteryStatus.json")
 
 
-
 def safe_division(a, b):
     """function to safely perform division between numbers to avoid division by 0.
         Args:

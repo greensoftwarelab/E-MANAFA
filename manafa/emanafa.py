@@ -8,6 +8,7 @@ from manafa.parsing.perfetto.perfettoParser import PerfettoCPUfreqParser
 from manafa.parsing.batteryStats.BatteryStatsParser import BatteryStatsParser
 from manafa.utils.Logger import log, LogSeverity
 from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir, is_float
+from manafa.utils.dateUtils import convert_to_pytz_timezone
 
 MANAFA_RESOURCES_DIR = get_resources_dir()
 
@@ -343,7 +344,7 @@ class EManafa(Service):
         if res == 0 and len(out) > 0:
             default_tz = out.split(" ")[-2]
         log("Using timezone: %s" % default_tz)
-        return "WET" if default_tz == "WEST" else default_tz
+        return convert_to_pytz_timezone(default_tz)
 
     def unplug_if_fully_charged(self):
         """ virtually unplugs device charger, by calling dumpsys battery unplug."""
