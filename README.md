@@ -24,7 +24,7 @@ https://greensoftwarelab.github.io/E-MANAFA/modules.html
 
 In order to run this tool, the following resources are required:
 - rooted Android device (running Android 9 or above);
-- *nix-based environment (MAC OS , Linux);
+- *nix-based environment (MAC OS, Linux);
 - Python 3.6 or above;
 - Android Sdk tools (https://developer.android.com/studio/releases/platform-tools)
 
@@ -118,12 +118,6 @@ end = em.bat_events.events[-1].time  # last collected sample from batterystats
 p, c, z = em.getConsumptionInBetween(begin, end)
 print(f"TOTAL: {p} Joules")
 ```
-
-## Supported devices
-This tool can be used with any Android device able to run Perfetto, available since Android 9 (P). The tool so far was successfuly executed on the following devices:
-- Pixel 3a
-- Pixel 4a 5G
-- Xiaomi Mi 9 Lite
 
 ## TODO
 - support for memory power calculator (MemoryPowerCalculator is a new addition in 8.0, mainly to count the power consumption on DDR memory . formula: MemoryPower = (mAatRail_1 * timeMs_1 + mAatRail_2 * timeMs_2 +… + mAatRail_n * timeMs_n) / (1000 * 60 * 60) (mAatRail_n: is the power at the read/write rate level, timeMs_n: is the time at the mAatRail_n level))
