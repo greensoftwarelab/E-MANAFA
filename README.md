@@ -110,20 +110,17 @@ $ python3 emanafa.py [-p|--profile <prof>]
 em = EManafa()
 em.init()
 em.start()
-do_work_to_profile() # replace by procedure to be measured 
+do_work_to_profile() # e.g time.sleep(10)
 em.stop()
-em.parseResults()
-begin = em.bat_events.events[0].time  # first collected sample from batterystats
-end = em.bat_events.events[-1].time  # last collected sample from batterystats
-p, c, z = em.getConsumptionInBetween(begin, end)
+em.parse_results()
+begin = manafa.perf_events.events[0].time  # first sample from perfetto
+end = manafa.perf_events.events[-1].time  # last sample from perfetto
+p, c, z = em.get_consumption_in_between(begin, end)
+out_file = em.save_final_report(begin)
 print(f"TOTAL: {p} Joules")
 ```
 
-## Supported devices
-This tool can be used with any Android device able to run Perfetto, available since Android 9 (P). The tool so far was successfuly executed on the following devices:
-- Pixel 3a
-- Pixel 4a 5G
-- Xiaomi Mi 9 Lite
 
 ## TODO
+- support for all timezones
 - support for memory power calculator (MemoryPowerCalculator is a new addition in 8.0, mainly to count the power consumption on DDR memory . formula: MemoryPower = (mAatRail_1 * timeMs_1 + mAatRail_2 * timeMs_2 +… + mAatRail_n * timeMs_n) / (1000 * 60 * 60) (mAatRail_n: is the power at the read/write rate level, timeMs_n: is the time at the mAatRail_n level))
