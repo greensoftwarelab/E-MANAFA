@@ -99,8 +99,8 @@ def main():
             time.sleep(args.time_in_secs)  # do work
             log("stopping profiler...")
         manafa.stop()
-        begin = manafa.perf_events.events[0].time  # first sample from perfetto
-        end = manafa.perf_events.events[-1].time  # last sample from perfetto
+        begin = manafa.perf_events.events[0].time if len(manafa.perf_events.events) > 0 else manafa.bat_events.events[0].time  # first sample from perfetto
+        end = manafa.perf_events.events[-1].time if len(manafa.perf_events.events) > 0 else manafa.bat_events.events[-1].time  # first s
         total, per_c, timeline = manafa.get_consumption_in_between(begin, end)
         print_profiled_stats(end-begin, total, per_c, timeline)
         out_file = manafa.save_final_report(begin, output_filepath=args.output_file)

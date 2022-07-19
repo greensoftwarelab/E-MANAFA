@@ -4,6 +4,7 @@ import re
 from enum import Enum
 
 from manafa.parsing.powerProfile.PowerProfile import PowerProfile
+from manafa.utils.Utils import execute_shell_command
 
 x="""import time
 import subprocess
@@ -110,6 +111,17 @@ class PerfettoCPUfreqParser(object):
 		self.start_time = start_time
 		self.power_profile = self.load_power_profile(power_profile) if power_profile is not None else {}
 
+	def get_device_current_frequency_vals(self):
+		cpu_vals = execute_shell_command("adb shell cat '/sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq' ")[1]
+		return cpu_vals.splitlines()
+
+	def start(self):
+		start_time = execute_shell_command("adb shell date +%s")[1].strip()
+		pce = PerfettoCPUEvent(int(start_time))
+		for i, cpu_f in enumerate(self.get_device_current_frequency_vals()):
+			pce.update(i, int(cpu_f))
+		self.events.append(pce)
+
 	@staticmethod
 	def load_power_profile(xml_profile):
 		"""Loads power profile from xml_profile filepath.
@@ -161,7 +173,7 @@ class PerfettoCPUfreqParser(object):
 		else:
 			last = self.events[-1]
 			z = PerfettoCPUEvent(time, last.vals)
-			z.update(cpu_id,cpu_freq)
+			z.update(cpu_id, cpu_freq)
 			self.events.append(z)
 
 	def parse_event(self, ev_str):

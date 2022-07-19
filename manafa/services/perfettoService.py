@@ -90,8 +90,11 @@ class PerfettoService(Service):
         for f in filter(lambda x: re.match(r'trace-*', x) is not None, os.listdir(self.results_dir)):
             f_file = os.path.join(self.results_dir, f)
             last_exported = os.path.join(self.results_dir, f"{f}.systrace")
-            res, o, e = execute_shell_command(f"chmod +x {tc_path}; {tc_path} systrace {f_file} {last_exported}")
+            cmd = f"chmod +x {tc_path}; {tc_path} systrace {f_file} {last_exported}"
+            res, o, e = execute_shell_command(cmd)
             if res != 0:
+                print(cmd)
+                print(o)
                 raise Exception("unable to run traceconv")
         return last_exported
 

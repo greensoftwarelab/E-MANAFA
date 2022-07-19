@@ -79,7 +79,6 @@ class HunterParser(object):
             start_time: lower timestamp bound.
             end_time: upper timestmp bound.
         """
-
         for i, line in enumerate(lines_list):
             if ": " in line:
                 line = line.split(": ")[-1]

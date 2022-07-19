@@ -84,12 +84,13 @@ class EManafa(Service):
         self.batterystats.init(boot_time=self.boot_time)
         self.perfetto.init(boot_time=self.boot_time)
         self.unplug_if_fully_charged()
-
+        self.perf_events = PerfettoCPUfreqParser(self.power_profile, self.boot_time, timezone=self.timezone)
 
     def start(self):
         """starts inner services."""
         self.batterystats.start()
         self.perfetto.start()
+        self.perf_events.start()
 
 
     def stop(self, run_id=None):
@@ -100,7 +101,7 @@ class EManafa(Service):
             pf_out_file(str): path to the resultant perfetto log file.
         """
         if run_id is None:
-            run_id = execute_shell_command("date +%s")[1].strip()
+            run_id = execute_shell_command("adb shell date +%s")[1].strip()
         self.bts_out_file = self.batterystats.stop(run_id)
         self.pft_out_file = self.perfetto.stop(run_id)
         log("Perfetto file:  %s" % self.pft_out_file)
@@ -108,7 +109,6 @@ class EManafa(Service):
         if self.unplugged:
             self.plug_back()
         return self.bts_out_file, self.pft_out_file
-
 
     def clean(self):
         """calls clean methods from inner services to clean previous result files."""
@@ -131,7 +131,7 @@ class EManafa(Service):
         self.boot_time = get_last_boot_time(bts_file)
         self.bat_events = BatteryStatsParser(self.power_profile, timezone=self.timezone)
         self.bat_events.parse_file(bts_file)
-        self.perf_events = PerfettoCPUfreqParser(self.power_profile, self.boot_time, timezone=self.timezone)
+        self.perf_events.start_time = self.boot_time
         self.perf_events.parse_file(pf_file)
 
     def get_consumption_in_between(self, start_time=0, end_time=sys.maxsize):
@@ -187,8 +187,8 @@ class EManafa(Service):
         """
         c_beg_bef, c_beg_aft = self.bat_events.get_closest_pair(start_time)
         if len(self.bat_events.events) == 0:
-            raise Exception("Unable no find batterystats samples. Maybe the profiling session or warm-up time wasn't long "
-                            "enough")
+            raise Exception("Unable no find batterystats samples. Maybe the profiling session or warm-up time wasn't long enough")
+            #log("Unable no find batterystats samples. Maybe the profiling session or warm-up time wasn't long enough")
         total = 0
         per_component_consumption = {}
         last_event = self.bat_events.events[c_beg_bef]
@@ -199,7 +199,7 @@ class EManafa(Service):
             # start-end             |--|
             # or in btween two samples
             delta_time = abs(end_time - start_time)
-            total, per_component_consumption = self.calculate_glob_and_component_consumption(last_event,per_component_consumption, delta_time, total)
+            total, per_component_consumption = self.calculate_glob_and_component_consumption(last_event, per_component_consumption, delta_time, total)
             return total, per_component_consumption
         #
         for i, x in enumerate(self.bat_events.events[c_beg_aft:]):
@@ -227,8 +227,8 @@ class EManafa(Service):
             total: cpu energy consumption
         """
         if len(self.perf_events.events) == 0:
-            raise Exception("Unable no find perfetto samples. Maybe the profiling session or warm-up time wasn't long "
-                            "enough")
+            raise Exception("Unable no find perfetto cpu frequency events. Maybe the profiling session or warm-up time wasn't long enough")
+            #log("Unable no find perfetto cpu frequency events. Maybe the profiling session or warm-up time wasn't long enough")
         c_beg_bef, c_beg_aft = self.perf_events.get_closest_pair(start_time)
         total = 0
         last_event = self.perf_events.events[c_beg_bef]
