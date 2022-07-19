@@ -24,7 +24,7 @@ https://greensoftwarelab.github.io/E-MANAFA/modules.html
 
 In order to run this tool, the following resources are required:
 - rooted Android device (running Android 9 or above);
-- *nix-based environment (MAC OS , Linux);
+- *nix-based environment (MAC OS, Linux);
 - Python 3.6 or above;
 - Android Sdk tools (https://developer.android.com/studio/releases/platform-tools)
 
@@ -50,7 +50,7 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 #### 2.1 Clone repo
 
 ```
-$ git clone https://github.com/RRua/e-manafa.git
+$ git clone https://github.com/greensoftwarelab/E-MANAFA.git
 ```
 
 #### 2.2 Replicate the environment
@@ -119,7 +119,6 @@ p, c, z = em.get_consumption_in_between(begin, end)
 out_file = em.save_final_report(begin)
 print(f"TOTAL: {p} Joules")
 ```
-
 
 ## TODO
 - support for all timezones
