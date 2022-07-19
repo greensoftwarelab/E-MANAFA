@@ -50,7 +50,7 @@ export PATH=$ANDROID_HOME/platform-tools:$PATH
 #### 2.1 Clone repo
 
 ```
-$ git clone https://github.com/RRua/e-manafa.git
+$ git clone https://github.com/greensoftwarelab/E-MANAFA.git
 ```
 
 #### 2.2 Replicate the environment
