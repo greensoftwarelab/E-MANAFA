@@ -7,5 +7,5 @@ Provides manafa version information.
 
 from incremental import Version
 
-__version__ = Version("manafa", 0, 3, 127)
+__version__ = Version("manafa", 0, 3, 128)
 __all__ = ["__version__"]
