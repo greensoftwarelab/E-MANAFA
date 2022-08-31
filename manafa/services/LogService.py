@@ -64,8 +64,11 @@ class LogService(Service):
         """
         filename = self.get_results_filename(run_id)
         time.sleep(1)
-        #execute_shell_command("adb logcat -d | grep -E '(<|>).*_.*\[[0-9]+' | cut -f4 -d\: | tr -d ' ' > %s" % filename)
-        execute_shell_command("adb logcat -d | grep -io \"[<>].*m=example.*]\" > %s" % filename)
+        is_in_old_format = float(execute_shell_command("adb logcat -d | grep -io \"[<>].*m=example.*]\" | wc -l ")[1].strip()) > 1
+        if is_in_old_format:
+            execute_shell_command("adb logcat -d | grep -io \"[<>].*m=example.*]\" > %s" % filename)
+        else:
+            execute_shell_command("adb logcat -d | grep -E '(<|>).*_.*\[[0-9]+' | cut -f4 -d\: | tr -d ' ' > %s" % filename)
         return filename
 
     def clean(self):

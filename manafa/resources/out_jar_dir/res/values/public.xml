@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <public type="id" name="accessibilityActionDragStart" id="0x01fe0000" />
-    <public type="id" name="accessibilityActionDragDrop" id="0x01fe0001" />
-    <public type="id" name="accessibilityActionDragCancel" id="0x01fe0002" />
-    <public type="attr" name="shouldUseDefaultUnfoldTransition" id="0x01ff0000" />
-</resources>

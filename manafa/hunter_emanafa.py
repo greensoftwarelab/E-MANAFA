@@ -76,7 +76,7 @@ class HunterEManafa(EManafa):
             to_instrument = True'''
 
         self.hunter_log_parser.parse_file(self.hunter_out_file, functions, True)
-        run_id = os.path.basename(self.hunter_out_file).split("-")[1] if run_id is None else run_id
+        run_id = os.path.basename(self.hunter_out_file).split("-")[1] if self.hunter_out_file is not None and run_id is None else run_id
         hunter_trace = self.hunter_log_parser.trace
         total_consumption = 0
         total_cpu_consumption = 0

@@ -67,9 +67,9 @@ class EManafa(Service):
         self.boot_time = 0
         log("Power profile file: " + self.power_profile, LogSeverity.INFO)
         self.batterystats = BatteryStatsService()
-        self.perf_events = None
         self.perfetto = PerfettoService()
         self.timezone = timezone if timezone is not None else self.__infer_timezone()
+        self.perf_events = PerfettoCPUfreqParser(self.power_profile, self.boot_time, timezone=self.timezone)
         self.unplugged = False
         self.bat_events = None
         self.pft_out_file = None
@@ -84,7 +84,6 @@ class EManafa(Service):
         self.batterystats.init(boot_time=self.boot_time)
         self.perfetto.init(boot_time=self.boot_time)
         self.unplug_if_fully_charged()
-        self.perf_events = PerfettoCPUfreqParser(self.power_profile, self.boot_time, timezone=self.timezone)
 
     def start(self):
         """starts inner services."""
@@ -146,6 +145,7 @@ class EManafa(Service):
             metrics(dict): batterystats info containing events occurred during the interval. for each type of event, it
             presents.
         """
+
         total, per_component = self.calculate_non_cpu_energy(start_time, end_time)
         total_cpu = self.calculate_cpu_energy(start_time, end_time)
         metrics = self.bat_events.get_events_in_between(start_time, end_time)

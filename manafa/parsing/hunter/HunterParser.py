@@ -23,6 +23,8 @@ class HunterParser(object):
             functions: list of function names to filter.
             instrument: optional paramm to enable or disable function filtering.
         """
+        if filepath is None:
+            return
         with open(filepath, 'r') as filehandle:
             lines = filehandle.read().splitlines()
             self.parse_history(lines, functions, instrument)
@@ -84,7 +86,7 @@ class HunterParser(object):
                 line = line.split(": ")[-1]
                 if ">>" in line:
                     continue
-            if re.match(r"^>", line) and line.strip().endswith("]"):
+            if "m=example" in line:
                 self.parse_history_old_format(lines_list[:], functions, instrument=instrument, start_time=0, end_time=end_time)
                 return
             elif re.match(r"^>", line):
@@ -177,6 +179,8 @@ class HunterParser(object):
         consumption = 0.0
         cpu_consumption = 0.0
         da_time = 0.0
+        if not function_name in self.trace:
+            return 0, 0
         for i, times in enumerate(self.trace[function_name]):
             results = self.trace[function_name][i]
             if not results['checked']:
@@ -184,7 +188,6 @@ class HunterParser(object):
                     consumption = results['consumption']
                     per_component_consumption = results['per_component_consumption']
                     cpu_consumption = per_component_consumption['cpu']
-
                     da_time = results['end_time'] if 'end_time' in results else self.end_time
                     self.__update_checked(function_name, i)
                     return cpu_consumption, da_time
