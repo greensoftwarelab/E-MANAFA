@@ -16,6 +16,19 @@ DEFAULT_OUT_DIR = "/data/misc/perfetto-traces"
 CONFIG_FILE = "perfetto.config.bin"
 
 
+def device_has_perfetto():
+    res, o, _ = execute_shell_command("adb shell which perfetto")
+    return res == 0 and 'perfetto' in o
+
+
+def set_persistent_traces_enabled_flag():
+    cmd = "adb shell setprop persist.traced.enable 1"
+    res, o, e = execute_shell_command(cmd)
+    if res != 0:
+        print(e)
+        raise Exception("error while setting persist.traced.enable property")
+
+
 class PerfettoService(Service):
     """Class that manages the perfetto service.
 
@@ -33,8 +46,9 @@ class PerfettoService(Service):
         self.boot_time = boot_time
         self.output_dir = default_out_dir
         self.output_filename = os.path.join(self.output_dir, "trace")
-        execute_shell_command("adb shell setprop persist.traced.enable 1")
+        set_persistent_traces_enabled_flag()
         execute_shell_command(f"adb shell mkdir -p {self.output_dir}")
+
 
     def config(self, **kwargs):
         pass
@@ -73,7 +87,13 @@ class PerfettoService(Service):
             file_id = execute_shell_command("date +%s")[1].strip()
         res, o, e = execute_shell_command("adb shell killall perfetto")
         if res != 0:
-            raise Exception("unable to kill perfetto process")
+            print(o)
+            print(e)
+            is_running, _, _ = execute_shell_command("adb shell ps | grep perfetto")
+            if is_running:
+                raise Exception("unable to kill Perfetto service")
+            else:
+                raise Exception("Unable to stop Perfetto because Perfetto service was not running")
         time.sleep(1)
         filename = os.path.join(self.results_dir, f'trace-{file_id}-{self.boot_time}')
         res, o, e = execute_shell_command(f"adb pull {self.output_filename} {filename}")
@@ -89,13 +109,16 @@ class PerfettoService(Service):
         tc_path = os.path.join(RESOURCES_DIR, 'traceconv')
         for f in filter(lambda x: re.match(r'trace-*', x) is not None, os.listdir(self.results_dir)):
             f_file = os.path.join(self.results_dir, f)
+            if not os.path.exists(f_file):
+                raise Exception(f"Systrace file not found ({f_file})")
             last_exported = os.path.join(self.results_dir, f"{f}.systrace")
             cmd = f"chmod +x {tc_path}; {tc_path} systrace {f_file} {last_exported}"
             res, o, e = execute_shell_command(cmd)
             if res != 0:
                 print(cmd)
                 print(o)
-                raise Exception("unable to run traceconv")
+                raise Exception("unable to run traceconv. Hints: Maybe you need an internet connection to allow "
+                                "systrace to download some resources")
         return last_exported
 
     def clean(self):
@@ -108,3 +131,6 @@ class PerfettoService(Service):
         """returns profiling session id given its filepath"""
         simple_name = os.path.basename(perfetto_filepath)
         return simple_name.split("-")[1].split(".")[0]
+
+
+
