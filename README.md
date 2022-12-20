@@ -119,7 +119,17 @@ p, c, z = em.get_consumption_in_between(begin, end)
 out_file = em.save_final_report(begin)
 print(f"TOTAL: {p} Joules")
 ```
+## Associated publications:
 
-## TODO
-- support for all timezones
-- support for memory power calculator (MemoryPowerCalculator is a new addition in 8.0, mainly to count the power consumption on DDR memory . formula: MemoryPower = (mAatRail_1 * timeMs_1 + mAatRail_2 * timeMs_2 +… + mAatRail_n * timeMs_n) / (1000 * 60 * 60) (mAatRail_n: is the power at the read/write rate level, timeMs_n: is the time at the mAatRail_n level))
+```
+@INPROCEEDINGS{manafa,
+author={Rua, Rui and Saraiva, João},
+title={E-MANAFA: Energy Monitoring and ANAlysis tool For Android},
+booktitle={2022 37th IEEE/ACM International Conference on Automated Software Engineering Workshops (ASEW)},
+year={2022},
+volume={},
+number={},
+pages={},
+doi={}
+}
+
