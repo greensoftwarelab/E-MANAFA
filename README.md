@@ -122,14 +122,18 @@ print(f"TOTAL: {p} Joules")
 ## Associated publications:
 
 ```
-@INPROCEEDINGS{manafa,
-author={Rua, Rui and Saraiva, João},
-title={E-MANAFA: Energy Monitoring and ANAlysis tool For Android},
-booktitle={2022 37th IEEE/ACM International Conference on Automated Software Engineering Workshops (ASEW)},
-year={2022},
-volume={},
-number={},
-pages={},
-doi={}
+@inproceedings{10.1145/3551349.3561342,
+author = {Rua, Rui and Saraiva, Jo\~{a}o},
+title = {E-MANAFA: Energy Monitoring and ANAlysis Tool For Android},
+year = {2023},
+isbn = {9781450394758},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3551349.3561342},
+doi = {10.1145/3551349.3561342},
+articleno = {202},
+numpages = {4},
+location = {Rochester, MI, USA},
+series = {ASE22}
 }
 
