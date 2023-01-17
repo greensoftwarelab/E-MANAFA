@@ -97,7 +97,7 @@ $ emanafa [-p|--profile <prof>]
 ### From project's root
 
 ```
-$ python3 emanafa.py [-p|--profile <prof>] 
+$ python3 manafa/main.py [-p|--profile <prof>] 
                      [-t|--timezone <tz>] 
                      [-pft|--perfettofile <pf>] 
                      [-bts|--batstatsfile <bf>] 
