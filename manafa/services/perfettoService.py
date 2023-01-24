@@ -48,7 +48,13 @@ class PerfettoService(Service):
         self.output_filename = os.path.join(self.output_dir, "trace")
         set_persistent_traces_enabled_flag()
         execute_shell_command(f"adb shell mkdir -p {self.output_dir}")
+        self.executable_switches = {
+            'background': '--background',
+            'config': "--config"
+        }
 
+    def get_switch(self, key, default=""):
+        return self.executable_switches[key] if key in self.executable_switches else default
 
     def config(self, **kwargs):
         pass
@@ -69,7 +75,9 @@ class PerfettoService(Service):
         Starts perfetto service, using the config file cfg_file as input.
         """
         # execute_shell_command(f"adb shell perfetto -o {self.output_filename} freq  -t 1h --background ")´
-        cmd = f"cat {os.path.join(RESOURCES_DIR, self.cfg_file)} | adb shell perfetto -d -o {self.output_filename} -c -"
+        cmd = f"cat {os.path.join(RESOURCES_DIR, self.cfg_file)} | adb shell perfetto " \
+              f"{self.get_switch('background', '-b')} -o {self.output_filename} {self.get_switch('config', '-c')} -"
+        print(f"executing perfetto: {cmd}")
         res, o, e = execute_shell_command(cmd=cmd)
         return res == 0 and e.strip() == ""
 
@@ -131,6 +139,3 @@ class PerfettoService(Service):
         """returns profiling session id given its filepath"""
         simple_name = os.path.basename(perfetto_filepath)
         return simple_name.split("-")[1].split(".")[0]
-
-
-

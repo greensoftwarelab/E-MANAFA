@@ -13,6 +13,12 @@ NOT_INSTRUMENT_FILE = os.path.join(MANAFA_RESOURCES_DIR, 'not_instrument_file.tx
 MANAFA_INSPECTOR_URL = "https://greensoftwarelab.github.io/manafa-inspector/"
 
 
+def validate_start():
+    res, o, e = execute_shell_command("adb shell getprop ro.build.version.release")
+    is_above_android_8 = res == 0 and int(o.split(".")[0]) >= 9
+    if not is_above_android_8:
+        raise Exception("Unable to run E-Manafa on devices with version < Android 9")
+
 def has_connected_devices():
     """checks if there are devices connected via adb"""
     res, o, e = execute_shell_command("adb devices -l | grep -v attached")
@@ -86,6 +92,7 @@ def main():
     if not has_device_conn and invalid_file_args:
         log("Fatal error. No connected devices or result files submitted for analysis", LogSeverity.FATAL)
         exit(-1)
+    validate_start()
     manafa = create_manafa(args)
     if has_device_conn and invalid_file_args:
         manafa.init()
