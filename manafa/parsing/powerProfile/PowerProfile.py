@@ -126,6 +126,8 @@ class PowerProfile(object):
 				else:
 					profile_speeds = self.components["cpu"]["core_speeds"]["cluster%d" % i] \
 						if 'core_speeds' in self.components["cpu"] else self.components["cpu"]["speeds"]["cluster%d"%i]
+					profile_currents = profile_currents if not isinstance(profile_currents, dict) \
+						else profile_currents["cluster%d" % i]
 					break
 		mini_fr = 0
 		freq = 0
