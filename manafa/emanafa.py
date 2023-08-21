@@ -273,8 +273,6 @@ class EManafa(Service):
         # print(tot_time)
         return total
 
-
-
     def __extract_power_profile(self, filename):
         """ Extracts power_profile.xml file from the device, by pulling framework-res.apk and using apktool to unzip the apk.
         If the process fails, retrieves DEFAULT_PROFILE filepath

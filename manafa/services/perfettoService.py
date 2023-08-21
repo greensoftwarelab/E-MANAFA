@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 import re
 
-from textops import cat
 
 from .service import Service
 import time
@@ -27,6 +26,21 @@ def set_persistent_traces_enabled_flag():
     if res != 0:
         print(e)
         raise Exception("error while setting persist.traced.enable property")
+
+
+def convert_to_systrace(file_to_convert, results_dir=None):
+    results_dir = results_dir if results_dir is not None else os.path.dirname(file_to_convert)
+    tc_path = os.path.join(RESOURCES_DIR, 'traceconv')
+    target_filename = f"{os.path.basename(file_to_convert)}.systrace"
+    last_exported = os.path.join(results_dir, target_filename)
+    cmd = f"chmod +x {tc_path}; {tc_path} systrace {file_to_convert} {last_exported}"
+    res, o, e = execute_shell_command(cmd)
+    if res != 0:
+        print(cmd)
+        print(o)
+        raise Exception("unable to run traceconv. Hints: Maybe you need an internet connection to allow "
+                        "systrace to download some resources")
+    return last_exported
 
 
 class PerfettoService(Service):
@@ -114,19 +128,12 @@ class PerfettoService(Service):
             last_exported: path of last exported file.
         """
         last_exported = ""
-        tc_path = os.path.join(RESOURCES_DIR, 'traceconv')
         for f in filter(lambda x: re.match(r'trace-*', x) is not None, os.listdir(self.results_dir)):
             f_file = os.path.join(self.results_dir, f)
             if not os.path.exists(f_file):
                 raise Exception(f"Systrace file not found ({f_file})")
             last_exported = os.path.join(self.results_dir, f"{f}.systrace")
-            cmd = f"chmod +x {tc_path}; {tc_path} systrace {f_file} {last_exported}"
-            res, o, e = execute_shell_command(cmd)
-            if res != 0:
-                print(cmd)
-                print(o)
-                raise Exception("unable to run traceconv. Hints: Maybe you need an internet connection to allow "
-                                "systrace to download some resources")
+            convert_to_systrace(f_file)
         return last_exported
 
     def clean(self):

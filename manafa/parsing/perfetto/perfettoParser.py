@@ -40,6 +40,7 @@ class CPU_STATE(Enum):
 	AWAKE = "awake"
 	ACTIVE = "active"
 
+
 class PerfettoCPUEvent(object):
 	"""Stores information regarding each cpu frequency in a given time.
 

@@ -1,6 +1,8 @@
 import shutil
 import sys, os, time, json
 import argparse
+
+from manafa.services.perfettoService import convert_to_systrace
 from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir
 from manafa.emanafa import EManafa
 from manafa.hunter_emanafa import HunterEManafa
@@ -39,14 +41,19 @@ def parse_results(args, manafa):
         bstats_files = mega_find(args.directory, pattern="bstats-*", maxdepth=2, type_file='f')
         for b_file in bstats_files:
             b_file_id = os.path.basename(b_file).split("-")[1] #if len(os.path.basename(b_file).split("-")) >
-            matching_pft_files = [ x for x in  mega_find(args.directory, pattern="trace-*" ) if b_file_id in x ]
+            matching_pft_files = [x for x in mega_find(args.directory, pattern="trace-*") if b_file_id in x]
             if len(matching_pft_files) == 0:
                 print(" unmatched batstats file")
                 continue
+
+            is_converted = matching_pft_files[0].endswith('.systrace')
+            if not is_converted:
+                matching_pft_files[0] = convert_to_systrace(matching_pft_files[0])
             matching_ht_files = [x for x in mega_find(args.directory, pattern="hunter-*") if b_file_id in x]
             if len(matching_ht_files) > 0:
                 _, fc = manafa.parse_results(bts_file=b_file, pf_file=matching_pft_files[0], htr_file=matching_ht_files[0])
-                shutil.copyfile(fc, os.path.basename(fc))
+                if fc is not None:
+                    shutil.copyfile(fc, os.path.basename(fc))
             else:
                 manafa.parse_results(b_file, matching_pft_files[0])
             begin = manafa.perf_events.events[0].time if len(manafa.perf_events.events) > 1 else manafa.bat_events.events[0].time
@@ -106,6 +113,7 @@ def main():
             time.sleep(args.time_in_secs)  # do work
             log("stopping profiler...")
         manafa.stop()
+        manafa.clean()
         begin = manafa.perf_events.events[0].time if len(manafa.perf_events.events) > 1 else manafa.bat_events.events[0].time
         end = manafa.perf_events.events[-1].time if len(manafa.perf_events.events) > 1 else manafa.bat_events.events[-1].time
         total, per_c, timeline = manafa.get_consumption_in_between(begin, end)

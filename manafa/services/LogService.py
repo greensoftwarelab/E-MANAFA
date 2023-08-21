@@ -36,7 +36,6 @@ class LogService(Service):
         self.boot_time = boot_time
         self.trace = {}
 
-
     def start(self, run_id=None):
         """starts the profiling session.
 
