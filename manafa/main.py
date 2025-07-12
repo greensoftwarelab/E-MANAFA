@@ -2,6 +2,7 @@ import shutil
 import sys, os, time, json
 import argparse
 
+from manafa.am_emanafa import AMEManafa
 from manafa.services.perfettoService import convert_to_systrace
 from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir
 from manafa.emanafa import EManafa
@@ -32,6 +33,9 @@ def create_manafa(args):
         return HunterEManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=MANAFA_RESOURCES_DIR,
             instrument_file=TO_INSTRUMENT_FILE,
             not_instrument_file=NOT_INSTRUMENT_FILE)
+    elif not args.hunter and args.app_package is not None:
+        return AMEManafa(app_package_name=args.app_package, power_profile=args.profile, timezone=args.timezone,
+                         resources_dir=MANAFA_RESOURCES_DIR)
     else:
         return EManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=MANAFA_RESOURCES_DIR)
 
@@ -84,7 +88,7 @@ def print_profiled_stats(el_time, total_consumption, per_comp_consumption, event
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-ht", "--hunter", help="parse hunter logs", action='store_true', default=True)
+    parser.add_argument("-ht", "--hunter", help="parse hunter logs", action='store_true', default=False)
     parser.add_argument("-p", "--profile", help="power profile file", default=None, type=str)
     parser.add_argument("-t", "--timezone", help="device timezone", default=None, type=str)
     parser.add_argument("-pft", "--perfettofile", help="perfetto file", default=None, type=str)
@@ -93,6 +97,8 @@ def main():
     parser.add_argument("-d", "--directory", help="results file directory", default=None, type=str)
     parser.add_argument("-o", "--output_file", help="output file", default=None, type=str)
     parser.add_argument("-s", "--time_in_secs", help="time to profile", default=0, type=int)
+    parser.add_argument("-a", "--app_package", help="package of app to profile", default=None, type=str)
+
     args = parser.parse_args()
     has_device_conn = has_connected_devices()
     invalid_file_args = (args.perfettofile is None or args.batstatsfile is None) and args.directory is None
@@ -103,6 +109,7 @@ def main():
     manafa = create_manafa(args)
     if has_device_conn and invalid_file_args:
         manafa.init()
+        print('paco')
         manafa.start()
         log("profiling...")
         if args.time_in_secs == 0:

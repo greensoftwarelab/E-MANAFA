@@ -3,7 +3,7 @@ import os
 
 from manafa.emanafa import EManafa, MANAFA_RESOURCES_DIR
 from manafa.parsing.hunter.HunterParser import HunterParser
-from manafa.services.LogService import LogService
+from manafa.services.LogcatService import LogcatService
 from manafa.parsing.hunter.AppConsumptionStats import AppConsumptionStats
 from manafa.utils.Logger import log, LogSeverity
 from manafa.utils.Utils import execute_shell_command
@@ -25,11 +25,11 @@ class HunterEManafa(EManafa):
                  timezone=None,
                  resources_dir=MANAFA_RESOURCES_DIR,
                  instrument_file=None,
-                 not_instrument_file=None,):
-        super(HunterEManafa, self).__init__(power_profile=power_profile, timezone=timezone, resources_dir=resources_dir)
+                 not_instrument_file=None, **kwargs):
+        super(HunterEManafa, self).__init__(power_profile=power_profile, timezone=timezone, resources_dir=resources_dir, **kwargs)
         self.app_consumptions = AppConsumptionStats()
         self.app_consumptions_log = ""
-        self.log_service = LogService()
+        self.log_service = LogcatService()
         self.hunter_log_parser = HunterParser()
         self.hunter_out_file = None
         self.instrument_file = instrument_file
