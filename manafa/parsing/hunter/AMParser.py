@@ -1,4 +1,4 @@
-import sys, os, re
+import sys
 
 from manafa.utils.Logger import log
 
@@ -22,8 +22,6 @@ class AMParser(object):
         """function to parse traces from filepath file.
         Args:
             filepath: logfile with app traces.
-            functions: list of function names to filter.
-            instrument: optional paramm to enable or disable function filtering.
         """
         if filepath is None:
             return
@@ -36,10 +34,9 @@ class AMParser(object):
         """function to parse app traces from a list of lines (lines_list).
         Args:
             lines_list: list of lines from log file.
-            functions: list of function names to filter.
-            instrument: optional paramm to enable or disable function filtering.
             start_time: lower timestamp bound.
-            end_time: upper timestmp bound.
+            end_time: upper timestamp bound.
+            col_sep: column separator used in the log file.
         """
         end_time = float(end_time) if end_time != sys.maxsize else float((lines_list[-1].split(',')[1]) if len(lines_list) > 0 else sys.maxsize)
         for i, line in enumerate(lines_list):
@@ -57,6 +54,8 @@ class AMParser(object):
                 time_obj = {
                     'begin_time': begin_time,
                     'end_time': begin_time + (duration_secs if duration_secs > 0 else end_time - begin_time),
+                    'depth': int(depth),
+                    'method_def': method_def,
                 }
                 if method_name not in self.trace:
                     self.trace[function_id] = {}
@@ -95,7 +94,6 @@ class AMParser(object):
             cpu_consumption:
             da_time:
         """
-        consumption = 0.0
         cpu_consumption = 0.0
         da_time = 0.0
         if not function_name in self.trace:
@@ -104,7 +102,6 @@ class AMParser(object):
             results = self.trace[function_name][i]
             if not results['checked']:
                 if checked:
-                    consumption = results['consumption']
                     per_component_consumption = results['per_component_consumption']
                     cpu_consumption = per_component_consumption['cpu']
                     da_time = results['end_time'] if 'end_time' in results else self.end_time

@@ -1,4 +1,4 @@
-import time,sys, os
+import os
 
 
 from .service import Service
@@ -11,7 +11,7 @@ DEVICE_RESULTS_DIR = "/data/local/tmp/"
 TRACE_PROCESSOR_PATH = "~/repos/research/perfetto/tools/trace_processor"
 
 def convert_to_csv(file_to_convert, results_dir=None):
-    #  ~/repos/research/perfetto/tools/trace_processor xisco -Q "SELECT name, ts, dur, depth FROM slice ORDER BY ts"
+    #  ~/repos/research/perfetto/tools/trace_processor tracefile -Q "SELECT name, ts, dur, depth FROM slice ORDER BY ts"
     results_dir = results_dir if results_dir is not None else os.path.dirname(file_to_convert)
     filepath = file_to_convert.replace(".trace", ".csv")
     target_file = os.path.join(results_dir, os.path.basename(filepath))
@@ -43,7 +43,7 @@ class AmProfilerService(Service):
         pass
 
     def init(self, boot_time=0, **kwargs):
-        """inits the class.
+        """init the class.
         Args:
             boot_time: device boot timestamp.
             **kwargs:
