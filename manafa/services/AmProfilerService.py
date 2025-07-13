@@ -1,14 +1,11 @@
 import os
-
-
 from .service import Service
-
 import re
-from ..utils.Utils import execute_shell_command
+from ..utils.Utils import execute_shell_command, get_resources_dir
 from manafa.utils.Logger import log
 
 DEVICE_RESULTS_DIR = "/data/local/tmp/"
-TRACE_PROCESSOR_PATH = "~/repos/research/perfetto/tools/trace_processor"
+TRACE_PROCESSOR_PATH = os.path.join(get_resources_dir() , "trace_processor")
 
 def convert_to_csv(file_to_convert, results_dir=None):
     #  ~/repos/research/perfetto/tools/trace_processor tracefile -Q "SELECT name, ts, dur, depth FROM slice ORDER BY ts"
