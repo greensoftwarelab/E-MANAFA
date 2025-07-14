@@ -96,7 +96,7 @@ class AmProfilerService(Service):
     def clean(self):
         """cleans device log state and removes files from previous runs.
         """
-        res = execute_shell_command(f"adb shell xargs rm {DEVICE_RESULTS_DIR}/app_*.trace")
+        res = execute_shell_command(f"adb shell rm {DEVICE_RESULTS_DIR}/app_*.trace")
         print(res)
         res = execute_shell_command(
             f"find {self.results_dir} -type f -name \"app_*.trace\"  | xargs rm ")
