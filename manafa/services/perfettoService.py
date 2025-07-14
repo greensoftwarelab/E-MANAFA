@@ -8,6 +8,7 @@ import time
 import os
 
 from manafa.utils.Utils import execute_shell_command, get_resources_dir
+from ..utils.Logger import log, LogSeverity
 
 RESOURCES_DIR = get_resources_dir()
 
@@ -60,7 +61,10 @@ class PerfettoService(Service):
         self.boot_time = boot_time
         self.output_dir = default_out_dir
         self.output_filename = os.path.join(self.output_dir, "trace")
-        set_persistent_traces_enabled_flag()
+        try:
+            set_persistent_traces_enabled_flag()
+        except Exception as e:
+            log(f"Error while setting persist.traced.enable property: {e}", log_sev=LogSeverity.ERROR)
         execute_shell_command(f"adb shell mkdir -p {self.output_dir}")
         self.executable_switches = {
             'background': '--background',

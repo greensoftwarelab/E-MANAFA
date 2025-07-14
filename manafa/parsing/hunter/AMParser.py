@@ -48,7 +48,7 @@ class AMParser(object):
             begin_time = self.boot_time + (float(begin_time) * pow(10, -9))  # convert from nanoseconds to seconds
             method_name = method_def.split(' ')[0].replace("\"", '').replace("$", ".").replace(":", "")
             method_hash = str(hash(method_def.split(':')[1] if len(method_def.split(' ')) > 1 else ''))
-            function_id = method_name + method_hash
+            function_id = f"{method_name}_{method_hash}"
             duration_secs = float(duration) * pow(10, -9)  # convert from nanoseconds to seconds
             if float(begin_time) >= start_time:
                 time_obj = {
