@@ -109,7 +109,6 @@ def main():
     manafa = create_manafa(args)
     if has_device_conn and invalid_file_args:
         manafa.init()
-        print('paco')
         manafa.start()
         log("profiling...")
         if args.time_in_secs == 0:

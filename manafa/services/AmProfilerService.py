@@ -13,7 +13,7 @@ def convert_to_csv(file_to_convert, results_dir=None):
     filepath = file_to_convert.replace(".trace", ".csv")
     target_file = os.path.join(results_dir, os.path.basename(filepath))
     cmd = f"{TRACE_PROCESSOR_PATH} {os.path.join(results_dir, file_to_convert)} -Q \"SELECT name, ts, dur, depth FROM slice ORDER BY ts\" > {target_file}"
-    log("Converting %s to CSV: " % cmd)
+    #log("Converting %s to CSV: " % cmd)
     res = execute_shell_command(cmd)
     #print(res)
     return target_file
@@ -85,7 +85,6 @@ class AmProfilerService(Service):
         log("Stopping Am Profiler for package: %s" % self.package_name)
         execute_shell_command("adb shell am profile stop %s" % self.package_name)
         filename = execute_shell_command("adb shell ls %s | grep app_%s" % (DEVICE_RESULTS_DIR, self.package_name))[1].strip()
-        log("Am Profiler file:  %s" % filename)
         res, o, e = execute_shell_command(f"adb pull {DEVICE_RESULTS_DIR}/{filename}  {self.results_dir}")
         if res != 0:
             raise Exception(f"unable to pull trace file. Attempted to pull {filename}")
@@ -113,6 +112,6 @@ class AmProfilerService(Service):
             if not os.path.exists(f_file):
                 raise Exception(f"trace file not found ({f_file})")
             last_exported = os.path.join(self.results_dir, f)
-            log("Converting %s to CSV: " % last_exported)
+            #log("Converting %s to CSV: " % last_exported)
             target_file = convert_to_csv(f_file, self.results_dir)
         return target_file
