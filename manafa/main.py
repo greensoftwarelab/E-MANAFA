@@ -67,12 +67,13 @@ def parse_results(args, manafa):
             out_file = manafa.save_final_report(begin, output_filepath=args.output_file)
             log(f"Output file: {out_file}. You can inspect it with E-MANAFA Inspector in {MANAFA_INSPECTOR_URL}",
                 log_sev=LogSeverity.SUCCESS)
-            manafa.clean()
+
     elif args.hunterfile:
         manafa.parse_results(args.batstatsfile, args.perfettofile, args.hunterfile)
         manafa.calculate_function_consumption()
     else:
         manafa.parse_results(args.batstatsfile, args.perfettofile)
+    manafa.clean()
 
 
 def print_profiled_stats(el_time, total_consumption, per_comp_consumption, event_timeline):
@@ -119,12 +120,12 @@ def main():
             time.sleep(args.time_in_secs)  # do work
             log("stopping profiler...")
         manafa.stop()
-        manafa.clean()
         begin = manafa.perf_events.events[0].time if len(manafa.perf_events.events) > 1 else manafa.bat_events.events[0].time
         end = manafa.perf_events.events[-1].time if len(manafa.perf_events.events) > 1 else manafa.bat_events.events[-1].time
         total, per_c, timeline = manafa.get_consumption_in_between(begin, end)
         print_profiled_stats(end-begin, total, per_c, timeline)
         out_file = manafa.save_final_report(begin, output_filepath=args.output_file)
+        manafa.clean()
         log(f"Output file: {out_file}. You can inspect it with E-MANAFA Inspector in {MANAFA_INSPECTOR_URL}",
             log_sev=LogSeverity.SUCCESS)
     else:

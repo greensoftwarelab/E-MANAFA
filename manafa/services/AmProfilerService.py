@@ -15,7 +15,7 @@ def convert_to_csv(file_to_convert, results_dir=None):
     cmd = f"{TRACE_PROCESSOR_PATH} {os.path.join(results_dir, file_to_convert)} -Q \"SELECT name, ts, dur, depth FROM slice ORDER BY ts\" > {target_file}"
     #log("Converting %s to CSV: " % cmd)
     res = execute_shell_command(cmd)
-    #print(res)
+    print(res)
     return target_file
 
 
@@ -56,6 +56,10 @@ class AmProfilerService(Service):
             run_id(str): current session/run id.  Considered only for API compat purposes.
         """
         #self.clean()
+        execute_shell_command(
+            f"find {self.results_dir} -type f -name \"*.trace\"  | xargs rm ")
+        execute_shell_command(
+            f"find {self.results_dir} -type f -name \"*.csv\"  | xargs rm ")
         output_filename = self.get_results_filename(run_id)
         log("Am Profiler run id:  %s" % run_id)
         res = execute_shell_command(" adb shell cmd package resolve-activity --brief %s | grep %s" % (self.package_name, self.package_name))
@@ -83,7 +87,8 @@ class AmProfilerService(Service):
             filename: the name of the output file.
         """
         log("Stopping Am Profiler for package: %s" % self.package_name)
-        execute_shell_command("adb shell am profile stop %s" % self.package_name)
+        res = execute_shell_command("adb shell am profile stop %s" % self.package_name)
+        print(res)
         filename = execute_shell_command("adb shell ls %s | grep app_%s" % (DEVICE_RESULTS_DIR, self.package_name))[1].strip()
         res, o, e = execute_shell_command(f"adb pull {DEVICE_RESULTS_DIR}/{filename}  {self.results_dir}")
         if res != 0:
@@ -95,10 +100,11 @@ class AmProfilerService(Service):
     def clean(self):
         """cleans device log state and removes files from previous runs.
         """
-        res = execute_shell_command(f"adb shell rm {DEVICE_RESULTS_DIR}/app_*.trace")
-        print(res)
-        res = execute_shell_command(
-            f"find {self.results_dir} -type f -name \"app_*.trace\"  | xargs rm ")
+        execute_shell_command(f"adb shell rm {DEVICE_RESULTS_DIR}/*.trace")
+        #execute_shell_command(
+        #    f"find {self.results_dir} -type f -name \"*.trace\"  | xargs rm ")
+        #execute_shell_command(
+        #    f"find {self.results_dir} -type f -name \"*.csv\"  | xargs rm ")
 
     def export(self):
         """Exports results from previous runs.

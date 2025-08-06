@@ -64,7 +64,7 @@ class AMEManafa(EManafa):
         total_consumption = 0
         total_cpu_consumption = 0
         if len(self.am_log_parser.trace) == 0:
-            log(f"No hunter traces found in {self.trace_out_file}", log_sev=LogSeverity.ERROR)
+            log(f"No traces found in {self.trace_out_file}", log_sev=LogSeverity.ERROR)
             return self.trace_out_file, self.app_consumptions_log
         for i, function in enumerate(am_trace):
             func_consumption = 0
