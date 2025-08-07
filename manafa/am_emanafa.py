@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 from manafa.emanafa import EManafa, MANAFA_RESOURCES_DIR
 from manafa.parsing.hunter.AMParser import AMParser
@@ -59,7 +60,7 @@ class AMEManafa(EManafa):
     def calculate_function_consumption(self, run_id=None): #, to_instrument_file, not_instrument_file):
         """calculates consumption per function called during the profiling session."""
         self.am_log_parser.parse_file(self.trace_out_file)
-        run_id = os.path.basename(self.trace_out_file).split("_")[-1] if self.trace_out_file is not None and run_id is None else run_id
+        run_id = os.path.basename(self.trace_out_file).split("_")[-1] if self.pft_out_file is not None and run_id is None else run_id
         am_trace = self.am_log_parser.trace
         total_consumption = 0
         total_cpu_consumption = 0

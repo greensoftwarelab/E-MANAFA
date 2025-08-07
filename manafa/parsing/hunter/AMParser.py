@@ -1,6 +1,7 @@
 import sys
 
 from manafa.utils.Logger import log
+from manafa.utils.Utils import is_float
 
 
 class AMParser(object):
@@ -38,14 +39,20 @@ class AMParser(object):
             end_time: upper timestamp bound.
             col_sep: column separator used in the log file.
         """
-        end_time = float(end_time) if end_time != sys.maxsize else float((lines_list[-1].split(',')[1]) if len(lines_list) > 0 else sys.maxsize)
+        try:
+            end_time = float(end_time) if end_time != sys.maxsize else float((lines_list[-1].split(',')[1]) if len(lines_list) > 0 else sys.maxsize)
+        except:
+            end_time = float((lines_list[-2].split(',')[1]) if len(lines_list) > 1 else sys.maxsize)
         for i, line in enumerate(lines_list):
             #print(line)
             if len(line) < 3:
                 continue
             line = line.strip()
             method_def, begin_time, duration, depth = line.split(col_sep)
-            begin_time = self.boot_time + (float(begin_time) * pow(10, -9))  # convert from nanoseconds to seconds
+            try:
+                begin_time = self.boot_time + (float(begin_time) * pow(10, -9))  # convert from nanoseconds to seconds
+            except:
+                continue
             method_name = method_def.split(' ')[0].replace("\"", '').replace("$", ".").replace(":", "")
             method_hash = str(hash(method_def.split(':')[1] if len(method_def.split(' ')) > 1 else ''))
             function_id = f"{method_name}_{method_hash}"
