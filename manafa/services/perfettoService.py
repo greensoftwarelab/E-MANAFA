@@ -116,9 +116,14 @@ class PerfettoService(Service):
         if res != 0:
             x = execute_shell_command("adb shell setprop persist.traced.enable 0")
             print(x)
-            time.sleep(2)
-            x = execute_shell_command("adb shell ps | grep perfetto")
-            is_running = x[0] == 0 and 'perfetto' in x[1]
+            # killall can race a trace that is already self-terminating (its config has a
+            # duration_ms), so poll for the exit instead of rechecking once
+            for _ in range(10):
+                time.sleep(0.5)
+                x = execute_shell_command("adb shell ps | grep perfetto")
+                is_running = x[0] == 0 and 'perfetto' in x[1]
+                if not is_running:
+                    break
             if is_running:
                 raise Exception("unable to kill Perfetto service")
         time.sleep(1)

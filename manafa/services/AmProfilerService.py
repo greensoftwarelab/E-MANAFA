@@ -9,18 +9,39 @@ from manafa.utils.Logger import log
 DEVICE_RESULTS_DIR = "/data/local/tmp/"
 TRACE_PROCESSOR_PATH = os.path.join(get_resources_dir() , "trace_processor")
 PROFILING_SAMPLE_RATE = 750  # in nanosecs, default sampling rate for am profiler
+# One row per method call. id/parent_id/thread let the parser rebuild each thread's call
+# tree; a call still open when profiling stopped (dur = -1) ends at its thread's last event.
+SLICE_QUERY = (
+    "SELECT s.name, s.ts, IIF(s.dur < 0, e.last_end - s.ts, s.dur) AS dur, s.depth, "
+    "s.id, s.parent_id, t.name AS thread "
+    "FROM slice s JOIN thread_track tt ON s.track_id = tt.id JOIN thread t USING(utid) "
+    "JOIN (SELECT track_id, MAX(ts + MAX(dur, 0)) AS last_end FROM slice GROUP BY track_id) e "
+    "ON e.track_id = s.track_id ORDER BY s.ts"
+)
+
+def get_launcher_activity(package_name):
+    """returns the app's first launcher activity as <package>/<activity>.
+
+    resolve-activity returns the system chooser when the app has several launcher
+    activities (e.g. debug builds with LeakCanary), so the launchers are queried directly.
+    """
+    res = execute_shell_command(
+        "adb shell cmd package query-activities --brief -a android.intent.action.MAIN "
+        "-c android.intent.category.LAUNCHER %s | grep %s/ | head -n 1" % (package_name, package_name))
+    return res[1].strip()
+
 
 def convert_to_csv(file_to_convert, results_dir=None):
     #  ~/repos/research/perfetto/tools/trace_processor tracefile -Q "SELECT name, ts, dur, depth FROM slice ORDER BY ts"
     results_dir = results_dir if results_dir is not None else os.path.dirname(file_to_convert)
     filepath = file_to_convert.replace(".trace", ".csv")
     target_file = os.path.join(results_dir, os.path.basename(filepath))
-    cmd = f"{TRACE_PROCESSOR_PATH} {os.path.join(results_dir, file_to_convert)} -Q \"SELECT name, ts, dur, depth FROM slice ORDER BY ts\" > {target_file}"
+    cmd = f"{TRACE_PROCESSOR_PATH} {os.path.join(results_dir, file_to_convert)} -Q \"{SLICE_QUERY}\" > {target_file}"
     log("Converting %s to CSV: " % cmd)
     res = execute_shell_command(cmd)
     corresp_exec_file = file_to_convert.replace(".trace", "_exec.trace")
     if os.path.exists(corresp_exec_file):
-        cmd = f"{TRACE_PROCESSOR_PATH} {os.path.join(results_dir, corresp_exec_file)} -Q \"SELECT name, ts, dur, depth FROM slice ORDER BY ts\" >> {target_file}"
+        cmd = f"{TRACE_PROCESSOR_PATH} {os.path.join(results_dir, corresp_exec_file)} -Q \"{SLICE_QUERY}\" >> {target_file}"
         log("Converting exec file %s to CSV: " % cmd)
         res = execute_shell_command(cmd)
     print(res)
@@ -70,8 +91,7 @@ class AmProfilerService(Service):
             f"find {self.results_dir} -type f -name \"*.csv\"  | xargs rm ")
         startup_output_filename = self.get_results_filename(run_id)
         log("Am Profiler run id:  %s" % run_id)
-        res = execute_shell_command(" adb shell cmd package resolve-activity --brief %s | grep %s" % (self.package_name, self.package_name))
-        activity_package = res[1].strip()
+        activity_package = get_launcher_activity(self.package_name)
         cmd = " adb shell am start -S -n %s -P %s" % (activity_package, startup_output_filename )
         res = execute_shell_command(cmd)
         print(res)
@@ -81,7 +101,9 @@ class AmProfilerService(Service):
         time.sleep(1)
         output_filename_exec = startup_output_filename.replace(".trace", "_exec.trace")
         # adb shell am profile start --sampling 1000 com.sanad.gpt4o.myapplication /data/local/tmp/manual_startup.trace
-        cmd = f"adb shell am profile start --sampling {PROFILING_SAMPLE_RATE} %s %s" % (self.package_name, output_filename_exec)
+        # --streaming: without it ART buffers the trace in memory (8 MB) and, once a
+        # longer workload overflows it, writes an empty file at stop.
+        cmd = f"adb shell am profile start --sampling {PROFILING_SAMPLE_RATE} --streaming %s %s" % (self.package_name, output_filename_exec)
         log("Profiling exec with Am Profiler: " + cmd)
         res = execute_shell_command(cmd)
         print(res)

@@ -1,3 +1,4 @@
+import bisect
 
 
 import re
@@ -201,12 +202,19 @@ class PerfettoCPUfreqParser(object):
 			lasti(int): before index.
 			i(int): after index.
 		"""
-		lasti = 0
-		for i, x in enumerate(self.events):
-			if x.time > time:
-				return lasti, i
-			lasti = i
-		return lasti, lasti
+		times = self.event_times()
+		i = bisect.bisect_right(times, time)  # first event after time
+		if i == len(times):
+			return max(i - 1, 0), max(i - 1, 0)
+		return max(i - 1, 0), i
+
+	def event_times(self):
+		"""sorted event timestamps, cached until the event list changes (for bisect lookups)."""
+		key = (id(self.events), len(self.events))
+		if getattr(self, '_times_key', None) != key:
+			self._times = [x.time for x in self.events]
+			self._times_key = key
+		return self._times
 
 
 def parse_dumpsys_output(dumpsys_text: str) -> dict:

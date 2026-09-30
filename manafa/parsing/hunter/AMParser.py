@@ -1,3 +1,4 @@
+import csv
 import sys
 
 from manafa.utils.Logger import log
@@ -39,20 +40,22 @@ class AMParser(object):
             end_time: upper timestamp bound.
             col_sep: column separator used in the log file.
         """
-        try:
-            end_time = float(end_time) if end_time != sys.maxsize else float((lines_list[-1].split(',')[1]) if len(lines_list) > 0 else sys.maxsize)
-        except:
-            end_time = float((lines_list[-2].split(',')[1]) if len(lines_list) > 1 else sys.maxsize)
-        for i, line in enumerate(lines_list):
-            #print(line)
-            if len(line) < 3:
+        rows = []
+        segment = 0  # one per appended trace (startup, exec); slice ids restart in each
+        for row in csv.reader(lines_list, delimiter=col_sep):
+            if len(row) < 4:
                 continue
-            line = line.strip()
-            method_def, begin_time, duration, depth = line.split(col_sep)
             try:
-                begin_time = self.boot_time + (float(begin_time) * pow(10, -9))  # convert from nanoseconds to seconds
-            except:
+                begin_time = self.boot_time + (float(row[1]) * pow(10, -9))  # convert from nanoseconds to seconds
+            except ValueError:
+                if rows:  # header line of the next appended trace
+                    segment += 1
                 continue
+            rows.append((segment, begin_time, row))
+        # fallback end for calls with no recorded exit (dur < 0): the last event of the trace
+        last_event = max((b + max(float(r[2]), 0) * pow(10, -9) for _, b, r in rows), default=end_time)
+        for segment, begin_time, row in rows:
+            method_def, _, duration, depth = row[:4]
             method_name = method_def.split(' ')[0].replace("\"", '').replace("$", ".").replace(":", "")
             method_hash = str(hash(method_def.split(':')[1] if len(method_def.split(' ')) > 1 else ''))
             function_id = f"{method_name}_{method_hash}"
@@ -60,18 +63,22 @@ class AMParser(object):
             if float(begin_time) >= start_time:
                 time_obj = {
                     'begin_time': begin_time,
-                    'end_time': begin_time + (duration_secs if duration_secs > 0 else end_time - begin_time),
+                    'end_time': begin_time + (duration_secs if duration_secs >= 0 else last_event - begin_time),
                     'depth': int(depth),
                     'method_def': method_def,
                 }
-                if method_name not in self.trace:
+                if len(row) >= 7:  # id, parent_id and thread columns (see AmProfilerService.convert_to_csv)
+                    time_obj.update({
+                        'id': f"{segment}:{row[4]}",
+                        'parent_id': f"{segment}:{row[5]}" if is_float(row[5]) else None,
+                        'thread': row[6],
+                        'segment': segment,
+                    })
+                if function_id not in self.trace:
                     self.trace[function_id] = {}
-                    self.trace[function_id][0] = time_obj
-                else:
-                    self.trace[function_id][len(self.trace[function_id])] = time_obj
+                self.trace[function_id][len(self.trace[function_id])] = time_obj
             else:
-                #pass
-                log("invalid line" + line)
+                log("invalid line" + col_sep.join(row))
 
     def add_consumption(self, function_name, position, consumption, per_component_consumption, metrics):
         """updates consumption stats when a line referring a function is parsed.

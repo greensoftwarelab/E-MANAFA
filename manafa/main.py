@@ -7,6 +7,7 @@ from manafa.services.perfettoService import convert_to_systrace
 from manafa.utils.Utils import execute_shell_command, mega_find, get_resources_dir
 from manafa.emanafa import EManafa
 from manafa.hunter_emanafa import HunterEManafa
+from manafa.heap_emanafa import HeapEManafa
 from manafa.utils.Logger import log, LogSeverity
 from manafa.utils.BatteryDrainCalculator import BatteryDrainCalculator
 
@@ -151,6 +152,9 @@ def create_manafa(args):
         (hasattr(args, 'profile_mode') and args.profile_mode and args.profile_mode != 'legacy')
     )
 
+    if args.heap:
+        return HeapEManafa(app_package_name=args.app_package)
+
     #hunter mode takes priority
     if args.hunter or args.hunterfile is not None:
         return HunterEManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=MANAFA_RESOURCES_DIR)
@@ -226,6 +230,18 @@ def parse_results(args, manafa):
     manafa.clean()
 
 
+def print_heap_stats(heap_stats, top=10):
+    """prints the classes retaining the most memory in the last heap dump."""
+    classes = heap_stats['classes']
+    print("--------------------------------------")
+    print(f"Heap dumps: {len(heap_stats['dump_timestamps'])}, classes: {len(classes)}")
+    print(f"Top {top} classes by retained bytes (last dump; per-dump series in the output file):")
+    ranked = sorted(classes.items(), key=lambda kv: kv[1]['retained_bytes'][-1], reverse=True)[:top]
+    for name, c in ranked:
+        print(f"  {name}: retained={c['retained_bytes'][-1]} B, instances={c['instance_count'][-1]}")
+    print("--------------------------------------")
+
+
 def print_profiled_stats(el_time, total_consumption, per_comp_consumption, event_timeline, battery_drain_info=None):
     print("--------------------------------------")
     print(f"Total energy consumed: {total_consumption} Joules")
@@ -254,6 +270,9 @@ Examples:
   
   # Memory profiling only
   python3 manafa/main.py -a com.android.chrome -s 30 -pm memory
+
+  # Per-class Java heap profiling (debuggable/profileable app, Android 11+)
+  python3 manafa/main.py -a com.android.chrome -s 30 -pm memory --heap
   
   # Export detailed results
   python3 manafa/main.py -a com.android.chrome -s 30 -pm energy -of json -o results.json
@@ -286,7 +305,12 @@ Examples:
 
     parser.add_argument("--force-legacy", action='store_true',
                        help='Force use of legacy profiler even if device supports new features')
+    parser.add_argument("--heap", action='store_true',
+                       help='With -pm memory: per-class Java heap profiling (java_hprof heap dumps) '
+                            'instead of system memory counters. Requires -a')
     args = parser.parse_args()
+    if args.heap and (args.profile_mode != 'memory' or args.app_package is None):
+        parser.error("--heap requires -pm memory and -a <package>")
     
     #warnings for new modes
     if args.profile_mode == 'both' and not args.force_legacy:
@@ -305,6 +329,10 @@ Examples:
         log("Fatal error. No connected devices or result files submitted for analysis", LogSeverity.FATAL)
         exit(-1)
     
+    if args.heap and not (has_device_conn and invalid_file_args):
+        log("Fatal error. --heap supports live profiling only (connected device, no result files)", LogSeverity.FATAL)
+        exit(-1)
+
     validate_start()
     manafa = create_manafa(args)
     
@@ -313,7 +341,7 @@ Examples:
         print(f"\n{'='*70}")
         print(f"E-MANAFA Profiling")
         print(f"{'='*70}")
-        print(f"Mode: {args.profile_mode.upper()}")
+        print(f"Mode: {args.profile_mode.upper()}{' (heap)' if args.heap else ''}")
         if args.app_package:
             print(f"App: {args.app_package}")
         print(f"Duration: {args.time_in_secs} seconds" if args.time_in_secs > 0 else "Duration: Manual stop")
@@ -340,7 +368,11 @@ Examples:
         battery_calculator = BatteryDrainCalculator()
 
         #display results based on profiler type
-        if args.profile_mode == 'legacy' or args.force_legacy:
+        if args.heap:
+            out_file = manafa.save_final_report(output_filepath=args.output_file)
+            print_heap_stats(manafa.heap_stats)
+            log(f"Output file: {out_file}", log_sev=LogSeverity.SUCCESS)
+        elif args.profile_mode == 'legacy' or args.force_legacy:
             #legacy output
             if len(manafa.perf_events.events) > 1 or len(manafa.bat_events.events) > 0:
                 begin = manafa.perf_events.events[0].time if len(manafa.perf_events.events) > 1 else manafa.bat_events.events[0].time

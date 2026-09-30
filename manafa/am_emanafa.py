@@ -90,10 +90,32 @@ class AMEManafa(EManafa):
         #self.app_consumptions.write_consumptions(consumption_log, total_cpu_consumption)
         #hunter_edited = self.am_log_parser.add_cpu_consumption_to_trace_file(self.trace_out_file, functions, True)
         #log("Hunter file:  %s" % hunter_edited)
+        self._add_self_consumption(am_trace)
         self.app_consumptions.app_traces = self.am_log_parser.trace
         self.app_consumptions_log = self.app_consumptions.save_function_info(f"functions_{run_id}_results.json", filter_zeros=True)
         log("Function Consumptions file:  %s" % self.app_consumptions_log)
         return self.trace_out_file, self.app_consumptions_log
+
+    @staticmethod
+    def _add_self_consumption(am_trace):
+        """adds each call's self consumption: its own energy minus its direct callees' energy.
+
+        'consumption' is inclusive (the device energy over the whole call), so summing it over
+        nested calls counts the same interval once per stack frame. The self values partition
+        each thread's time instead. Needs the id/parent_id columns of convert_to_csv.
+        """
+        by_id = {c['id']: c for calls in am_trace.values() for c in calls.values() if 'id' in c}
+        for c in by_id.values():
+            c['self_consumption'] = c['consumption']
+            c['self_cpu'] = c['per_component_consumption']['cpu']
+        for c in by_id.values():
+            parent = by_id.get(c['parent_id'])
+            if parent is not None:
+                parent['self_consumption'] -= c['consumption']
+                parent['self_cpu'] -= c['per_component_consumption']['cpu']
+        for c in by_id.values():  # rounding in the interval integrals can go slightly negative
+            c['self_consumption'] = max(c['self_consumption'], 0.0)
+            c['self_cpu'] = max(c['self_cpu'], 0.0)
 
     def clean(self):
         """calls clean methods from inner services to clean previous result files"""

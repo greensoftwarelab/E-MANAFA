@@ -1,3 +1,4 @@
+import bisect
 """ This module contains ENUMs that store state values of batterystats events.
 
 BatteryStatsConstants contains constants associated with batterystats events and respective meaning.
@@ -325,12 +326,19 @@ class BatteryStatsParser(object):
         Returns:
             int, int: index of the closest events.
         """
-        lasti = 0
-        for i, x in enumerate(self.events):
-            if x.time > time:
-                return lasti, i
-            lasti = i
-        return lasti, lasti
+        times = self.event_times()
+        i = bisect.bisect_right(times, time)  # first event after time
+        if i == len(times):
+            return max(i - 1, 0), max(i - 1, 0)
+        return max(i - 1, 0), i
+
+    def event_times(self):
+        """sorted event timestamps, cached until the event list changes (for bisect lookups)."""
+        key = (id(self.events), len(self.events))
+        if getattr(self, '_times_key', None) != key:
+            self._times = [x.time for x in self.events]
+            self._times_key = key
+        return self._times
 
     def get_events_in_between(self, start_time, end_time):
         """get batstat events occured between start_time and end_time.
@@ -349,7 +357,8 @@ class BatteryStatsParser(object):
         # {'health: [(event_state,start,end, pctage_duration)], ..}
         prev_time = self.events[c_beg_aft].time if len(self.events) > 0 else start_time
         fst_time = prev_time
-        for ev in self.events[c_beg_aft:]:
+        for k in range(c_beg_aft, len(self.events)):
+            ev = self.events[k]
             if ev.time > end_time:
                 break
             for kup, upval in ev.updates.items():
@@ -405,19 +414,22 @@ class BatteryStatsParser(object):
 
         """
         l = []
-        last_ev = self.events[0] if len(self.events) > 0 else None
+        times = self.event_times()
+        lo = bisect.bisect_right(times, start_time)  # first event after start_time
+        hi = bisect.bisect_left(times, end_time)  # first event at or after end_time
+        last_ev = self.events[lo - 1] if lo > 0 else self.events[0]
         last_time = start_time
-        for x in self.events:
-            if x.time > start_time and x.time < end_time:
-                delta = x.time - last_time
-                state = last_ev.get_cpu_value()
-                voltage = last_ev.get_voltage_value()  # float(last_ev.updates["volt"])
-                pair = (delta, state, voltage)
-                l.append(pair)
-                last_time = x.time
+        for k in range(lo, hi):
+            x = self.events[k]
+            delta = x.time - last_time
+            state = last_ev.get_cpu_value()
+            voltage = last_ev.get_voltage_value()  # float(last_ev.updates["volt"])
+            l.append((delta, state, voltage))
+            last_time = x.time
             last_ev = x
+        # tail: the state in effect at end_time (not the session's last event)
         last_delta = end_time - last_time
-        last_state = last_ev.currents["cpu"]
+        last_state = last_ev.get_cpu_value()
         last_voltage = last_ev.get_voltage_value()  # float(last_ev.updates["volt"])
         last_pair = (last_delta, last_state, last_voltage)
         l.append(last_pair)

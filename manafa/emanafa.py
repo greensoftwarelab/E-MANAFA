@@ -1,3 +1,4 @@
+import bisect
 import json
 import sys
 import time
@@ -296,8 +297,8 @@ class EManafa(Service):
         per_component_consumption = {}
         last_event = self.bat_events.events[c_beg_bef]
         last_time = start_time  # self.bat_events.events[c_beg_bef].time if c_beg_bef >= 0 else start_time
-        in_bt2 = list(filter(lambda x: x.time >= start_time and x.time >= end_time, self.bat_events.events))
-        if c_beg_bef == c_beg_aft or len(in_bt2) == 1:
+        n_after_end = len(self.bat_events.events) - bisect.bisect_left(self.bat_events.event_times(), max(start_time, end_time))
+        if c_beg_bef == c_beg_aft or n_after_end == 1:
             # batevents |--|--|--|
             # start-end             |--|
             # or in btween two samples
@@ -305,7 +306,8 @@ class EManafa(Service):
             total, per_component_consumption = self.calculate_glob_and_component_consumption(last_event, per_component_consumption, delta_time, total)
             return total, per_component_consumption
         #
-        for i, x in enumerate(self.bat_events.events[c_beg_aft:]):
+        for i in range(c_beg_aft, len(self.bat_events.events)):
+            x = self.bat_events.events[i]
             if x.time > end_time:
                 #delta_time = end_time - last_time
                 break
@@ -349,8 +351,8 @@ class EManafa(Service):
         last_event = self.perf_events.events[c_beg_bef]
         last_time = start_time
         tot_time = 0
-        in_bt2 = list(filter(lambda x: x.time >= start_time and x.time >= end_time, self.perf_events.events))
-        if c_beg_bef == c_beg_aft or len(in_bt2) == 1:
+        n_after_end = len(self.perf_events.events) - bisect.bisect_left(self.perf_events.event_times(), max(start_time, end_time))
+        if c_beg_bef == c_beg_aft or n_after_end == 1:
             # perfevent |--|--|--|
             # start-end             |--|
             # or in bt2 2 samples
@@ -372,7 +374,8 @@ class EManafa(Service):
                 total += cpus_current * delta_time * DEFAULT_VOLTAGE_MV
             return total
 
-        for i, x in enumerate(self.perf_events.events[c_beg_aft:]):
+        for i in range(c_beg_aft, len(self.perf_events.events)):
+            x = self.perf_events.events[i]
             if x.time > end_time:
                 break
 
